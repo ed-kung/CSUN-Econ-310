@@ -21,6 +21,8 @@ nav_order: 1
 
 ### Professor
 
+![my photo](assets/images/myphoto.jpg)
+
 - Dr. Edward Kung
 - edward.kung@csun.edu
 
