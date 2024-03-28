@@ -1,8 +1,8 @@
-title: Just the Docs Template
-description: A starter template for a Jeykll site using the Just the Docs theme!
+title: CSUN Econ 310
+description: Course website for CSUN Econ 310 with Prof. Edward Kung
 theme: just-the-docs
 
-url: https://just-the-docs.github.io
+url: https://ed-kung.github.io/CSUN-Econ-310
 
 aux_links:
-  Template Repository: https://github.com/just-the-docs/just-the-docs-template
+  ekung.io: https://ekung.io

@@ -1,6 +1,7 @@
 ---
 title: Home
 layout: home
+nav_order: 1
 ---
 
 # CSUN ECON 310: Intermediate Microeconomic Theory
