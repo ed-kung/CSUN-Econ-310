@@ -6,8 +6,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: CSUN Econ 310
-description: Course website for CSUN Econ 310 with Prof. Edward Kung
+title: "ECON 310: Intermediate Microeconomic Theory"
+description: Course website for ECON 310 with Prof. Edward Kung at CSUN
 theme: just-the-docs
 url: https://ed-kung.github.io/CSUN-Econ-310
 repository: ed-kung/CSUN-Econ-310
@@ -73,7 +73,7 @@ nav_external_links:
 back_to_top: true
 back_to_top_text: "Back to top"
 
-footer_content: "Copyright &copy; 2024 Edward Kung. Powered by Jekyll, Github Pages, and Just-the-Docs."
+footer_content: "Copyright &copy; 2024 Edward Kung. Powered by Jekyll, Github Pages, and Just the Docs."
 
 # Footer last edited timestamp
 last_edit_timestamp: true # show or hide edit time - page must have `last_modified_date` defined in the frontmatter

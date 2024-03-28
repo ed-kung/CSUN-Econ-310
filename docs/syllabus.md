@@ -4,7 +4,7 @@ title: Syllabus
 nav_order: 2
 ---
 
-# Fall 2024 Syllabus
+# CSUN ECON 310<br>Fall 2024 Syllabus
 {: .no_toc }
 
 ## Table of Contents
@@ -50,7 +50,7 @@ Placeholder text.
 ## Tentative Schedule
 
 | Week | Dates       | Session 1          | Session 2        | Homework       |
-| ---- | ----------- | ------------------ | ---------------- | -------------- |
+| ---: | :---------- | :----------------- | :--------------- | :------------- |
 |    1 | 8/25 - 8/29 | Functions          | Optimization     | HW 1           | 
 |    2 | 9/1 - 9/5   | Consumer Choice    | Isoquants        | HW 2           |
 
