@@ -1,1 +1,9 @@
 // custom SCSS (or CSS) goes here
+.main-header {
+    height: 80px
+}
+
+.site-header {
+    height: 80px;
+    max-height: revert;
+}
