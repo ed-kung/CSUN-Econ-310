@@ -7,6 +7,8 @@ nav_order: 1
 # CSUN Econ 310:<br>Fall 2024 Syllabus
 {: .no_toc }
 
+![course logo](assets/images/logo.webp)
+
 ## Table of Contents
 {: .no_toc }
 
