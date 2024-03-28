@@ -4,7 +4,7 @@ title: Syllabus
 nav_order: 1
 ---
 
-# CSUN Econ 310: Intermediate Microeconomic Theory
+# ECON 310: Intermediate Microeconomic Theory
 {: .no_toc }
 
 ![course logo](assets/images/logo.webp)
