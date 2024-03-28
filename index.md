@@ -4,10 +4,13 @@ title: Syllabus
 nav_order: 1
 ---
 
-# CSUN Econ 310:<br>Fall 2024 Syllabus
+# CSUN Econ 310: Intermediate Microeconomic Theory
 {: .no_toc }
 
 ![course logo](assets/images/logo.webp)
+
+## Fall 2024 Syllabus
+{: .no_toc }
 
 ## Table of Contents
 {: .no_toc }
@@ -21,7 +24,7 @@ nav_order: 1
 
 ### Professor
 
-![my photo](assets/images/myphoto.jpg)
+<img src="assets/images/myphoto.jpg" width="100">
 
 - Dr. Edward Kung
 - edward.kung@csun.edu
