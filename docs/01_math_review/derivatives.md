@@ -9,3 +9,8 @@ nav_order: 2
 
 The derivative is the slope of a function.
 
+{: .warning}
+> This is an example of a warning.
+
+{: .note}
+> This is an example of a note.
