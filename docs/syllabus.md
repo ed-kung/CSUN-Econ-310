@@ -10,7 +10,7 @@ nav_order: 2
 ## Table of Contents
 {: .no_toc }
 
-1. TOC
+- TOC
 {:toc}
 
 ---
