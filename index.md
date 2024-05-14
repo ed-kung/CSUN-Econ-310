@@ -56,14 +56,26 @@ Placeholder text.
 
 ## Tentative Schedule
 
-| Week | Dates       | Session 1          | Session 2        | Homework       |
-| ---: | :---------- | :----------------- | :--------------- | :------------- |
-|    1 | 8/25 - 8/29 | Functions          | Optimization     | HW 1           | 
-|    2 | 9/1 - 9/5   | Consumer Choice    | Isoquants        | HW 2           |
+| Week | Dates         | Session 1                            | Session 2                                | 
+| ---: | :------------ | :----------------------------------- | :--------------------------------------- | 
+|    1 | 8/26 - 8/30   | Introduction & Math Review           | Single Variable Optimization I           |   
+|    2 | 9/2 - 9/6     | Single Variable Optimization II      | Supply & Demand                          |
+|    3 | 9/9 - 9/13    | Application: Price Controls          | Application: Taxation                    |
+|    4 | 9/16 - 9/20   | Multivariate Optimization I          | Multivariate Optimization II             |
+|    5 | 9/23 - 9/27   | Consumer Theory                      | Application: Food Stamps                 |  
+|    6 | 9/30 - 10/4   | Application: Public Education        | **Midterm 1**                            |
+|    7 | 10/7 - 10/11  | Firm Theory I                        | Firm Theory II                           |
+|    8 | 10/14 - 10/18 | Application: Labor & Capital Markets | Application: Labor & Capital Markets     |
+|    9 | 10/21 - 10/25 | Monopolies                           | Application: Taxing Monopolies           |
+|   10 | 10/28 - 11/1  | Application: Price Discrimination    | Game Theory I                            |
+|   11 | 11/4 - 11/8   | Game Theory II                       | **Midterm 2**                            |
+|   12 | 11/11 - 11/15 | Oligopolies I                        | Oligopolies II                           |
+|   13 | 11/18 - 11/22 | Oligopolies III                      | *(Online)* Risk & Uncertainty            |
+|   14 | 11/25 - 11/29 | Insurance Markets                    | **NO CLASS - THANKSGIVING**              |
+|   15 | 12/2 - 12/6   | Game Theory III                      | Application: Signaling                   |
+|   16 | 12/9 - 12/13  | Review Session                       | **NO CLASS - SEMESTER ENDS**             |
 
-### Final Exam
-
-- Placeholder text
+Final Exam date TBD.
 
 ---
 
