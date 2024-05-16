@@ -132,4 +132,26 @@ q_d &= q_s & \\
 >
 > ![supply-demand-02](/CSUN-Econ-310/assets/images/01-math-review-supply-demand-02.png)
 
+## Working with logs
+
+It's also quite common in economics to work with natural logs (the $$\ln$$ function). The log function is useful because the difference in the log of two quantities is approximately equal to the percent change between the two quantities.
+
+To work with logs, you'll need to memorize these rules:
+
+| Log of 1            | $$\ln 1 = 0$$                     |
+| Product Rule        | $$\ln (xy) = \ln x + \ln y$$      |
+| Quotient Rule       | $$\ln (x/y) = \ln x - \ln y$$     |
+| Power Rule          | $$\ln (x^a) = a \ln x$$           |
+| Inverse Rule 1      | $$e^{\ln x} = x$$                 |
+| Inverse Rule 2      | $$\ln (e^x) = x$$                 |
+| Difference Rule     | $$\ln y - \ln x \approx (y-x)/x$$ |
+
+Here, $$e$$ is Euler's Number, a mathematical constant equal to 2.71828. Euler's Number arises naturally out of the mathematics of compounding interest rates, and thus has many applications in economics and finance.
+
+{: .yellow-callout-title }
+> Example 1
+>
+> Supply and demand are given by the functions:
+>
+> $$\begin{aligned}
 
