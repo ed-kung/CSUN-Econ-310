@@ -1,6 +1,6 @@
 ---
 layout: default
-title: 01. Math Review
+title: Math Review
 parent: Lecture Notes
 ---
 
@@ -149,9 +149,16 @@ To work with logs, you'll need to memorize these rules:
 Here, $$e$$ is Euler's Number, a mathematical constant equal to 2.71828. Euler's Number arises naturally out of the mathematics of compounding interest rates, and thus has many applications in economics and finance.
 
 {: .yellow-callout-title }
-> Example 1
+> Example
 >
-> Supply and demand are given by the functions:
+> Natural logs are useful for modeling supply and demand curves with constant elasticity. For example, suppose the demand curve is specified by:
 >
-> $$\begin{aligned}
-
+>$$\ln q_d = 10 - 2\ln p$$
+>
+> Using the difference rule, you can show that whenever price changes by $$+1$$%, then quantity demanded changes by $$-2$$%. This demand curve therefore has a constant elasticity of demand equal to $$-2$$.
+>
+> More generally, if:
+>
+>$$\ln q_d = a - b\ln p$$
+>
+> Then the elasticity of demand is constant and equal to $$-b$$.
