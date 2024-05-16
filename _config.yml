@@ -9,7 +9,8 @@
 title: "ECON 310: Intermediate Microeconomic Theory"
 description: Course website for ECON 310 with Prof. Edward Kung at CSUN
 theme: just-the-docs
-url: "https://ed-kung.github.io/CSUN-Econ-310"
+url: https://ed-kung.github.io
+baseurl: /CSUN-Econ-310
 repository: ed-kung/CSUN-Econ-310
 
 permalink: pretty
