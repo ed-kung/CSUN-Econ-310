@@ -87,12 +87,18 @@ color_scheme: nil
 
 callouts_level: quiet # or loud
 callouts:
-  note:
-    title: Note
+  blue-callout:
+    title: blue
     color: blue
-  warning:
-    title: Warning
+  red-callout:
+    title: red
     color: red
+  green-callout:
+    title: green
+    color: green
+  yellow-callout:
+    title: yellow
+    color: yellow
 
 # Enable mathjax
 math: mathjax
