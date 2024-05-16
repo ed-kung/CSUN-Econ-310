@@ -52,17 +52,17 @@ Functions can be visualized using graphs. A graph simply plots the different inp
 {: .blue-callout-title }
 > Example 1
 >
-> ![Graph of x^2](/assets/images/01-math-review-xsquared.png)
+> ![Graph of x^2](assets/images/01-math-review-xsquared.png)
 
 {: .green-callout-title }
 > Example 2
 >
-> ![Graph of sqrt(x)](/assets/images/01-math-review-sqrtx.png)
+> ![Graph of sqrt(x)](assets/images/01-math-review-sqrtx.png)
 
 {: .yellow-callout-title }
 > Example 3
 >
-> ![Graph of x^0.5 y^0.5](/assets/images/01-math-review-sqrtxy.png)
+> ![Graph of x^0.5 y^0.5](assets/images/01-math-review-sqrtxy.png)
 
 ## Supply and demand curves as functions
 
@@ -91,7 +91,7 @@ The market is in equilibrium when $$q_d = q_s$$. Thus, the price that equilibrat
 >
 > The graph below illustrates.
 >
-> ![supply-demand-01](/assets/images/01-math-review-supply-demand-01.png)
+> ![supply-demand-01](assets/images/01-math-review-supply-demand-01.png)
 
 ## Working with exponents
 
@@ -130,6 +130,6 @@ q_d &= q_s & \\
 >
 > These supply and demand curves are plotted in the graph below.
 >
-> ![supply-demand-02](/assets/images/01-math-review-supply-demand-02.png)
+> ![supply-demand-02](assets/images/01-math-review-supply-demand-02.png)
 
 
