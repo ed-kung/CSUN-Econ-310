@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Single Variable Optimization
+title: 2. Single Variable Optimization
 parent: Lecture Notes
 ---
 

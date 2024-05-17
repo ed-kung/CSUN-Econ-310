@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Math Review
+title: 1. Math Review
 parent: Lecture Notes
 ---
 
