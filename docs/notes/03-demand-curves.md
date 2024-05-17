@@ -1,6 +1,6 @@
 ---
 layout: default
-title: 3. Demand Curves
+title: 4. Demand Curves
 parent: Lecture Notes
 ---
 
@@ -12,9 +12,13 @@ parent: Lecture Notes
 
 ## General setup 
 
-Let there be a commodity with price $$p$$. A consumer with income $$Y$$ gets utility from consuming this commodity, but also from how much money they have left over to consume other goods.  If the consumer consumes $$q$$ units of the commodity and has $$c$$ money left over, they get utility $$u(c,q)$$.
+Let there be a commodity with price $$p$$, which consumers take as given. 
 
-The consumer chooses $$c$$ and $$q$$ to maximize their utility. The optimization problem they solve is:
+A consumer with income $$Y$$ gets utility from consuming this commodity.  If the consumer consumes $$q$$ units of the commodity, then they have $$c = Y-pq$$ dollars left to spend on other goods.
+
+The consumer gets utility from consumption of the commodity $$q$$ and consumption of other goods $$c$$. They choose $$c$$ and $$q$$ to maximize their utility, $$u(c,q)$$. 
+
+The optimization problem the consumer solves is:
 
 $$\max_{c,q} ~ u(c,q) ~ ~ \text{ s.t. } ~ ~ c = Y - pq$$
 
@@ -25,11 +29,6 @@ $$\max_{c,q} ~ u(c,q) ~ ~ \text{ s.t. } ~ ~ c = Y - pq$$
 
 {: .green-callout-title }
 > Note 2
->
->$$u(c,q)$$ is called the **objective function**. It's what we're maximizing.
-
-{: .yellow-callout-title }
-> Note 3
 >
 >$$c = Y - pq$$ is called the **budget constraint** because it says that the consumer cannot spend more than their income.
 
@@ -48,7 +47,7 @@ That is, utility increases linearly in the numeraire good $$c$$, but can increas
 >
 > $$u(c,q) = c + 10q - 0.5q^2$$
 >
-> The price of the commodity is $$p=$$ $5, and the consumer's income is $$Y=$$ $100.
+> The price of the commodity is $$p=5$$, and the consumer's income is $$Y=100$$.
 >
 > 1. How many units of the commodity will the consumer purchase?
 > 2. How much money will they spend on the commodity?
@@ -98,7 +97,7 @@ A demand curve maps the price of a commodity to the amount of the commodity that
 >
 > $$u(c,q) = c + 10q - 0.5q^2$$
 >
-> The price of the commodity is $$p$$, and the consumer's income is $$Y=$$ $100.
+> The price of the commodity is $$p$$, and the consumer's income is $$Y=100$$.
 >
 > Calculate how many units of the commodity the consumer will purchase, expressed as a function of the price $$p$$.
 >
@@ -124,7 +123,7 @@ A demand curve maps the price of a commodity to the amount of the commodity that
 
 ## Consumer surplus
 
-We define consumer surplus as the gain in utility that the consumer gets from participating in the market vs. not participating in it. We can calculate consumer surplus using graphs or using equations. 
+Consumer surplus is the gain in utility that a consumer gets from consuming $$q$$ units of the commodity vs. consuming 0. We can calculate consumer surplus using graphs or using equations. 
 
 The advantage of calculating consumer surplus using equations is that it works for any type of demand curve, even if the demand curve isn't a straight line.
 
@@ -135,7 +134,7 @@ The advantage of calculating consumer surplus using equations is that it works f
 >
 > $$u(c,q) = c + 10q - 0.5q^2$$
 >
-> The price of the commodity is $$p$$, and the consumer's income is $$Y=$$ $100. Calculate consumer surplus when the price of the commodity is $5.
+> The price of the commodity is $$p$$, and the consumer's income is $$Y=100$$. Calculate consumer surplus when the price of the commodity is $$p=5$$.
 >
 > *Answer using graphs.*
 >
@@ -151,7 +150,7 @@ The advantage of calculating consumer surplus using equations is that it works f
 >
 > For this problem, we already saw that the consumer's total utility when $$p=5$$ was $$112.5$$. This is not the same as consumer surplus, however, because you have to compare this utility to the utility they get from not buying the commodity at all.
 >
-> If the consumer does not participate in the market, and therefore does not buy the commodity, then $$q=0$$ and $$c=100$$. So utility is:
+> If the consumer buys $$q=0$$ units of the commodity, then their numeraire consumption is $$c=100$$. Their utility is:
 >
 > $$\begin{align}
 u(c,q) &= c + 10q - 0.5q^2 \\
@@ -159,7 +158,7 @@ u(c,q) &= c + 10q - 0.5q^2 \\
 &=100
 \end{align}$$
 > 
-> So the consumer gets $$100$$ utility if they don't participate in the market, and $$112.5$$ utility if they do (when price is $5). Thus, the consumer surplus is $$112.5 - 100 = 12.5$$, which it the same as what we calculated using the graph.
+> So the consumer gets $$100$$ utility if they consume $$q=0$$, and $$112.5$$ utility if they consume $$q=5$$ at a price of $$p=5$$. Thus, the consumer surplus is $$112.5 - 100 = 12.5$$, which it the same as what we calculated using the graph.
 
 {: .blue-callout-title }
 > Example 2
@@ -191,9 +190,41 @@ q &= \left(\frac{p}{12}\right)^{-2}
 >
 > ![demand-curve](/CSUN-Econ-310/assets/images/03-demand-curves-consumer-surplus-2.png)
 >
-> The shaded area is not a triangle, so we don't know how to calculate the area.
+> The shaded area is not a triangle, so we can't calculate the area using a simple geometric formula.
 >
 > Instead, let's calculate consumer surplus using the utility equation. At $$p=4$$, $$q=9$$ and $$c=14$$. Utility is $$86$$. If the consumer did not participate in the market, then $$q=0$$ and $$c=50$$, and utility is $$50$$. Thus, the consumer surplus is $$86 - 50 = 36$$.
+
+## Price and marginal willingness-to-pay
+
+Let's return to the general setup with quasilinear utility:
+
+$$\max_{c,q} ~ c + v(q) ~ ~ \text{ s.t. } ~ ~ c = Y - pq $$
+
+Which we can rewrite as:
+
+$$\max_{q} ~ Y - pq + v(q)$$
+
+The first order condition for this optimization problem is:
+
+$$ -p + v^\prime(q) = 0 $$
+
+So at the optimal choice of $$q$$ (call it $$q^*$$), the following equation holds:
+
+$$ v^\prime(q^*) = p $$
+
+In other words, at the optimal choice of $$q$$, price equals the marginal utility that the consumer gets from consumption of $$q$$.
+
+In the quasilinear framework, utility has a 1:1 relationship with dollars spent on the numeraire good. Thus, marginal utility equals marginal willingness to pay.
+
+Thus, in the equilibrium of any market where consumers are price-takers and consumers are free to buy however much or however little of the commodity as they would like, price equals consumers' marginal willingness to pay.
+
+{: .purple-callout-title }
+> Economic Insight
+>
+> In the equilibrium of a market where consumers are price takers, price equals consumers' marginal willingness to pay.
+
+This is a useful insight, because it means that price is a good measure of how much value consumers derive from their consumption of a commodity. Higher priced goods are valued more highly by the marginal consumer than lower priced goods.
+
 
 
 
