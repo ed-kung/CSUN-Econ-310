@@ -41,12 +41,12 @@ p - c^\prime(q) &= 0 & \text{(apply derivative rules)} \\
 p &= c^\prime(q)  & \text{(add } c^\prime(q) \text{ to both sides)}
 \end{align}$$
 
-Thus price equals marginal cost at the firm's optimal choice of $$q$$.
+Thus, at the firm's optimal choice of $$q$$, price equals marginal cost.
 
 {: .green-callout-title }
 > Note
 >
-> Marginal cost is defined as the additional cost for an additional unit of output. The derivative of cost is defined as the rate of change in cost over the rate of change in output. These two concepts of the same, so marginal cost is the same as the derivative of the cost function.
+> The marginal cost at $$q$$ is the slope of the cost function at $$q$$, thus: marginal cost at $$q$$ is the derivative of the cost function at $$q$$.
 
 {: .purple-callout-title }
 > Economic Insight
@@ -97,7 +97,7 @@ Thus price equals marginal cost at the firm's optimal choice of $$q$$.
 
 ## Supply curves
 
-A supply curve maps the price of a commodity to the amount of the level of output that a producer chooses to produce. We can solve the optimization problem for a general price $$p$$ to get the producer's supply curve.
+A supply curve maps the price of a commodity to the amount of output a producer chooses to produce. We can solve the optimization problem for a general price $$p$$ to get the producer's supply curve.
 
 {: .blue-callout-title }
 > Example
@@ -123,7 +123,7 @@ p &= 2q \\
 \frac{p}{2} &= q
 \end{align}$$
 >
-> Thus, when the price is $$p$$, it is optimal to produce $$q = p/2$$ units of output. This is the supply curve. 
+> When price is $$p$$, the optimal quantity of output is $$q = p/2$$. This is the supply curve. 
 >
 > The graph of this supply curve is plotted below.
 >
@@ -156,7 +156,7 @@ The advantage of calculating producer surplus using equations is that it works f
 >
 > *Answer using equations.*
 >
-> We already calculated before that at a price of $$p=10$$, the firm will produce $$q=5$$ units. Plugging that into the profit equation, $$\Pi(q) = 10q - q^2$$ gives a profit of $$25$$, which is same as the answer we got graphically.
+> When price is $$p=10$$, the firm will produce $$q=5$$ units of output. Plugging that into the profit equation, $$\Pi(q) = 10q - q^2$$ gives a profit of $$25$$, which is same as the answer we got graphically.
 
 {: .yellow-callout-title }
 > Example 2
@@ -171,7 +171,7 @@ The advantage of calculating producer surplus using equations is that it works f
 >
 > *Answer.*
 >
-> Set up the optimization problem:
+> The firm's optimization problem is:
 >
 > $$\max_{q} ~ pq - q^3$$
 >

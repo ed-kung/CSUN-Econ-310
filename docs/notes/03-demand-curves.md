@@ -75,6 +75,8 @@ That is, utility increases linearly in the numeraire good $$c$$, but can increas
 5 &= q & \text{(add q to both sides)}
 \end{aligned}$$
 >
+> So here are our answers:
+>
 > 1. The consumer will purchase $$q=5$$ units of the commodity.
 > 2. The consumer spends $$pq = 25$$ dollars on the commodity.
 > 3. The consumer has $$c = Y - pq = 75$$ dollars left over.
@@ -88,7 +90,7 @@ u(c,q) &= c + 10q - 0.5q^2 \\
 
 ## Demand curves
 
-A demand curve maps the price of a commodity to the amount of the commodity that a consumer would wish to buy. We can solve the opimization problem for a general price $$p$$ to get the consumer's demand curve.
+A demand curve maps the price of a commodity to the quantity that a consumer buys. We can solve the opimization problem for a general price $$p$$ to get the consumer's demand curve.
 
 {: .green-callout-title }
 > Example
@@ -103,11 +105,11 @@ A demand curve maps the price of a commodity to the amount of the commodity that
 >
 > *Answer.*
 >
-> The consumer solves:
+> Write down the consumer's optimization problem:
 >
 > $$\max_{q} ~ 100 - pq + 10q - 0.5q^2$$
 >
-> To find the optimal choice of $$q$$, solve the first order condition.
+> Solve the first order condition:
 >
 > $$\begin{align}
 \frac{d}{dx} (100 -pq + 10q - 0.5q^2) &= 0  & \text{(first order condition)} \\
@@ -148,9 +150,9 @@ The advantage of calculating consumer surplus using equations is that it works f
 >
 > *Answer using equations.*
 >
-> For this problem, we already saw that the consumer's total utility when $$p=5$$ was $$112.5$$. This is not the same as consumer surplus, however, because you have to compare this utility to the utility they get from not buying the commodity at all.
+> For this problem, we already saw that the consumer's total utility when $$p=5$$ was $$112.5$$. This is not the same as consumer surplus, however, because you have to compare this utility to the utility from buying $$q=0$$.
 >
-> If the consumer buys $$q=0$$ units of the commodity, then their numeraire consumption is $$c=100$$. Their utility is:
+> If the consumer buys $$q=0$$, then their numeraire consumption is $$c=100$$. Their utility is:
 >
 > $$\begin{align}
 u(c,q) &= c + 10q - 0.5q^2 \\
@@ -192,7 +194,7 @@ q &= \left(\frac{p}{12}\right)^{-2}
 >
 > The shaded area is not a triangle, so we can't calculate the area using a simple geometric formula.
 >
-> Instead, let's calculate consumer surplus using the utility equation. At $$p=4$$, $$q=9$$ and $$c=14$$. Utility is $$86$$. If the consumer did not participate in the market, then $$q=0$$ and $$c=50$$, and utility is $$50$$. Thus, the consumer surplus is $$86 - 50 = 36$$.
+> Instead, let's calculate consumer surplus using the utility equation. At $$p=4$$, we calculate $$q=9$$ and $$c=14$$. Utility is $$86$$. If $$q=0$$, then $$c=50$$ and utility is $$50$$. The consumer surplus at $$p=4$$ is therefore $$86-50=36$$.
 
 ## Price and marginal willingness-to-pay
 
@@ -208,15 +210,15 @@ The first order condition for this optimization problem is:
 
 $$ -p + v^\prime(q) = 0 $$
 
-So at the optimal choice of $$q$$ (call it $$q^*$$), the following equation holds:
+So at the optimal choice of $$q$$, the following equation holds:
 
-$$ v^\prime(q^*) = p $$
+$$ p = v^\prime(q)$$
 
 In other words, at the optimal choice of $$q$$, price equals the marginal utility that the consumer gets from consumption of $$q$$.
 
 In the quasilinear framework, utility has a 1:1 relationship with dollars spent on the numeraire good. Thus, marginal utility equals marginal willingness to pay.
 
-Thus, in the equilibrium of any market where consumers are price-takers and consumers are free to buy however much or however little of the commodity as they would like, price equals consumers' marginal willingness to pay.
+Thus, in the equilibrium of any market where consumers are price-takers, they will consume up to the quantity where price equals their marginal willingness to pay.
 
 {: .purple-callout-title }
 > Economic Insight
