@@ -16,7 +16,7 @@ There are $$N$$ identical consumers and $$M$$ identical firms. A commodity is tr
 
 The consumers each have income $$Y$$. Their utility function over the numeraire good $$c$$ and the commodity $$q$$ is:
 
-$$u(c,q) = c + v(q)$$.
+$$u(c,q) = c + v(q)$$
 
 The cost for a firm to produce $$q$$ units of the commodity is $$c(q)$$. Firms maximize their profit: 
 
@@ -252,4 +252,14 @@ q_s &= p - p_g \\
 >
 > When the marginal willingness-to-pay and the marginal cost of a commodity both increase/decrease by the same amount, we expect the price of the commodity to increase/decrease by that amount, but the equilibrium quantity to remain unchanged.
 
+
+## Summary
+
+To find the short run equilibrium of a competitive market, follow these steps:
+
+1. Write down the optimization problem of the consumers, then solve their first order condition to get $$q_d$$ as a function of $$p$$.
+2. Write down the optimization problem of the firms, then solve their first order condition to get $$q_s$$ as a function of $$p$$.
+3. Use $$Nq_d = Mq_s$$ to find the equilibrium $$p$$.
+4. Plug $$p$$ into the first order conditions to find $$q_s$$ and $$q_d$$.
+5. Use the above to calculate any other relevant variable, such as consumer utility or firm profit.
 
