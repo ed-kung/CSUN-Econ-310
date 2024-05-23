@@ -2,6 +2,7 @@
 layout: default
 title: 1. Math Review
 parent: Lecture Notes
+nav_order: 1
 ---
 
 # Math Review

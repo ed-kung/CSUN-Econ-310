@@ -2,6 +2,7 @@
 layout: default
 title: 3. Supply Curves
 parent: Lecture Notes
+nav_order: 3
 ---
 
 # Supply Curves

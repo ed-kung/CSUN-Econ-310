@@ -2,6 +2,7 @@
 layout: default
 title: 2. Single Variable Optimization
 parent: Lecture Notes
+nav_order: 2
 ---
 
 # Single Variable Optimization
@@ -17,6 +18,11 @@ Suppose you're given an arbitrary function, $$f(x)$$. The function has the follo
 ![graphical-intuition](/CSUN-Econ-310/assets/images/02-single-variable-optimization-intuition.png)
 
 What value of $$x$$ maximizes $$f(x)$$?  $$f(x)$$ is maximized at the value of $$x$$ where the *slope* of the function is flat. 
+
+{: .purple-callout-title }
+> Mathematical Insight
+>
+> In single variable optimization, the maximum of a function is found at the point where the slope is exactly equal to zero.
 
 It's like climbing a mountain. To ascend, you follow the direction where the slope rises fastest. You know you're at the peak when the point you're standing on is flat and in every direction you look the land is sloping downwards away from you.
 

@@ -2,6 +2,7 @@
 layout: default
 title: 5. Short Run Competitive Equilibrium
 parent: Lecture Notes
+nav_order: 5
 ---
 
 # Short Run Competitive Equilibrium

@@ -2,6 +2,7 @@
 layout: default
 title: "8. Application: Demand Shocks"
 parent: Lecture Notes
+nav_order: 8
 ---
 
 # Application: Demand Shocks

@@ -2,6 +2,7 @@
 layout: default
 title: "7. Long Run Competitive Equilibrium"
 parent: Lecture Notes
+nav_order: 7
 ---
 
 # Long Run Competitive Equilibrium

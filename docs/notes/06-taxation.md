@@ -2,6 +2,7 @@
 layout: default
 title: "6. Application: Taxation"
 parent: Lecture Notes
+nav_order: 6
 ---
 
 # Application: Taxation

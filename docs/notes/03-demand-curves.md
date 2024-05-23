@@ -2,6 +2,7 @@
 layout: default
 title: 4. Demand Curves
 parent: Lecture Notes
+nav_order: 4
 ---
 
 # Demand Curves
