@@ -44,3 +44,27 @@ As it turns out, the maximum point lies on the contour which *just touches* the 
 >
 > In two dimensional constrained optimization, the maximal point is found on the contour line that *just touches*, i.e. is *tangent* to, the constraint. 
 
+{: .blue-callout-title }
+> Example
+>
+> An example with x^0.5 y^0.5
+
+## Constrained optimization with equations
+
+### General problem
+
+### 2-dimensional problem with linear constraint
+
+{: .green-callout-title }
+> Example
+>
+> 
+
+
+
+
+
+
+
+
+
