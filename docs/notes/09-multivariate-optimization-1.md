@@ -205,13 +205,13 @@ As in single variable optimization, we call the requirement that every partial d
 
 ### General case
 
-For the general case:
+For the general case,
 
 $$\max_{x_1, \ldots, x_n} ~ f(x_1, \ldots, x_n)$$
 
-We have $$n$$ first order conditions:
+there are $$n$$ first order conditions:
 
-$$f_{x_n} (x_1, \ldots, x_n) = 0 ~ ~ \text{ for each } n $$
+$$\frac{\partial}{\partial x_i} f(x_1, \ldots, x_n) = 0 ~ ~ \text{ for each } ~ x_i $$
 
 That gives us $$n$$ equations in $$n$$ unknowns. (The unknowns are $$x_1, \ldots, x_n$$.)  If you're interested in how to solve large systems of equations, you should take a math class called **Linear Algebra**.
 
