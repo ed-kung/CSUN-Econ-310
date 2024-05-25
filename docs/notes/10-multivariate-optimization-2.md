@@ -55,7 +55,7 @@ As it turns out, the maximum point lies on the contour which *just touches* the 
 >
 > The diagram below shows contour lines for the function:
 >
-> $$ f(x,y) = x^{0.5} y^{0.5} $$
+> $$ f(x,y) = x^{\frac{1}{2}} y^{\frac{1}{2}} $$
 >
 > The black line illustrates the constraint:
 >
@@ -158,7 +158,7 @@ x &= 6
 > $$\begin{align}
 x + 2y &= 12 \\
 2y &= 12 - x \\
-y &= 6 - 0.5x 
+y &= 6 - \frac{1}{2}x 
 \end{align}$$
 >
 > The contour line at elevation $$z$$ can be plotted by re-arranging $$xy=z$$:

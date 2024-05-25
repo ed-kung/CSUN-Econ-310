@@ -11,7 +11,7 @@ nav_order: 3
 - TOC
 {:toc}
 
-## General Setup
+## General setup
 
 A firm produces a commodity which it can sell at price $$p$$. The firm takes the price as given.
 

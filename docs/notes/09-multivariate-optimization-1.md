@@ -65,7 +65,7 @@ and then find all the combinations of $$x$$ and $$y$$ that give $$f(x,y)=z$$.
 {: .green-callout-title }
 > Example
 >
-> $$f(x,y) = x^{0.5} y^{0.5}$$ 
+> $$f(x,y) = x^{\frac{1}{2}} y^{\frac{1}{2}}$$ 
 >
 > Find the equation that describes the contour line for an elevation of $$z$$. Then plot the contour lines for $$z=2, 3, 4, 5, 6,7$$.
 >
@@ -74,8 +74,8 @@ and then find all the combinations of $$x$$ and $$y$$ that give $$f(x,y)=z$$.
 > To find the contour line at elevation $$z$$, set $$f(x,y)=z$$ and solve for $$y$$:
 >
 > $$\begin{align}
-x^{0.5} y^{0.5} &= z & \text{(definition of contour line)} \\
-\left(x^{0.5} y^{0.5}\right)^2 &= z^2 & \text{(take both sides to the power of 2)} \\
+x^{\frac{1}{2}} y^{\frac{1}{2}} &= z & \text{(definition of contour line)} \\
+\left(x^{\frac{1}{2}} y^{\frac{1}{2}}\right)^2 &= z^2 & \text{(take both sides to the power of 2)} \\
 xy &= z^2 & \text{(apply exponent rules)} \\
 y &= \frac{z^2}{x} &
 \end{align}$$
@@ -165,15 +165,15 @@ f_y(x,y) &= 4 - 3y^2
 {: .yellow-callout-title }
 > Example 2
 >
-> $$f(x,y) = x^{0.5} y^{0.5} $$
+> $$f(x,y) = x^{\frac{1}{2}} y^{\frac{1}{2}} $$
 >
 > Calculate $$f_x(x,y)$$ and $$f_y(x,y)$$.
 >
 > *Answer.*
 >
 > $$\begin{align} 
-f_x (x,y) &= 0.5 x^{-0.5} y^{0.5} \\
-f_y (x,y) &= 0.5 x^{0.5} y^{-0.5}
+f_x (x,y) &= \frac{1}{2} x^{-\frac{1}{2}} y^{\frac{1}{2}} \\
+f_y (x,y) &= \frac{1}{2} x^{\frac{1}{2}} y^{-\frac{1}{2}}
 \end{align}$$
 >
 

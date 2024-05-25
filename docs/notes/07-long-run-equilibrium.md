@@ -11,7 +11,7 @@ nav_order: 7
 - TOC
 {:toc}
 
-## General Setup
+## General setup
 
 There are $$N$$ identical consumers and $$M$$ identical firms.  The number of consumers is fixed, but $$M$$ can change over time, as firms can freely enter and exit the market.
 

@@ -98,7 +98,7 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 |   12 | 11/11 - 11/15 | Game Theory I                        | Game Theory II                           |
 |   13 | 11/18 - 11/22 | Bertrand and Cournot Competition     | *(Online)* TBD                           |
 |   14 | 11/25 - 11/29 | Hotelling Model                      | **NO CLASS - THANKSGIVING**              |
-|   15 | 12/2 - 12/6   | Risk and Uncertainty                 | Consumption & Savings                    |
+|   15 | 12/2 - 12/6   | Risk and Uncertainty                 | Saving and Borrowing                     |
 |   16 | 12/9 - 12/13  | Review Session                       | **NO CLASS - SEMESTER ENDS**             |
 
 Final Exam date TBD.
