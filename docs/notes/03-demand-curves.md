@@ -42,7 +42,7 @@ $$u(c,q) = c + v(q)$$
 That is, utility increases linearly in the numeraire good $$c$$, but can increase arbitrarily with the commodity $$q$$.
 
 {: .blue-callout-title }
-> Example
+> Example 1
 >
 > The consumer's utility function over numeraire consumption $$c$$ and commodity consumption $$q$$ is:
 >
@@ -94,7 +94,7 @@ u(c,q) &= c + 10q - 0.5q^2 \\
 A demand curve maps the price of a commodity to the quantity that a consumer buys. We can solve the opimization problem for a general price $$p$$ to get the consumer's demand curve.
 
 {: .green-callout-title }
-> Example
+> Example 2
 >
 > The consumer's utility function over numeraire consumption $$c$$ and commodity consumption $$q$$ is:
 >
@@ -131,7 +131,7 @@ Consumer surplus is the gain in utility that a consumer gets from consuming $$q$
 The advantage of calculating consumer surplus using equations is that it works for any type of demand curve, even if the demand curve isn't a straight line.
 
 {: .yellow-callout-title }
-> Example 1
+> Example 3
 >
 > The consumer's utility function over numeraire consumption $$c$$ and commodity consumption $$q$$ is:
 >
@@ -164,7 +164,7 @@ u(c,q) &= c + 10q - 0.5q^2 \\
 > So the consumer gets $$100$$ utility if they consume $$q=0$$, and $$112.5$$ utility if they consume $$q=5$$ at a price of $$p=5$$. Thus, the consumer surplus is $$112.5 - 100 = 12.5$$, which it the same as what we calculated using the graph.
 
 {: .blue-callout-title }
-> Example 2
+> Example 4
 >
 > In this example, we'll be forced to calculate consumer surplus using equations.
 >

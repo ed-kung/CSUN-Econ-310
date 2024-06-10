@@ -70,3 +70,49 @@ class LREQ:
             "util": self.util,
             "totalutil": self.totalutil
         }
+
+class CobbDouglasConsumer:
+    def __init__(self,a=0.5,b=0.5,px=1,py=1,I=100):
+        
+        x = I/(px*(1+b/a))
+        y = I/(py*(1+a/b))
+        
+        xmax = I/px
+        ymax = I/py
+        
+        U = x**a * y**b
+        
+        self.a=a
+        self.b=b
+        self.px=px
+        self.py=py
+        self.I=I
+        self.x=x
+        self.y=y
+        self.xmax=xmax
+        self.ymax=ymax
+        self.U = U
+    
+    def __repr__(self):
+        return repr({
+            'a': self.a,
+            'b': self.b,
+            'px': self.px, 
+            'py': self.py,
+            'I': self.I,
+            'x': self.x,
+            'y': self.y,
+            'xmax': self.xmax,
+            'ymax': self.ymax,
+            'U': self.U
+        })
+    
+    def is_integer(self):
+        return (
+            (self.x%1==0) and
+            (self.y%1==0) and
+            (self.xmax%1==0) and
+            (self.ymax%1==0)
+        )
+    
+        

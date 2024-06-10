@@ -35,7 +35,7 @@ $$ p = v^\prime(q_d) - t $$
 > When consumers are taxed at a rate of $$t$$ per unit, then instead of price equals marginal willingness-to-pay, we get that price equals marginal willingness-to-pay minus tax.
 
 {: .blue-callout-title }
-> Example 
+> Example 1
 >
 > **Consumers.** There are $$500$$ identical consumers each with income $$Y=100$$. Each consumer has a utility function over numeraire consumption $$c$$ and commodity $$q$$ that is equal to:
 >
@@ -170,7 +170,7 @@ $$ p = c^\prime(q_s) + t $$
 > When producers are taxed at a rate of $$t$$ per unit, then instead of price equals marginal cost, we get that price equals marginal cost plus tax. 
 
 {: .green-callout-title }
-> Example 
+> Example 2 
 >
 > **Consumers.** There are $$500$$ identical consumers each with income $$Y=100$$. Each consumer has a utility function over numeraire consumption $$c$$ and commodity $$q$$ that is equal to:
 >

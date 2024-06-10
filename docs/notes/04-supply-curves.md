@@ -55,7 +55,7 @@ Thus, at the firm's optimal choice of $$q$$, price equals marginal cost.
 > In the equilibrium of a market where firms are price takers, price equals the firms' marginal cost of production.
 
 {: .yellow-callout-title }
-> Example
+> Example 1
 > 
 > The price of a commodity is $$p=10$$. A firm can produce $$q$$ units of the commodity at a total cost of:
 >
@@ -101,7 +101,7 @@ Thus, at the firm's optimal choice of $$q$$, price equals marginal cost.
 A supply curve maps the price of a commodity to the amount of output a producer chooses to produce. We can solve the optimization problem for a general price $$p$$ to get the producer's supply curve.
 
 {: .blue-callout-title }
-> Example
+> Example 2
 > 
 > The price of a commodity is $$p$$. A firm can produce $$q$$ units of the commodity at a total cost of:
 >
@@ -137,7 +137,7 @@ Producer surplus is the gain in profit that a producer gets from producing $$q$$
 The advantage of calculating producer surplus using equations is that it works for any kind of supply curve, even if the supply curve isn't a straight line.
 
 {: .green-callout-title }
-> Example 1
+> Example 3
 > 
 > The price of a commodity is $$p$$. A firm can produce $$q$$ units of the commodity at a total cost of:
 >
@@ -160,7 +160,7 @@ The advantage of calculating producer surplus using equations is that it works f
 > When price is $$p=10$$, the firm will produce $$q=5$$ units of output. Plugging that into the profit equation, $$\Pi(q) = 10q - q^2$$ gives a profit of $$25$$, which is same as the answer we got graphically.
 
 {: .yellow-callout-title }
-> Example 2
+> Example 4
 >
 > In this example, we'll be forced to calculate producer surplus using equations.
 >

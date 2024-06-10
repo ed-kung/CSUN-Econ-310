@@ -110,7 +110,7 @@ This says that at the optimal choice, the ratio of marginal utility of good $$x$
 
 We call the ratio of marginal utility between two goods the **marginal rate of substitution** between the two goods (or ***MRS***).  
 
-It's called marginal rate of substitution, because it's the ratio of trade that would keep the consumer's utility constant.  Thus, consumers are willing to *substitute* between these two goods at the marginal rate of substitution.
+It's called marginal rate of substitution because it's the ratio of trade that would keep the consumer's utility constant.  Thus, consumers are willing to *substitute* between these two goods at the marginal rate of substitution.
 
 {: .purple-callout-title }
 > Definition
@@ -137,7 +137,7 @@ If the MRS between good $$x$$ and good $$y$$ is $$2.5$$, this means that the con
 >
 > $$u(x,y) = x^{\frac{1}{3}} y^{\frac{2}{3}} $$
 >
-> Write down the consumer's MRS between good $$x$$ and good $$y$$, expressed in terms of $$x$$ and $$y$$. Describe how the MRS changes as $$x$$ and $$y$$ change.
+> Write down the consumer's MRS between good $$x$$ and good $$y$$, expressed in terms of $$x$$ and $$y$$. Calculate the MRS when $$x=2$$ and $$y=3$$. Describe how the MRS changes as $$x$$ and $$y$$ change.
 > 
 > *Answer.*
 >
@@ -160,7 +160,9 @@ If the MRS between good $$x$$ and good $$y$$ is $$2.5$$, this means that the con
 &= \frac{y}{2x}
 \end{align}$$
 >
-> The MRS between $$x$$ and $$y$$ increases when $$y$$ increases and decreases when $$x$$ increases.
+> When $$x=2$$ and $$y=3$$, the MRS is $$3/4$$.
+>
+> The MRS increases when $$y$$ increases and decreases when $$x$$ increases.
 >
 > This means that $$x$$ becomes relative more valuable when the consumer's consumption of $$y$$ increases.  Conversely, $$x$$ becomes relatively *less* valuable when the consumer's consumption of $$x$$ increases.  
 >
@@ -191,7 +193,6 @@ This makes sense: if the MRS between goods $$x$$ and $$y$$ is $$2.5$$, it means 
 >
 > *Answer.* They'll consume bananas and apples until the MRS between bananas and apples is $$1.25 / 0.70 = 1.79$$.
 
-
 ## Graphical representation
 
 The general consumer choice problem can be represented graphically as follows:
@@ -208,52 +209,83 @@ In other words, the slope of the indifference curves are equal the marginal rate
 
 At the utility maximizing point, the budget line is just tangent to an indifference curve. Since the slope of the budget line is the ratio of $$p_x$$ to $$p_y$$, and the slope of the indifference curve is MRS, we see once again that utility is optimized when MRS equals the ratio of the prices.
 
-## Types of utility functions
-
-This section illustrates the indifference curves for some common types of utility functions.
+{: .purple-callout-title }
+> Tip
+>
+> To draw the graphical representation of consumer choice between two goods, make use of the following tidbits:
+>
+> 1. The slope of the budget line is always equal to $$- \frac{p_x}{p_y} $$.
+> 
+> 2. The y-intercept of the budget line is always $$\frac{I}{p_y}$$. 
+>
+> 3. The x-intercept of the budget line is always $$\frac{I}{p_x}$$.
+>
+> 4. The utility-maximizing choice of $$x$$ and $$y$$ occurs on the indifference curve that is just tangent to (just touching) the budget line.
 
 {: .green-callout-title }
-> Cobb Douglas
+> Example 5
 >
-> A Cobb Douglas utility function has the following form:
+> A consumer with income $$I=100$$ has utility function over two goods, $$x$$ and $$y$$ given by:
 >
-> $$ u(x,y) = A x^a y^b $$
-> 
-> It has indifference curves that look like:
-> 
-> ![cobb-douglas](/CSUN-Econ-310/assets/images/11-consumer-theory-cobb-douglas.png)
+> $$u(x,y) = x^{\frac{1}{2}} y^{\frac{1}{2}}$$
 >
-> Cobb Douglas utility functions exhibit diminishing marginal rates of substitution. They're one of the most common types of utility functions economists use to model consumer choice.
-
-{: .yellow-callout-title }
-> Perfect Substitutes
+> The price of good $$x$$ is $$p_x=5$$ and the price of good $$y$$ is $$p_y=10$$.
 >
-> Two goods are perfect substitutes if they're completely interchangeable with each other. Decreasing $$x$$ by 1 while increasing $$y$$ by 1 should get you the same utility, and vice versa. 
+> Represent the consumer optimization problem graphically and solve for the optimal choice of $$x$$ and $$y$$ (using calculus).
 >
-> The utility function of perfect substitutes is:
+> *Answer using calculus*.
 >
-> $$ u(x,y) = x + y $$
-> 
-> It has indifference curves that look like:
-> 
-> ![perfect-substitutes](/CSUN-Econ-310/assets/images/11-consumer-theory-perfect-substitutes.png)
+> Step 1. Write down the optimization problem.
 >
-> An example of perfect substitutes might be Exxon gasoline and Chevron gasoline.
-
-{: .blue-callout-title }
-> Perfect Complements
+> $$ \max_{x,y} ~ x^{\frac{1}{2}} y^{\frac{1}{2}} ~ ~ \text{ s.t. } ~ ~ 5x + 10y = 100 $$
 >
-> If $$x$$ and $$y$$ are perfect complements, then they must be purchased in equal amounts for either to have any benefit.  Purchasing more of $$x$$ without more of $$y$$ is of no use, nor is purchasing more of $$y$$ without more of $$x$$.
+> Step 2. Write down the first order conditions:
 >
-> The utility function for perfect complements is:
+> $$\begin{align}
+\tfrac{1}{2} x^{-\frac{1}{2}} y^{\frac{1}{2}} &= 5\lambda \\
+\tfrac{1}{2} x^{\frac{1}{2}} y^{-\frac{1}{2}} &= 10\lambda 
+\end{align}$$
 >
-> $$u(x,y) = \min(x,y) $$
+> Step 3. Divide the two first order conditions:
 >
-> It has indifference curves that look like:
+> $$\begin{align}
+\frac{\tfrac{1}{2} x^{-\frac{1}{2}} y^{\frac{1}{2}}}{\tfrac{1}{2} x^{\frac{1}{2}} y^{-\frac{1}{2}}} &= \frac{5}{10} \\
+\frac{y}{x} &= \frac{1}{2} \\
+y &= \tfrac{1}{2}x
+\end{align}$$
 >
-![perfect-complements](/CSUN-Econ-310/assets/images/11-consumer-theory-perfect-complements.png)
+> Step 4. Plug $$y = \tfrac{1}{2} x$$ into the budget constraint.
 >
-> An example of perfect complements might be left shoes and right shoes.
-
-
-
+> $$\begin{align}
+5x + 10y &= 100 \\
+5x + 10(\tfrac{1}{2}x) &= 100 \\
+5x + 5x &= 100 \\
+10x &= 100 \\
+x &= 10
+\end{align}$$
+>
+> Step 5. Plug $$x=10$$ into the budget constraint to solve for $$y$$.
+>
+> $$\begin{align}
+5x + 10y &= 100 \\
+5(10) + 10y &= 100 \\
+50 + 10y &= 100 \\
+10y &= 50 \\
+y &= 5
+\end{align}$$
+>
+> So the optimal choice is $$x=10$$ and $$y=5$$.
+>
+> *Graphical representation.*
+>
+> To plot the budget line, draw a straight line between the x-intercept and the y-intercept.  The x-intercept is $$I/p_x = 100/5 = 20$$.  The y-intercept is $$I/p_y = 100/10=10$$.
+>
+> To draw the indifference curve, first calculate the utility at $$x=10$$ and $$y=5$$.
+>
+> $$u(10,5) = 10^{\frac{1}{2}} 5^{\frac{1}{2}} = 7.071$$
+>
+> Then, plot all $$x$$ and $$y$$ which satisfy: $$x^{\frac{1}{2}} y^{\frac{1}{2}} = 7.071$$. 
+>
+> The graphical representation looks like this:
+>
+> ![example-5](/CSUN-Econ-310/assets/images/11-consumer-theory-example-5.png)

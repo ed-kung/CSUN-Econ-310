@@ -1,0 +1,216 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage[bottom]{footmisc}
+\usepackage{geometry}
+\usepackage{adjustbox}
+\usepackage[hyphenbreaks]{breakurl}
+\usepackage{booktabs}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\sisetup{output-exponent-marker=\ensuremath{\mathrm{E}}}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\include{estout}
+\interfootnotelinepenalty=10000
+
+\usepackage{numprint}
+\usepackage{threeparttable}
+\end_preamble
+\options hyperfootnotes=false,hidelinks
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "lmodern" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement H
+\paperfontsize 12
+\spacing onehalf
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\pdf_quoted_options "hyperfootnotes=false"
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1.25in
+\topmargin 1.25in
+\rightmargin 1.25in
+\bottommargin 1.25in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+Cobb Douglas consumer problem
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\max_{x,y}\text{ }x^{a}y^{b}\text{ s.t. }p_{x}x+p_{y}y=I
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+FOC
+\begin_inset Formula 
+\[
+ax^{a-1}y^{b}=\lambda p_{x}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+bx^{a}y^{b-1}=\lambda p_{y}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{ay}{bx}=\frac{p_{x}}{p_{y}}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+p_{y}y=\frac{b}{a}p_{x}x
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p_{x}x+\frac{b}{a}p_{x}x=I
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left(1+\frac{b}{a}\right)p_{x}x=I
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+x=\frac{I}{p_{x}(1+b/a)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Isoutility curves:
+\begin_inset Formula 
+\[
+x^{a}y^{b}=U
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+y=\left(\frac{U}{x^{a}}\right)^{1/b}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

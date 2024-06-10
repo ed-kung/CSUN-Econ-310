@@ -51,17 +51,17 @@ A function is a mapping from one or more "input" variables to an "output" variab
 Functions can be visualized using graphs. A graph simply plots the different input values along with their output value.
 
 {: .blue-callout-title }
-> Example 1
+> Example 4
 >
 > ![Graph of x^2](/CSUN-Econ-310/assets/images/01-math-review-xsquared.png)
 
 {: .green-callout-title }
-> Example 2
+> Example 5
 >
 > ![Graph of sqrt(x)](/CSUN-Econ-310/assets/images/01-math-review-sqrtx.png)
 
 {: .yellow-callout-title }
-> Example 3
+> Example 6
 >
 > ![Graph of x^0.5 y^0.5](/CSUN-Econ-310/assets/images/01-math-review-sqrtxy.png)
 
@@ -76,7 +76,7 @@ The supply curve maps price onto quantity supplied.  Let's write $$q_s = g(p)$$,
 The market is in equilibrium when $$q_d = q_s$$. Thus, the price that equilibrates the market is the price that solves the equation: $$f(p) = g(p)$$.
 
 {: .blue-callout-title }
-> Example
+> Example 7
 >
 > Supply and demand curves are defined by:
 >
@@ -110,7 +110,7 @@ To work with exponents, you need to memorize these rules:
 | Inverse Rule        | $$(x^a)^{1/a} = x$$           |
 
 {: .green-callout-title }
-> Example
+> Example 8
 >
 > Supply and demand curves are defined by:
 >
@@ -150,7 +150,7 @@ To work with logs, you'll need to memorize these rules:
 Here, $$e$$ is Euler's Number, a mathematical constant equal to 2.71828. Euler's Number arises naturally out of the mathematics of compounding interest rates, and thus has many applications in economics and finance.
 
 {: .yellow-callout-title }
-> Example
+> Example 9
 >
 > Natural logs are useful for modeling supply and demand curves with constant elasticity. For example, suppose the demand curve is specified by:
 >

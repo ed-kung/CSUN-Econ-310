@@ -51,7 +51,7 @@ As it turns out, the maximum point lies on the contour which *just touches* the 
 > In two dimensional constrained optimization, the maximal point is found on the contour line that *just touches*, i.e. is *tangent* to, the constraint. 
 
 {: .blue-callout-title }
-> Example
+> Example 1
 >
 > The diagram below shows contour lines for the function:
 >
@@ -101,7 +101,7 @@ There are 3 equations in 3 unknowns. The unknowns are $$x$$, $$y$$, and $$\lambd
 
 
 {: .green-callout-title }
-> Example
+> Example 2
 >
 > Solve:
 > 

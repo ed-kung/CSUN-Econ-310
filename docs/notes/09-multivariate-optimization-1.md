@@ -40,7 +40,7 @@ One way to find the peak is to look at a contour map. A contour map shows lines 
 <img src="/CSUN-Econ-310/assets/images/contour-map-1.webp" alt="contour map" width="600">
 
 {: .blue-callout-title }
-> Example
+> Example 1
 >
 > Look at the following two-dimensional function and its associated contour plot.
 >
@@ -63,7 +63,7 @@ $$f(x,y) = z$$
 and then find all the combinations of $$x$$ and $$y$$ that give $$f(x,y)=z$$.
 
 {: .green-callout-title }
-> Example
+> Example 2
 >
 > $$f(x,y) = x^{\frac{1}{2}} y^{\frac{1}{2}}$$ 
 >
@@ -94,7 +94,7 @@ A partial derivative of a function shows the slope of the function when moving i
 Let's call $$f_x(x,y)$$ the partial derivative of $$f(x,y)$$ with respect to $$x$$. $$f_x(x,y)$$ tells us the slope of $$f(x,y)$$ when traveling in a straight line along the $$x$$ direction, at a given level of $$y$$.
 
 {: .yellow-callout-title }
-> Example
+> Example 3
 >
 > Imagine you are traveling from left to right along the black line (at $$y=6$$), shown below:
 >
@@ -120,7 +120,7 @@ Let's call $$f_x(x,y)$$ the partial derivative of $$f(x,y)$$ with respect to $$x
 Let's call $$f_y(x,y)$$ the partial derivative of $$f(x,y)$$ with respect to $$y$$. $$f_y(x,y)$$ tells us the slope of $$f(x,y)$$ when traveling in a straight line along the $$y$$ direction, at a given level of $$x$$.
 
 {: .blue-callout-title }
-> Example
+> Example 4
 >
 > Imagine you are traveling from south to north along the black line (at $$x=3$$), shown below:
 >
@@ -148,7 +148,7 @@ To calculate the partial derivative of a function with respect to $$x$$, simply 
 To calculate the partial derivative of a function with respect to $$y$$, simply take the derivative of $$f(x,y)$$ with respect to $$y$$, treating $$x$$ as a constant.
 
 {: .green-callout-title }
-> Example 1
+> Example 5
 > 
 > $$ f(x,y) = 8x - x^2 + 4y - y^3 $$
 >
@@ -163,7 +163,7 @@ f_y(x,y) &= 4 - 3y^2
 >
 
 {: .yellow-callout-title }
-> Example 2
+> Example 6
 >
 > $$f(x,y) = x^{\frac{1}{2}} y^{\frac{1}{2}} $$
 >
@@ -178,7 +178,7 @@ f_y (x,y) &= \frac{1}{2} x^{\frac{1}{2}} y^{-\frac{1}{2}}
 >
 
 {: .blue-callout-title }
-> Example 3
+> Example 7
 >
 > $$f(x,y) = x^2 \ln y $$
 >
@@ -231,7 +231,7 @@ f_y(x,y) &= 0
 Which is 2 equations in 2 unknowns ($$x$$, $$y$$).  Usually, it's not too hard to solve systems of 2 equations in 2 unknowns.  In fact, you've been solving systems of up to 4 equations in 4 unknowns already!
 
 {: .green-callout-title }
-> Example
+> Example 8
 >
 > $$f(x,y) = 12x + xy - 0.5x^2 - y^2$$
 >

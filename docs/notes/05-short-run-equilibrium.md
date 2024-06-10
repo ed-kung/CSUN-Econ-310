@@ -72,7 +72,7 @@ This is the equilibrium condition, which we call equation 3.
 The consumer's first order condition (Eq.1), the firm's first order condition (Eq.2), and the equilibrium condition (Eq.3) all have to hold in equilibrium. We therefore have three equations (Eq.1, Eq.2, Eq.3) and three unknowns ($$p$$, $$q_d$$, $$q_s$$). We can find the equilibrium by solving this system of equations.
 
 {: .blue-callout-title }
-> Example
+> Example 1
 >
 > **Consumers.** There are 3,000 identical consumers each with income $$Y=100$$. Each consumer has a utility function over numeraire consumption $$c$$ and commodity $$q$$ that is equal to:
 >
@@ -166,7 +166,7 @@ Because the optimization problems are more "fundamental" than a supply curve or 
 The following example demonstrates.
 
 {: .green-callout-title }
-> Example
+> Example 2
 >
 > There are $$10,000$$ identical Uber drivers (producers) and $$10,000$$ identical Uber riders (consumers). The price per mile of an Uber ride is $$p$$.  Riders and drivers are both price takers.
 >

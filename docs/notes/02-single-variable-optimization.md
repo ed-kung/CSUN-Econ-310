@@ -59,7 +59,7 @@ Since the slope of a function is different at every point, we can define another
 By convention, we notate the derivative of $$f(x)$$ as $$f^\prime(x)$$ or $$\frac{d}{dx} f(x)$$. Both notations mean the same thing.
 
 {: .yellow-callout-title }
-> Example
+> Example 3
 >
 > The graphs below show the function $$f(x)$$ and its derivative, $$f^\prime(x)$$. The derivative shows the slope of $$f(x)$$ at each value of $$x$$. Notice how the slope is positive when $$x<2.6$$, zero when $$x=2.6$$, and negative when $$x>2.6$$.
 >
@@ -81,7 +81,7 @@ To find the derivative of common functions, you can make use of the following ru
 | Chain Rule                      | $$f(x) = g[h(x)]$$     | $$f^\prime(x) = g^\prime[h(x)] h^\prime(x)$$ |
 
 {: .blue-callout-title }
-> Example 1
+> Example 4
 > 
 > Find the derivative of $$f(x) = 5.2x - x^2$$.  Then calculate the slope of $$f(x)$$ when $$x=2$$.
 >
@@ -92,7 +92,7 @@ To find the derivative of common functions, you can make use of the following ru
 > $$f^\prime(2) = 5.2 - 4 = 1.2$$. So the slope of $$f(x)$$ when $$x=2$$ is 1.2.
 
 {: .green-callout-title }
-> Example 2
+> Example 5
 >
 > Find the derivative of $$f(x) = ax^2 + bx + c$$. Then calculate the slope of $$f(x)$$ when $$x=-1$$
 >
@@ -106,7 +106,7 @@ f^\prime(-1) &= 2a(-1) + b = -2a + b
 
 
 {: .yellow-callout-title }
-> Example 3
+> Example 6
 >
 > Find the derivative of $$f(x) = \ln( x^2 + 2x + 1)$$.
 >
@@ -152,7 +152,7 @@ $$f^\prime(x) = 0$$
 This condition is known as the **first order condition**.
 
 {: .blue-callout-title }
-> Example 1
+> Example 7
 >
 > In the above graphs, the equation of the function was:
 >
@@ -182,7 +182,7 @@ This condition is known as the **first order condition**.
 > So $$f(x) = 5.2x - x^2$$ is maximized at $$x=2.6$$.
 
 {: .green-callout-title }
-> Example 2
+> Example 8
 > 
 > A firm is deciding how much quantity $$q$$ to produce. It can sell its output at a price of $10. The total cost of production is equal to $$q^2$$.
 > 
@@ -220,7 +220,7 @@ This condition is known as the **first order condition**.
 > So the maximum profit attainable is 25.
 
 {: .yellow-callout-title }
-> Example 3
+> Example 9
 > 
 > Find the value of $$x$$ that maximizes:
 >

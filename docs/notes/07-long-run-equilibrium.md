@@ -85,7 +85,7 @@ $$ \text{(Eq.4)} ~ ~ ~ ~ pq_s - c(q_s) = 0 $$
 The above conditions contain 4 equations: (Eq.1, Eq.2, Eq.3, and Eq.4), and 4 unknowns: ($$p$$, $$q_d$$, $$q_s$$, and $$M$$).  The long run equilibrium is the solution to this system of equations.
 
 {: .blue-callout-title }
-> Example
+> Example 1
 >
 > A commodity is traded in a competitive market at price $$p$$. Consumers and firms are price takers.
 > 
