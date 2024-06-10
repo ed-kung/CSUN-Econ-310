@@ -122,7 +122,7 @@ A demand curve maps the price of a commodity to the quantity that a consumer buy
 >
 > The graph of the demand curve is plotted below.
 >
-> ![demand-curve](/CSUN-Econ-310/assets/images/03-demand-curves-demand-curve-1.png)
+> ![demand-curve](/CSUN-Econ-310/assets/images/04-demand-curves-demand-curve-1.png)
 
 ## Consumer surplus
 
@@ -145,7 +145,7 @@ The advantage of calculating consumer surplus using equations is that it works f
 >
 > In Econ 160, you learned how to calculate consumer surplus using graphs. The consumer surplus at $$p=5$$ is the shaded triangle underneath the demand curve and above the price, as shown below.
 >
-> ![demand-curve](/CSUN-Econ-310/assets/images/03-demand-curves-consumer-surplus-1.png)
+> ![demand-curve](/CSUN-Econ-310/assets/images/04-demand-curves-consumer-surplus-1.png)
 >
 > The area of this triangle is $$\frac{1}{2} (5)(5) = 12.5$$, so consumer surplus is $$12.5$$.
 >
@@ -191,7 +191,7 @@ q &= \left(\frac{p}{12}\right)^{-2}
 >
 > If we were to plot this function and calculate the consumer surplus at $$p=4$$, we'd get the following graph.
 >
-> ![demand-curve](/CSUN-Econ-310/assets/images/03-demand-curves-consumer-surplus-2.png)
+> ![demand-curve](/CSUN-Econ-310/assets/images/04-demand-curves-consumer-surplus-2.png)
 >
 > The shaded area is not a triangle, so we can't calculate the area using a simple geometric formula.
 >

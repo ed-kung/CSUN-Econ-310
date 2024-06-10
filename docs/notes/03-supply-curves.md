@@ -74,7 +74,7 @@ Thus, at the firm's optimal choice of $$q$$, price equals marginal cost.
 >
 > If we were to plot the profit function, it would look like this:
 >
-> ![profit-function](/CSUN-Econ-310/assets/images/04-supply-curves-profit-1.png)
+> ![profit-function](/CSUN-Econ-310/assets/images/03-supply-curves-profit-1.png)
 >
 > To find the maximum of the profit function, we solve the first order condition:
 >
@@ -128,7 +128,7 @@ p &= 2q \\
 >
 > The graph of this supply curve is plotted below.
 >
-> ![supply-curve-1](/CSUN-Econ-310/assets/images/04-supply-curves-supply-curve-1.png)
+> ![supply-curve-1](/CSUN-Econ-310/assets/images/03-supply-curves-supply-curve-1.png)
 
 ## Producer surplus
 
@@ -151,7 +151,7 @@ The advantage of calculating producer surplus using equations is that it works f
 >
 > In Econ 160, you learned how to calculate producer surplus using graphs. The producer surplus at $$p=10$$ is the shaded triangle underneath the price and above the supply curve, as shown below.
 >
-> ![producer-surplus-1](/CSUN-Econ-310/assets/images/04-supply-curves-producer-surplus-1.png)
+> ![producer-surplus-1](/CSUN-Econ-310/assets/images/03-supply-curves-producer-surplus-1.png)
 >
 > The area of the triangle is $$\frac{1}{2}(5)(10) = 25$$, so the producer surplus is $$25$$.
 >
@@ -187,7 +187,7 @@ p &= 3q^2 & \text{(add } 3q^2 \text{ to both sides)} \\
 >
 > If we were to plot this supply curve and calculate the producer surplus at $$p=5$$, we'd get the following graph.
 >
-> ![producer-surplus-1](/CSUN-Econ-310/assets/images/04-supply-curves-producer-surplus-2.png)
+> ![producer-surplus-1](/CSUN-Econ-310/assets/images/03-supply-curves-producer-surplus-2.png)
 >
 > The shaded area is not a triangle, so we can't calculate the area using a simple geometric formula.
 >
