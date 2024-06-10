@@ -225,67 +225,16 @@ At the utility maximizing point, the budget line is just tangent to an indiffere
 {: .green-callout-title }
 > Example 5
 >
-> A consumer with income $$I=100$$ has utility function over two goods, $$x$$ and $$y$$ given by:
+> A consumer with income $$I=100$$ derives utility from two goods, $$x$$ and $$y$$. The price of $$x$$ is $$p_x=5$$ and the price of $$y$$ is $$p_y=10$$.
 >
-> $$u(x,y) = x^{\frac{1}{2}} y^{\frac{1}{2}}$$
+> The consumer's utility function is represented by the indifference curves shown in the diagram below.
 >
-> The price of good $$x$$ is $$p_x=5$$ and the price of good $$y$$ is $$p_y=10$$.
+> ![example-5-setup](/CSUN-Econ-310/assets/images/11-consumer-theory-example-5-setup.png)
 >
-> Represent the consumer optimization problem graphically and solve for the optimal choice of $$x$$ and $$y$$ (using calculus).
+> Draw the budget line and find the optimal consumption of $$x$$ and $$y$$.
 >
-> *Answer using calculus*.
+> *Answer.*
 >
-> Step 1. Write down the optimization problem.
->
-> $$ \max_{x,y} ~ x^{\frac{1}{2}} y^{\frac{1}{2}} ~ ~ \text{ s.t. } ~ ~ 5x + 10y = 100 $$
->
-> Step 2. Write down the first order conditions:
->
-> $$\begin{align}
-\tfrac{1}{2} x^{-\frac{1}{2}} y^{\frac{1}{2}} &= 5\lambda \\
-\tfrac{1}{2} x^{\frac{1}{2}} y^{-\frac{1}{2}} &= 10\lambda 
-\end{align}$$
->
-> Step 3. Divide the two first order conditions:
->
-> $$\begin{align}
-\frac{\tfrac{1}{2} x^{-\frac{1}{2}} y^{\frac{1}{2}}}{\tfrac{1}{2} x^{\frac{1}{2}} y^{-\frac{1}{2}}} &= \frac{5}{10} \\
-\frac{y}{x} &= \frac{1}{2} \\
-y &= \tfrac{1}{2}x
-\end{align}$$
->
-> Step 4. Plug $$y = \tfrac{1}{2} x$$ into the budget constraint.
->
-> $$\begin{align}
-5x + 10y &= 100 \\
-5x + 10(\tfrac{1}{2}x) &= 100 \\
-5x + 5x &= 100 \\
-10x &= 100 \\
-x &= 10
-\end{align}$$
->
-> Step 5. Plug $$x=10$$ into the budget constraint to solve for $$y$$.
->
-> $$\begin{align}
-5x + 10y &= 100 \\
-5(10) + 10y &= 100 \\
-50 + 10y &= 100 \\
-10y &= 50 \\
-y &= 5
-\end{align}$$
->
-> So the optimal choice is $$x=10$$ and $$y=5$$.
->
-> *Graphical representation.*
->
-> To plot the budget line, draw a straight line between the x-intercept and the y-intercept.  The x-intercept is $$I/p_x = 100/5 = 20$$.  The y-intercept is $$I/p_y = 100/10=10$$.
->
-> To draw the indifference curve, first calculate the utility at $$x=10$$ and $$y=5$$.
->
-> $$u(10,5) = 10^{\frac{1}{2}} 5^{\frac{1}{2}} = 7.071$$
->
-> Then, plot all $$x$$ and $$y$$ which satisfy: $$x^{\frac{1}{2}} y^{\frac{1}{2}} = 7.071$$. 
->
-> The graphical representation looks like this:
+> To x-intercept of the budget line is $$I/p_x = 100/5 = 20$$. The y-intercept of the budget line is $$I/p_y = 100/10 = 10$$. The optimal point occurs on the indifference curve that just touches the budget line, which is marked by point "A" on the diagram below. The optimal consumption is $$x=10$$ and $$y=5$$.
 >
 > ![example-5](/CSUN-Econ-310/assets/images/11-consumer-theory-example-5.png)

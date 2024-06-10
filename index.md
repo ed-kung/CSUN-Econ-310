@@ -82,24 +82,24 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 
 ## Tentative Schedule
 
-| Week | Dates         | Session 1                            | Session 2                                | 
-| ---: | :------------ | :----------------------------------- | :--------------------------------------- | 
-|    1 | 8/26 - 8/30   | Introduction & Math Review           | Single Variable Optimization I           |   
-|    2 | 9/2 - 9/6     | Supply Curves                        | Demand Curves                            |
-|    3 | 9/9 - 9/13    | Short Run Competitive Equilibrium    | Application: Taxation                    |
-|    4 | 9/16 - 9/20   | Long Run Competitive Equilibrium     | Application: Demand Shocks               |
-|    5 | 9/23 - 9/27   | Review                               | **Midterm 1**                            |  
-|    6 | 9/30 - 10/4   | Multivariate Optimization I          | Multivariate Optimization II             |
-|    7 | 10/7 - 10/11  | Theory of Consumer Choice            | Consumer Theory: Applications            | 
-|    8 | 10/14 - 10/18 | Consumer Theory: Special Cases       | Theory of Production                     |
-|    9 | 10/21 - 10/25 | Application: Labor Markets           | Application: Labor & Capital Markets     |
-|   10 | 10/28 - 11/1  | Review                               | **Midterm 2**                            |
-|   11 | 11/4 - 11/8   | Monopolies                           | Price Discrimination                     |
-|   12 | 11/11 - 11/15 | Game Theory I                        | Game Theory II                           |
-|   13 | 11/18 - 11/22 | Bertrand and Cournot Competition     | *(Online)* TBD                           |
-|   14 | 11/25 - 11/29 | Hotelling Model                      | **NO CLASS - THANKSGIVING**              |
-|   15 | 12/2 - 12/6   | Risk and Uncertainty                 | Saving and Borrowing                     |
-|   16 | 12/9 - 12/13  | Review Session                       | **NO CLASS - SEMESTER ENDS**             |
+| Week | Dates         | Session 1                            | Session 2                                   |  
+| ---: | :------------ | :----------------------------------- | :------------------------------------------ | 
+|    1 | 8/26 - 8/30   | Introduction & Math Review           | Single Variable Optimization I              |   
+|    2 | 9/2 - 9/6     | Supply Curves                        | Demand Curves                               |
+|    3 | 9/9 - 9/13    | Short Run Competitive Equilibrium    | Application: Taxation                       |
+|    4 | 9/16 - 9/20   | Long Run Competitive Equilibrium     | Application: Demand Shocks                  |
+|    5 | 9/23 - 9/27   | Review                               | **Midterm 1**                               |  
+|    6 | 9/30 - 10/4   | Multivariate Optimization I          | Multivariate Optimization II                |
+|    7 | 10/7 - 10/11  | Theory of Consumer Choice            | Consumer Theory: Special Cases              | 
+|    8 | 10/14 - 10/18 | Income and Substitution Effects      | Application: In-kind vs. Monetary Transfers |
+|    9 | 10/21 - 10/25 | Theory of Production                 | Application: Labor & Capital Markets        |
+|   10 | 10/28 - 11/1  | Review                               | **Midterm 2**                               |
+|   11 | 11/4 - 11/8   | Monopolies                           | Price Discrimination                        |
+|   12 | 11/11 - 11/15 | Game Theory I                        | Game Theory II                              |
+|   13 | 11/18 - 11/22 | Bertrand and Cournot Competition     | *(Online)* TBD                              |
+|   14 | 11/25 - 11/29 | Hotelling Model                      | **NO CLASS - THANKSGIVING**                 |
+|   15 | 12/2 - 12/6   | Risk and Uncertainty                 | Saving and Borrowing                        |
+|   16 | 12/9 - 12/13  | Review Session                       | **NO CLASS - SEMESTER ENDS**                |
 
 Final Exam date TBD.
 
