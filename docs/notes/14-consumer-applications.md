@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "12. Consumer Theory: Applications"
+title: "14. Application: In-Kind vs. Monetary Transfers"
 parent: Lecture Notes
-nav_order: 12
+nav_order: 14
 ---
 
-# Consumer Theory: Applications
+# Application: In-Kind vs. Monetary Transfers
 {: .no_toc }
 
 - TOC

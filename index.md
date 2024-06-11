@@ -48,13 +48,13 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 
     Attendance in this class will be checked. Everyone starts with full credit (10 pts). For each missed session, an increasing number of points will be deducted. 0 pts are deducted for the first two missed classes. Afterwards, 2 pts are deducted for the third missed class, 4 pts for the fourth, 6 pts for the fifth, and so on. You can earn negative attendance points which will affect the rest of your grade.
     
-- **Homework Assignments (30%)**
+- **Homework Assignments (20%)**
 
-    Weekly homework assignments will generally consist of a problem set, to be submitted on paper. Students can work optionally work in groups of up to 3 on homework assignments. If you work in a group, your group only has to make one submission for the whole group.
+    Weekly homework assignments will generally consist of a problem set, to be submitted on paper. Students can elect to work in groups of up to 3 on homework assignments. If you work in a group, your group only has to make one submission for the whole group.
     
-- **Exams (60%)**
+- **Exams (70%)**
 
-    There will be two midterm exams and a final. The first midterm is worth 15% of your grade, the second is worth 20%, and the final is worth 25%.
+    There will be two midterm exams and a final. The midterms are each worth 20% of your grade and the final exam is worth 30% of the grade.
 
 - **Grading Scale**
 
@@ -90,8 +90,8 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 |    4 | 9/16 - 9/20   | Long Run Competitive Equilibrium     | Application: Demand Shocks                  |
 |    5 | 9/23 - 9/27   | Review                               | **Midterm 1**                               |  
 |    6 | 9/30 - 10/4   | Multivariate Optimization I          | Multivariate Optimization II                |
-|    7 | 10/7 - 10/11  | Theory of Consumer Choice            | Consumer Theory: Special Cases              | 
-|    8 | 10/14 - 10/18 | Income and Substitution Effects      | Application: In-kind vs. Monetary Transfers |
+|    7 | 10/7 - 10/11  | Theory of Consumer Choice            | Exploring Utility Functions                 | 
+|    8 | 10/14 - 10/18 | Application: Price Changes           | Application: In-kind vs. Monetary Transfers |
 |    9 | 10/21 - 10/25 | Theory of Production                 | Application: Labor & Capital Markets        |
 |   10 | 10/28 - 11/1  | Review                               | **Midterm 2**                               |
 |   11 | 11/4 - 11/8   | Monopolies                           | Price Discrimination                        |
