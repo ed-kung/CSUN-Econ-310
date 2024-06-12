@@ -41,7 +41,50 @@ Because of its flexibility and mathematical convenience, Cobb Douglas is a commo
 {: .blue-callout-title }
 > Cobb Douglas Example
 >
-> 
+> A consumer derives utility over goods $$x$$ and $$y$$ given by:
+>
+> $$ u(x,y) = x^{\frac{2}{3}} y^{\frac{1}{3}} $$
+>
+> The consumer has income $$I=120$$. The price of $$x$$ is $$p_x = 20$$ and the price of $$y$$ is $$p_y = 10$$. 
+>
+> Find the optimal choice of $$x$$ and $$y$$. Draw a diagram representing the consumer's optimal choice.
+>
+> *Answer.*
+>
+> Step 1. Write down the optimization problem.
+>
+> $$ \max_{x,y} ~ x^{\frac{2}{3}} y^{\frac{1}{3}} ~ ~ \text{ s.t. } ~ ~ 20x + 10y = 120 $$
+>
+> Step 2. Write down the first order conditions.
+>
+> $$\begin{align}
+\tfrac{2}{3} x^{-\frac{1}{3}} y^{\frac{1}{3}} &= 20 \lambda  \\
+\tfrac{1}{3} x^{\frac{2}{3}} y^{-\frac{2}{3}} &= 10 \lambda 
+\end{align}$$
+>
+> Step 3. Divide the two first order conditions.
+>
+> $$\begin{align}
+\frac{\tfrac{2}{3} x^{-\frac{1}{3}} y^{\frac{1}{3}}}{\tfrac{1}{3} x^{\frac{2}{3}} y^{-\frac{2}{3}}} &= \frac{20\lambda}{10\lambda} \\
+\frac{2y}{x} &= 2 \\
+y&=x 
+\end{align}$$
+>
+> Step 4. Plug $$y=x$$ into the budget constraint.
+>
+> $$\begin{align}
+20x + 10y &= 120 \\
+20x + 10x &= 120 \\
+30x &= 120 \\
+x &= 4
+\end{align}$$
+>
+> Step 5. Use $$y=x$$ to get $$y=4$$.
+>
+> So the optimal choice is $$x=4$$ and $$y=4$$.  The optimal choice is represented by the diagram below. (Instead of drawing many indifference curves, I'm only drawing the one that the optimal point lies on.)
+>
+> ![cb-example](/CSUN-Econ-310/assets/images/12-exploring-utility-cb-example.png)
+
 
 ---
 
@@ -74,7 +117,22 @@ For example, consider your decision to choose between Exxon gasoline and Shell g
 {: .green-callout-title }
 > Perfect Substitutes Example
 >
-> 
+> $$x$$ and $$y$$ are perfect substitutes. A consumer's utility over $$x$$ and $$y$$ is represented by the indifference curves below.
+>
+> ![perfect-subs-example-setup](/CSUN-Econ-310/assets/images/12-exploring-utility-pf-example-setup.png)
+>
+> The consumer has an income of $$80$$. The price of $$x$$ is $$p_x = 10$$ and the price of $$y$$ is $$p_y = 10$$. 
+>
+> Plot the budget line and find the optimal choice of $$x$$ and $$y$$.
+>
+> *Answer.*
+>
+> To plot the budget line, simply draw a straight line between the x and y intercepts. The x-intercept is $$I/p_x=8$$ and the y-intercept is $$I/p_y=8$$.
+>
+> ![perfect-subs-example-setup](/CSUN-Econ-310/assets/images/12-exploring-utility-pf-example-solution.png)
+>
+> The optimal point is the point on the budget line that touches the highest indifference curve. That occurs at $$x=8$$ and $$y=0$$. Note that this is a corner solution.
+
 
 ---
 
@@ -97,9 +155,45 @@ The important thing to remember about Leontieff utility is that $$x$$ and $$y$$ 
 ---
 
 {: .yellow-callout-title }
-> Leontieff Example
+> Leontieff Example 1
 >
-> 
+> $$x$$ and $$y$$ are perfect complements. A consumer's utility over $$x$$ and $$y$$ is represented by the indifference curves below.
+>
+> ![perfect-subs-example-setup](/CSUN-Econ-310/assets/images/12-exploring-utility-leontieff-example-setup.png)
+>
+> The consumer has an income of $$120$$. 
+>
+> 1. Plot the budget line and show the optimal choice when $$p_x = 40$$ and $$p_y = 20$$.
+>
+> 2. Plot the budget line and show the optimal choice when $$p_x = 20$$ and $$p_y = 40$$.
+>
+> *Answer.*
+>
+> The budget line when $$p_x=40$$ and $$p_y=20$$:
+>
+> ![perfect-subs-example-setup](/CSUN-Econ-310/assets/images/12-exploring-utility-leontieff-example-solution-1.png)
+>
+> The budget line when $$p_x=20$$ and $$p_y=40$$:
+>
+![perfect-subs-example-setup](/CSUN-Econ-310/assets/images/12-exploring-utility-leontieff-example-solution-2.png)
+>
+> In both cases, the optimal choice is $$x=2$$ and $$y=2$$. 
+
+
+{: .blue-callout-title }
+> Leontieff Example 2
+>
+> Here is an alternative way to solve problems with Leontieff utility without drawing indifference curves.
+>
+> A consumer's utility over $$x$$ and $$y$$ is given by:
+>
+> $$u(x,y) = \min (x, y)$$
+>
+> The consumer's income is $$I=120$$.  The price of $$x$$ is $$p_x=10$$ and the price of $$y$$ is $$p_y=20$$. Calculate the optimal choice of $$x$$ and $$y$$.
+>
+> *Answer.*
+>
+> First note that at the optimal solution, $$x$$ and $$y$$ must be purchased in equal quantities. The total cost to buy both is $$p_x + p_y = 30$$. Since the consumer's income is $$I=120$$, he can buy only $$I/(p_x+p_y) = 40$$ pairs of $$x,y$$. Thus, the optimal choice is $$x=40$$ and $$y=40$$.
 
 ---
 
@@ -128,7 +222,47 @@ Quasilinear utility functions are often used to model consumer choice between a 
 {: .blue-callout-title }
 > Quasilinear Example
 >
+> A consumer has quasilinear utility over $$x$$ and $$y$$:
 >
+> $$u(x,y) = x + 20y^{\frac{1}{2}} $$
+>
+> The consumer's income is $$I=100$$. The price of $$x$$ is $$p_x=1$$ and the price of $$y$$ is $$p_y = 2$$. 
+> 
+> Find the optimal choice of $$x$$ and $$y$$.
+>
+> *Answer.*
+>
+> Step 1. Write down the optimization problem.
+>
+> $$\begin{align}
+\max_{x,y} ~ x + 20y^{\frac{1}{2}} ~ ~ \text{ s.t. } ~ ~ x + 2y = 100
+\end{align}$$
+>
+> Step 2. Write down the first order conditions.
+>
+> $$\begin{align}
+1 &= \lambda \\
+10y^{-\frac{1}{2}} &= 2\lambda 
+\end{align}$$
+>
+> Step 3. Plug $$\lambda=1$$ into the first order condition for $$y$$.
+>
+> $$\begin{align}
+10y^{-\frac{1}{2}} &= 2 \\
+5 &= y^{\frac{1}{2}}  \\
+25 &= y
+\end{align}$$
+>
+> Step 4. Plug $$y=25$$ into the budget constraint to get $$x$$.
+>
+> $$\begin{align}
+x + 2y &= 100 \\
+x + 2(25) &= 100 \\
+x + 50 &= 100 \\
+x &= 50
+\end{align}$$
+>
+> The optimal solution is $$x=50$$ and $$y=25$$.
 
 ---
 
