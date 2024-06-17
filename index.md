@@ -74,7 +74,7 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 	|       4 | You failed to follow all instructions OR your work has minor inaccuracies but still demonstrates an understanding of the material. |
 	|       3 | Your work has major inaccuracies OR your work demonstrates only a partial understanding of the material.                           |
     |       2 | You made an attempt, but your work has major inaccuracies and does not demonstrate an understanding of the material.               |
-    |       1 | You made only a partial attempt at completing the assignment.                                                                      |
+    |       1 | You made only a partial attempt at completing the assignment; or you made an attempt but I could not read it or understand it.                                                                      |
     |       0 | You did not make any attempt at the assignment. Note that if you do not attempt some parts of an assignment, you may receive a zero for the whole assignment. |	
 
 
