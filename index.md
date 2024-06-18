@@ -91,14 +91,14 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 |    5 | 9/23 - 9/27   | Review                               | **Midterm 1**                               |  
 |    6 | 9/30 - 10/4   | Multivariate Optimization I          | Multivariate Optimization II                |
 |    7 | 10/7 - 10/11  | Theory of Consumer Choice            | Exploring Utility Functions                 | 
-|    8 | 10/14 - 10/18 | Application: Price Changes           | Application: In-kind vs. Monetary Transfers |
-|    9 | 10/21 - 10/25 | Theory of Production                 | Application: Labor & Capital Markets        |
+|    8 | 10/14 - 10/18 | Application: In-kind vs. Monetary Transfers           | Application: Price Deflators and Real Income |
+|    9 | 10/21 - 10/25 | Application: Labor Supply                 | Theory of Production        |
 |   10 | 10/28 - 11/1  | Review                               | **Midterm 2**                               |
 |   11 | 11/4 - 11/8   | Monopolies                           | Price Discrimination                        |
 |   12 | 11/11 - 11/15 | Game Theory I                        | Game Theory II                              |
-|   13 | 11/18 - 11/22 | Bertrand and Cournot Competition     | *(Online)* TBD                              |
-|   14 | 11/25 - 11/29 | Hotelling Model                      | **NO CLASS - THANKSGIVING**                 |
-|   15 | 12/2 - 12/6   | Risk and Uncertainty                 | Saving and Borrowing                        |
+|   13 | 11/18 - 11/22 | Oligopolies I    | *(Online)* TBD                              |
+|   14 | 11/25 - 11/29 | Oligopolies II                      | **NO CLASS - THANKSGIVING**                 |
+|   15 | 12/2 - 12/6   | Risk and Insurance                 | Saving and Borrowing                        |
 |   16 | 12/9 - 12/13  | Review Session                       | **NO CLASS - SEMESTER ENDS**                |
 
 Final Exam date TBD.

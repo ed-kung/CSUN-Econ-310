@@ -13,6 +13,7 @@ nav_order: 12
 
 In this lecture we explore the properties of various types of utility functions over two goods, $$u(x,y)$$.
 
+
 ## Cobb Douglas
 
 A Cobb Douglas utility function has the following form:
