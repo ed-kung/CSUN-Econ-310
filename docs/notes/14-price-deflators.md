@@ -1,17 +1,15 @@
 ---
 layout: default
-title: "13. Application: Price Changes"
+title: "14. Application: Price Deflators and Real Income"
 parent: Lecture Notes
-nav_order: 13
+nav_order: 14
 ---
 
-# Application: Price Changes
+# Application: Price Deflators and Real Income
 {: .no_toc }
 
 - TOC
 {:toc}
-
-In this section we'll derive own-price elasticities and cross-price elasticities using Cobb-Douglas utility functions.
 
 
 

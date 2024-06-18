@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "15. Theory of Production"
+title: "16. Theory of Production"
 parent: Lecture Notes
-nav_order: 15
+nav_order: 16
 ---
 
 # Theory of Production
