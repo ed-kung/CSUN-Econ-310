@@ -193,6 +193,17 @@ x=\frac{I}{p_{x}(1+b/a)}
 \end_layout
 
 \begin_layout Standard
+\begin_inset Formula 
+\[
+y=\frac{I}{p_{y}(1+a/b)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Isoutility curves:
 \begin_inset Formula 
 \[
@@ -206,6 +217,50 @@ x^{a}y^{b}=U
 \[
 y=\left(\frac{U}{x^{a}}\right)^{1/b}
 \]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Real income (better way):
+\begin_inset Formula 
+\begin{align*}
+U(I,p_{x},p_{y}) & =\left(\frac{I}{p_{x}(1+b/a)}\right)^{a}\left(\frac{I}{p_{y}(1+a/b)}\right)^{b}\\
+ & =I^{a+b}\left(\frac{1}{p_{x}(1+b/a)}\right)^{a}\left(\frac{1}{p_{y}(1+a/b)}\right)^{b}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+I^{\prime a+b}\left(\frac{1}{p_{x}^{\prime}(1+b/a)}\right)^{a}\left(\frac{1}{p_{y}^{\prime}(1+a/b)}\right)^{b} & =I^{a+b}\left(\frac{1}{p_{x}(1+b/a)}\right)^{a}\left(\frac{1}{p_{y}(1+a/b)}\right)^{b}\\
+I^{\prime a+b}\left(\frac{1}{p_{x}^{\prime}}\right)^{a}\left(\frac{1}{p_{y}^{\prime}}\right)^{b} & =I^{a+b}\left(\frac{1}{p_{x}}\right)^{a}\left(\frac{1}{p_{y}}\right)^{b}\\
+\left(\frac{I^{\prime}}{I}\right)^{a+b} & =\left(\frac{p_{x}^{\prime}}{p_{x}}\right)^{a}\left(\frac{p_{y}^{\prime}}{p_{y}}\right)^{b}\\
+\frac{I^{\prime}}{I} & =\left(\frac{p_{x}^{\prime}}{p_{x}}\right)^{\frac{a}{a+b}}\left(\frac{p_{y}^{\prime}}{p_{y}}\right)^{\frac{b}{s+b}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Real income (constant bundle way):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\frac{I^{\prime}}{I} & =\frac{p_{x}^{\prime}x+p_{y}^{\prime}y}{I}\\
+ & =p_{x}^{\prime}\left(\frac{1}{p_{x}(1+b/a)}\right)+p_{y}^{\prime}\left(\frac{1}{p_{y}(1+a/b)}\right)\\
+ & =\frac{1}{1+b/a}\left(\frac{p_{x}^{\prime}}{p_{x}}\right)+\frac{1}{1+a/b}\left(\frac{p_{y}^{\prime}}{p_{x}}\right)
+\end{align*}
 
 \end_inset
 
