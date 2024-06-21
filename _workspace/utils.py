@@ -10,10 +10,10 @@ def polyeq(var='x', coefs=[1,1,1], remove_first_plus_minus=True):
             else:
                 t+='- '
             if p==0:
-                t+=f'{np.abs(c)} '
+                t+=f'{np.abs(c):g} '
             else:
                 if np.abs(c)!=1:
-                    t+=f'{np.abs(c)}'
+                    t+=f'{np.abs(c):g}'
                 if p==1:
                     t+=f'{var} '
                 else:
@@ -23,224 +23,171 @@ def polyeq(var='x', coefs=[1,1,1], remove_first_plus_minus=True):
     else:
         return t
 
-class SREQ:
-    def __init__(self,N=3000,M=200,Y=100,alpha=10,beta=2,gamma=0,delta=0,eta=0.2):
-        Q = (alpha - delta)/(beta/N + eta/M)
-        p = (N*eta*alpha + M*beta*delta)/(N*eta + M*beta)
-        
-        self.N=N
-        self.M=M
-        self.Y=Y
-        self.alpha=alpha
-        self.beta=beta
-        self.gamma=gamma
-        self.delta=delta
-        self.eta=eta
-        self.Q = Q
-        self.p = p
-        self.qd = Q/N
-        self.qs = Q/M
-        self.c = Y - p*self.qd
-        self.revenue = p*self.qs 
-        self.cost = gamma + delta*self.qs + 0.5*self.eta*self.qs**2
-        self.profit = self.revenue - self.cost
-        self.totalprofit = M*self.profit
-        self.util = self.c + alpha*self.qd - 0.5*beta*self.qd**2
-        self.totalutil = N*self.util
-        self.total_surplus = self.totalprofit + self.totalutil
-        
-    def check_solution(self):
-        return (
-            (self.c>0) and
-            (self.qd>0) and
-            (self.qs>0) and
-            (self.p>0) and
-            (np.abs(self.p%1)<0.001) and
-            (np.abs(self.qd%1)<0.001) and
-            (np.abs(self.qs%1)<0.001)
-        )
 
-    def general_setup(self):
-        return r"""
-A commodity $q$ is traded at price $p$ in a competitive market with $N$ identical consumers and $M$ identical firms.\\
 
-Each consumer has income $Y$ and maximizes:
 
-\begin{align*}
-\max_{c,q} ~ c + \alpha q - \tfrac{1}{2} \beta q^2 ~ \text{ s.t. } c + pq = Y
-\end{align*}
-
-Each firm's cost function is:
-
-\begin{align*}
-c(q) = \gamma + \delta q + \tfrac{1}{2} \eta q^2
-\end{align*}
-
-The firm maximizes:
-
-\begin{align*}
-\max_{q} ~ pq - c(q)
-\end{align*}
-
-The short run equilibrium condition is:
-
-\begin{align*}
-Nq_d = Mq_s = Q
-\end{align*}
-
-The general solutions are:
-
-\begin{align*}
-Q = \frac{\alpha - \delta}{\beta/N + \eta/M} 
-\end{align*}
-
-\begin{align*}
-p = \frac{N \eta \alpha + M \beta \delta}{N \eta + M \beta}
-\end{align*}
-"""
-
-    def setup(self):
-        return r"""
+SREQ_SETUP = r"""
 A commodity $q$ is traded at price $p$ in a competitive market with price-taking consumers and firms. \\
         
-There are ${:,.0f}$ identical consumers each with income $Y={:,.0f}$. Each consumer has a utility function over numeraire consumption $c$ and commodity $q$ given by:
+There are ${}$ identical consumers each with income ${}$. Each consumer has a utility function over numeraire consumption $c$ and commodity $q$ given by:
 
 $$u(c,q) = c + {}$$
 
-There are ${:,.0f}$ identical firms each with cost function given by:
+There are ${}$ identical firms each with cost function given by:
 
 $$c(q) = {}$$
-""".format(
-    self.N, 
-    self.Y,
-    polyeq('q', [0, self.alpha, -0.5*self.beta]),
-    self.M,
-    polyeq('q', [self.gamma, self.delta, 0.5*self.eta])
-)
 
-    def solution(self):
-        return r"""
-The solutions are: $p={}$, $q_d={}$, $q_s={}$.
-""".format(self.p, self.qd, self.qs)
+"""
+SREQ_SOLUTION = r"""
+The general solutions are:
 
+$$Q = \frac{\alpha - \delta}{\beta/N + \eta/M}$$
+
+$$p = \frac{N \eta \alpha + M \beta \delta}{N \eta + M \beta}$$
+"""
+class SREQ:
+    def __init__(self, params=None):
+        if not params:
+            params = {'N':3000, 'M':200, 'Y':100, 'alpha':10, 'beta':2, 'gamma':0, 'delta':0, 'eta':0.2}
+
+        params = {k:params[k] for k in ['N','M','Y','alpha','beta','gamma','delta','eta']}
         
+        N = params['N']
+        M = params['M']
+        Y = params['Y']
+        alpha = params['alpha']
+        beta = params['beta']
+        gamma = params['gamma']
+        delta = params['delta']
+        eta = params['eta']
+        
+        Q = (alpha - delta)/(beta/N + eta/M)
+        p = (N*eta*alpha + M*beta*delta)/(N*eta + M*beta)
+
+        sol = {}
+        sol['Q'] = Q
+        sol['p'] = p
+        sol['qd'] = Q/N
+        sol['qs'] = Q/M
+        sol['c'] = Y - p*sol['qd']
+        sol['revenue'] = p*sol['qs']
+        sol['cost'] = gamma + delta*sol['qs'] + 0.5*eta*sol['qs']**2
+        sol['profit'] = sol['revenue'] - sol['cost']
+        sol['total_profit'] = M*sol['profit']
+        sol['utility'] = sol['c'] + alpha * sol['qd'] - 0.5 * beta * sol['qd']**2
+        sol['total_utility'] = N*sol['utility']
+        sol['total_surplus'] = sol['total_profit'] + sol['total_utility']
+
+        self.params = params
+        self.sol = sol
+        
+    def check_solution(self):
+        sol = self.sol
+        return (
+            (sol['c']>0) and
+            (sol['qd']>0) and
+            (sol['qs']>0) and
+            (sol['p']>0) and
+            (np.abs(sol['p']%1)<0.001) and
+            (np.abs(sol['qd']%1)<0.001) and
+            (np.abs(sol['qs']%1)<0.001)
+        )
+
+    def general_setup(self):
+        return SREQ_SETUP.format(
+            'N', 'Y', '\\alpha q - \\tfrac{1}{2} \\beta q^2', 'M', '\\gamma + \\delta q + \\tfrac{1}{2} \\eta q^2'
+        ) 
+    def general_solution(self):
+        return SREQ_SOLUTION
+        
+    def setup(self):
+        return SREQ_SETUP.format(
+            f"{self.params['N']:,.0f}", 
+            f"Y={self.params['Y']:,.0f}",
+            polyeq('q', [0, self.params['alpha'], -0.5*self.params['beta']]),
+            f"{self.params['M']:,.0f}",
+            polyeq('q', [self.params['gamma'], self.params['delta'], 0.5*self.params['eta']])
+        )
+
+
+
+ADVALOREMSR_SOLUTION = r"""
+The general solutions are:
+
+$$Q = \frac{(1-t_p)\alpha - (1+t_c)\delta}{(1-t_p)\beta/N + (1+t_c)\eta/M}$$
+
+$$p = \frac{N \eta \alpha + M \beta \delta}{(1+t_c) N \eta + (1-t_p) M \beta}$$
+"""
 class AdValoremSR:
-    def __init__(self,N=3000,M=200,Y=100,alpha=10,beta=2,gamma=0,delta=0,eta=0.2,tc=0.1,tp=0):
+    def __init__(self, params=None):
+        if not params:
+            params = {'N':3000, 'M':200, 'Y':100, 'alpha':10, 'beta':2, 'gamma':0, 'delta':0, 'eta':0.2, 'tc':0.1, 'tp':0}
+
+        params = {k:params[k] for k in ['N','M','Y','alpha','beta','gamma','delta','eta','tc','tp']}
+
+        sreq = SREQ(params)
+        
+        N = params['N']
+        M = params['M']
+        Y = params['Y']
+        alpha = params['alpha']
+        beta = params['beta']
+        gamma = params['gamma']
+        delta = params['delta']
+        eta = params['eta']
+        tc = params['tc']
+        tp = params['tp']
+
         Q = ((1-tp)*alpha - (1+tc)*delta)/((1+tc)*eta/M + (1-tp)*beta/N)
         p = (N*eta*alpha + M*beta*delta)/(N*eta*(1+tc) + M*beta*(1-tp))
         
-        self.N=N
-        self.M=M
-        self.Y=Y
-        self.alpha=alpha
-        self.beta=beta
-        self.gamma=gamma
-        self.delta=delta
-        self.eta=eta
-        self.tc=tc
-        self.tp=tp
-        self.Q = Q
-        self.p = p
-        self.qd = Q/N
-        self.qs = Q/M
-        self.c = Y - p*self.qd
-        self.revenue = p*self.qs 
-        self.cost = gamma + delta*self.qs + 0.5*self.eta*self.qs**2
-        self.profit = self.revenue - self.cost
-        self.totalprofit = M*self.profit
-        self.util = self.c + alpha*self.qd - 0.5*beta*self.qd**2
-        self.totalutil = N*self.util
-        self.tax_revenue = (tc+tp)*Q
-        self.total_surplus = self.totalutil + self.totalprofit + self.tax_revenue
-        self.eq_notax = SREQ(N=N,M=M,Y=Y,alpha=alpha,beta=beta,gamma=gamma,delta=delta,eta=eta)
-        self.DWL = self.eq_notax.total_surplus - self.total_surplus
+        sol = {}
+        sol['Q'] = Q
+        sol['p'] = p
+        sol['qd'] = Q/N
+        sol['qs'] = Q/M
+        sol['c'] = Y - (1+tc)*p*sol['qd']
+        sol['revenue'] = (1-tp)*p*sol['qs']
+        sol['cost'] = gamma + delta*sol['qs'] + 0.5*eta*sol['qs']**2
+        sol['profit'] = sol['revenue'] - sol['cost']
+        sol['total_profit'] = M*sol['profit']
+        sol['utility'] = sol['c'] + alpha * sol['qd'] - 0.5 * beta * sol['qd']**2
+        sol['total_utility'] = N*sol['utility']
+        sol['tax_revenue'] = (tc+tp)*p*Q
+        sol['total_surplus'] = sol['total_profit'] + sol['total_utility'] + sol['tax_revenue']
+        sol['DWL'] = sreq.sol['total_surplus'] - sol['total_surplus']
+
+        self.params = params
+        self.sol = sol
+        self.sreq = sreq
 
     def check_solution(self):
         return (
-            (self.c>0) and
-            (self.p>0) and
-            (self.qd>0) and
-            (self.qs>0) and
-            (np.abs(self.p%1)<0.0001) and
-            (np.abs(self.qd%1)<0.0001) and
-            (np.abs(self.qs%1)<0.0001) and
-            (self.eq_notax.check_solution())
+            (self.sol['c']>0) and
+            (self.sol['p']>0) and
+            (self.sol['qd']>0) and
+            (self.sol['qs']>0) and
+            (np.abs(self.sol['p']%1)<0.0001) and
+            (np.abs(self.sol['qd']%1)<0.0001) and
+            (np.abs(self.sol['qs']%1)<0.0001) and
+            (self.sreq.check_solution())
         )
 
     def general_setup(self):
-        return r"""
-A commodity $q$ is traded at price $p$ in a competitive market with $N$ identical consumers and $M$ identical firms.\\
-
-An ad-valorem tax rate of $t_c$ is placed on consumers, and an ad-valorem tax rate of $t_p$ is placed on producers.
-
-Each consumer has income $Y$ and maximizes:
-
-\begin{align*}
-\max_{c,q} ~ c + \alpha q - \tfrac{1}{2} \beta q^2 ~ \text{ s.t. } c + (1+t_c)pq = Y
-\end{align*}
-
-Each firm's cost function is:
-
-\begin{align*}
-c(q) = \gamma + \delta q + \tfrac{1}{2} \eta q^2
-\end{align*}
-
-The firm maximizes:
-
-\begin{align*}
-\max_{q} ~ (1-t_p)pq - c(q)
-\end{align*}
-
-The short run equilibrium condition is:
-
-\begin{align*}
-Nq_d = Mq_s = Q
-\end{align*}
-
-The general solutions are:
-
-\begin{align*}
-Q = \frac{(1-t_p)\alpha - (1+t_c)\delta}{(1-t_p)\beta/N + (1+t_c)\eta/M} 
-\end{align*}
-
-\begin{align*}
-p = \frac{N \eta \alpha + M \beta \delta}{(1+t_c) N \eta + (1-t_p) M \beta}
-\end{align*}
-"""
-
-    def setup(self):
-        t = r"""
-A commodity $q$ is traded at price $p$ in a competitive market with price-taking consumers and firms. \\
-        
-There are ${:,.0f}$ identical consumers each with income $Y={:,.0f}$. Each consumer has a utility function over numeraire consumption $c$ and commodity $q$ given by:
-
-$$u(c,q) = c + {}$$
-
-There are ${:,.0f}$ identical firms each with cost function given by:
-
-$$c(q) = {}$$
-
-""".format(
-    self.N, 
-    self.Y,
-    polyeq('q', [0, self.alpha, -0.5*self.beta]),
-    self.M,
-    polyeq('q', [self.gamma, self.delta, 0.5*self.eta])
-)
-        if self.tc>0:
-            t+= r"An ad-valorem tax rate of ${:.0f}\%$ is placed on consumers.\\".format(self.tc*100)
-        if self.tp>0:
-            t+= r"An ad-valorem tax rate of ${:.0f}\%$ is placed on producers.\\".format(self.tp*100)
+        t = self.sreq.general_setup()
+        t+= r"An ad-valorem tax rate of $t_c$ is placed on the consumers and an ad-valorem tax rate of $t_p$ is placed on the producers."
         return t
 
-    def solution(self):
-        return r"""
-Solutions: \\
+    def general_solution(self):
+        return ADVALOREMSR_SOLUTION
 
-Pre-tax: $p={}$, $q_d={}$, $q_s={}$ \\
-
-Post-tax: $p={}$, $q_d={}$, $q_s={}$
-""".format(self.eq_notax.p, self.eq_notax.qd, self.eq_notax.qs, self.p, self.qd, self.qs)
+    def setup(self):
+        t = self.sreq.setup()
+        if self.params['tc']>0:
+            t+= r"An ad-valorem tax rate of ${}\%$ is placed on the consumers. ".format(f"{self.params['tc']*100:g}")
+        if self.params['tp']>0:
+            t+= r"An ad-valorem tax rate of ${}\%$ is placed on the producers. ".format(f"{self.params['tp']*100:g}")
+        return t
 
 
 class LREQ:
