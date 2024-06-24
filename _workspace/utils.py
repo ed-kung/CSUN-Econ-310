@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 def polyeq(var='x', coefs=[1,1,1], remove_first_plus_minus=True):
     t = ''
@@ -23,7 +24,11 @@ def polyeq(var='x', coefs=[1,1,1], remove_first_plus_minus=True):
     else:
         return t
 
-
+def select_rows(df, params):
+    idx = True
+    for k, v in params.items():
+        idx = (idx) & (df[k]==v)
+    return df.loc[idx]
 
 
 SREQ_SETUP = r"""
@@ -125,7 +130,7 @@ class AdValoremSR:
 
         params = {k:params[k] for k in ['N','M','Y','alpha','beta','gamma','delta','eta','tc','tp']}
 
-        sreq = SREQ(params)
+        no_tax = SREQ(params)
         
         N = params['N']
         M = params['M']
@@ -155,11 +160,19 @@ class AdValoremSR:
         sol['total_utility'] = N*sol['utility']
         sol['tax_revenue'] = (tc+tp)*p*Q
         sol['total_surplus'] = sol['total_profit'] + sol['total_utility'] + sol['tax_revenue']
-        sol['DWL'] = sreq.sol['total_surplus'] - sol['total_surplus']
+        sol['DWL'] = no_tax.sol['total_surplus'] - sol['total_surplus']
 
         self.params = params
         self.sol = sol
-        self.sreq = sreq
+        self.no_tax = no_tax
+
+        lumpsum_params = params.copy()
+        lumpsum_params['Y'] = params['Y'] - sol['tax_revenue']/params['N']
+        lumpsum = SREQ(lumpsum_params)
+        lumpsum.sol['tax_revenue'] = sol['tax_revenue']
+        lumpsum.sol['total_surplus'] = lumpsum.sol['total_profit'] + lumpsum.sol['total_utility'] + lumpsum.sol['tax_revenue']
+
+        self.lump_sum = lumpsum
 
     def check_solution(self):
         return (
@@ -170,11 +183,11 @@ class AdValoremSR:
             (np.abs(self.sol['p']%1)<0.0001) and
             (np.abs(self.sol['qd']%1)<0.0001) and
             (np.abs(self.sol['qs']%1)<0.0001) and
-            (self.sreq.check_solution())
+            (self.no_tax.check_solution())
         )
 
     def general_setup(self):
-        t = self.sreq.general_setup()
+        t = self.no_tax.general_setup()
         t+= r"An ad-valorem tax rate of $t_c$ is placed on the consumers and an ad-valorem tax rate of $t_p$ is placed on the producers."
         return t
 
@@ -182,7 +195,7 @@ class AdValoremSR:
         return ADVALOREMSR_SOLUTION
 
     def setup(self):
-        t = self.sreq.setup()
+        t = self.no_tax.setup()
         if self.params['tc']>0:
             t+= r"An ad-valorem tax rate of ${}\%$ is placed on the consumers. ".format(f"{self.params['tc']*100:g}")
         if self.params['tp']>0:
@@ -190,41 +203,97 @@ class AdValoremSR:
         return t
 
 
+
+
+LREQ_SETUP = r"""
+A commodity $q$ is traded at price $p$ in a competitive market with price-taking consumers and firms. \\
+        
+There are ${}$ identical consumers each with income ${}$. Each consumer has a utility function over numeraire consumption $c$ and commodity $q$ given by:
+
+$$u(c,q) = c + {}$$
+
+There are ${}$ identical firms each with cost function given by:
+
+$$c(q) = {}$$
+
+The number of firms is fixed in the short run, but in the long run firms can freely enter or exit the market. Thus, the number of firms is flexible in the long run.
+"""
+LREQ_SOLUTION = r"""
+The general solutions are:
+
+$$q_s = \sqrt{2\gamma / \eta}$$
+
+$$p = \delta + \eta q_s$$
+
+$$q_d = \frac{\alpha - p}{\beta}$$
+"""
 class LREQ:
-    def __init__(self,N=3000,Y=100,alpha=10,beta=2,gamma=32,delta=0,eta=0.2):
-        self.N=N
-        self.Y=Y
-        self.alpha=alpha
-        self.beta=beta
-        self.gamma=gamma
-        self.delta=delta
-        self.eta=eta
+    def __init__(self, params=None):
+        if not params:
+            params = {'N':3000, 'Y':100, 'alpha':10, 'beta':1, 'gamma':32, 'delta':0, 'eta':1}
+            
+        params = {k:params[k] for k in ['N','Y','alpha','beta','gamma','delta','eta']}
+
+        N = params['N']
+        Y = params['Y']
+        alpha = params['alpha']
+        beta = params['beta']
+        gamma = params['gamma']
+        delta = params['delta']
+        eta = params['eta']
+
+        qs = np.sqrt(2*gamma/eta)
+        p = delta + eta*qs
+        qd = (alpha - p)/beta
+        Q = N*qd
+        M = Q/qs
+        
+        sol = {}
+        sol['Q'] = Q
+        sol['p'] = p
+        sol['qd'] = qd
+        sol['qs'] = qs
+        sol['M'] = M
+        sol['c'] = Y - p*sol['qd']
+        sol['revenue'] = p*sol['qs']
+        sol['cost'] = gamma + delta*sol['qs'] + 0.5*eta*sol['qs']**2
+        sol['profit'] = sol['revenue'] - sol['cost']
+        sol['total_profit'] = M*sol['profit']
+        sol['utility'] = sol['c'] + alpha * sol['qd'] - 0.5 * beta * sol['qd']**2
+        sol['total_utility'] = N*sol['utility']
+        sol['total_surplus'] = sol['total_profit'] + sol['total_utility']
+
+        self.params = params
+        self.sol = sol
     
-    def solve(self):
-        self.qs = np.sqrt(2*self.gamma / self.eta)
-        self.p = self.delta + self.eta*self.qs
-        self.qd = (self.alpha - self.p) / self.beta
-        self.Q = self.N*self.qd
-        self.M = self.Q / self.qs
-        self.c = self.Y - self.p*self.qd
-        self.revenue = self.p * self.qs
-        self.cost = self.gamma + self.delta*self.qs + 0.5*self.eta*self.qs**2
-        self.profit = self.revenue - self.cost
-        self.totalprofit = self.M * self.profit
-        self.util = self.c + self.alpha*self.qd - 0.5*self.beta*self.qd**2
-        self.totalutil = self.N*self.util
-        return {
-            "M": self.M,
-            "Q": self.Q, 
-            "p": self.p,
-            "qd": self.qd,
-            "qs": self.qs,
-            "c": self.c,
-            "profit": self.profit,
-            "totalprofit": self.totalprofit,
-            "util": self.util,
-            "totalutil": self.totalutil
-        }
+    def check_solution(self):
+        sol = self.sol
+        return (
+            (sol['c']>0) and
+            (sol['qd']>0) and
+            (sol['qs']>0) and
+            (sol['p']>0) and
+            (np.abs(sol['p']%1)<0.001) and
+            (np.abs(sol['qd']%1)<0.001) and
+            (np.abs(sol['qs']%1)<0.001) and
+            (np.abs(sol['M']%1)<0.001)
+        )
+
+    def general_setup(self):
+        return LREQ_SETUP.format(
+            'N', 'Y', '\\alpha q - \\tfrac{1}{2} \\beta q^2', 'M', '\\gamma + \\delta q + \\tfrac{1}{2} \\eta q^2'
+        ) 
+    def general_solution(self):
+        return LREQ_SOLUTION
+        
+    def setup(self):
+        return LREQ_SETUP.format(
+            f"{self.params['N']:,.0f}", 
+            f"Y={self.params['Y']:,.0f}",
+            polyeq('q', [0, self.params['alpha'], -0.5*self.params['beta']]),
+            "M",
+            polyeq('q', [self.params['gamma'], self.params['delta'], 0.5*self.params['eta']])
+        )
 
 class CobbDouglasConsumer:
     def __init__(self,a=0.5,b=0.5,px=1,py=1,I=100):
