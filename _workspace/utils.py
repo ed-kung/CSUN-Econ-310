@@ -31,6 +31,50 @@ def select_rows(df, params):
     return df.loc[idx]
 
 
+
+SUPPLYPOLY_SETUP = r"""
+A price-taking firm produces a commodity that it can sell at price $p$. The firm's cost function is:
+
+$$ c(q) = {} $$
+"""
+SUPPLYPOLY_SOLUTION = r"""
+The supply curve is:
+
+$$ q = \left( \frac{p - b}{kc} \right)^{\frac{1}{k-1}} $$
+"""
+class SupplyPoly:
+    def __init__(self, params=None):
+        if not params:
+            params = {'a':0,'b':0,'c':0.5,'k':2}
+        params = {k:params[k] for k in ['a','b','c','k']}
+        self.params = params
+
+    def general_setup(self):
+        return SUPPLYPOLY_SETUP.format(
+            'a + bq + cq^k'
+        )
+    def general_solution(self):
+        return SUPPLYPOLY_SOLUTION
+    def setup(self):
+        k = self.params['k']
+        coefs = np.zeros(k+1)
+        coefs[0] = self.params['a']
+        coefs[1] = self.params['b']
+        coefs[k] = self.params['c']
+        return SUPPLYPOLY_SETUP.format(
+            polyeq('q', coefs=coefs)
+        )
+    def eval(self, p):
+        a = self.params['a']
+        b = self.params['b']
+        c = self.params['c']
+        k = self.params['k']
+        q = ((p-b)/(k*c))**(1/(k-1))
+        profit = p*q - a - b*q - c*q**k
+        producer_surplus = profit - a
+        return {'q':q, 'profit':profit, 'producer_surplus':producer_surplus}
+
+
 SREQ_SETUP = r"""
 A commodity $q$ is traded at price $p$ in a competitive market with price-taking consumers and firms. \\
         
@@ -295,89 +339,174 @@ class LREQ:
             polyeq('q', [self.params['gamma'], self.params['delta'], 0.5*self.params['eta']])
         )
 
+CB_SETUP = r"""
+A consumer with income ${}$ has a utility function over two goods, $x$ and $y$, given by:
+
+$$ u(x,y) = x^{} y^{} $$
+
+The price of good $x$ is ${}$ and the price of good $y$ is ${}$.
+"""
+CB_SOLUTION = r"""
+The general solutions are:
+
+$$ x = \frac{I}{p_x(1+b/a)} $$
+
+$$ y = \frac{I}{p_y(1+a/b)} $$
+
+The indifference curves are:
+
+$$ y = \left( \frac{U}{x^a} \right)^{\frac{1}{b}} $$
+
+The budget constraint is:
+
+$$ y = \frac{I - p_x x}{p_y } $$
+"""
 class CobbDouglasConsumer:
-    def __init__(self,a=0.5,b=0.5,px=1,py=1,I=100):
-        
+    def __init__(self, params=None):
+        if not params:
+            params = {'numer_a':1,'denom_a':2,'numer_b':1,'denom_b':2,'I':100,'px':1,'py':1}
+
+        params = {k:params[k] for k in ['numer_a','denom_a','numer_b','denom_b','I','px','py']}
+
+        a = params['numer_a']/params['denom_a']
+        b = params['numer_b']/params['denom_b']
+        I = params['I']
+        px = params['px']
+        py = params['py']
+
         x = I/(px*(1+b/a))
         y = I/(py*(1+a/b))
-        
-        xmax = I/px
-        ymax = I/py
-        
         U = x**a * y**b
+
+        sol = {}
+        sol['x'] = x
+        sol['y'] = y
+        sol['U'] = U
+        sol['xmax'] = params['I']/params['px']
+        sol['ymax'] = params['I']/params['py']
+
+        self.params = params
+        self.sol = sol
         
-        self.a=a
-        self.b=b
-        self.px=px
-        self.py=py
-        self.I=I
-        self.x=x
-        self.y=y
-        self.xmax=xmax
-        self.ymax=ymax
-        self.U = U
-    
-    def __repr__(self):
-        return repr({
-            'a': self.a,
-            'b': self.b,
-            'px': self.px, 
-            'py': self.py,
-            'I': self.I,
-            'x': self.x,
-            'y': self.y,
-            'xmax': self.xmax,
-            'ymax': self.ymax,
-            'U': self.U
-        })
-    
-    def is_integer(self):
+    def check_solution(self):
+        sol = self.sol
         return (
-            (self.x%1==0) and
-            (self.y%1==0) and
-            (self.xmax%1==0) and
-            (self.ymax%1==0)
+            (sol['x']>0) and
+            (sol['y']>0) and
+            (np.abs(sol['x']%1)<0.001) and
+            (np.abs(sol['y']%1)<0.001) and
+            (np.abs(sol['xmax']%1)<0.001) and
+            (np.abs(sol['ymax']%1)<0.001)
+        )
+        
+    def general_setup(self):
+        return CB_SETUP.format(
+            'I', 'a', 'b', 'p_x', 'p_y'
+        ) 
+    def general_solution(self):
+        return CB_SOLUTION
+
+    def setup(self):
+        return CB_SETUP.format(
+            f"I = {self.params['I']:.0f}", 
+            f"\\tfrac{{ {self.params['numer_a']:.0f} }}{{ {self.params['denom_a']:.0f} }}",
+            f"\\tfrac{{ {self.params['numer_b']:.0f} }}{{ {self.params['denom_b']:.0f} }}",
+            f"p_x = {self.params['px']:.0f}", 
+            f"p_y = {self.params['py']:.0f}"
         )
 
+
+CBD_SETUP = r"""
+A consumer has a utility function over two goods, $x$ and $y$, given by:
+
+$$ u(x,y) = x^{} y^{} $$
+
+In the base period, the consumer has income ${}$, the price of $x$ is ${}$, and the price of $y$ is ${}$.
+
+In the comparison period, the price of $x$ changes to ${}$ and the price of $y$ changes to ${}$.
+"""
+CBD_SOLUTION = r"""
+The general solutions are:
+
+$$ \text{CPI} = \frac{1}{1+b/a} \left(\frac{p_x^\prime}{p_x}\right) + \frac{1}{1+a/b}\left(\frac{p_y^\prime}{p_y}\right) $$
+
+$$ \text{Constant Utility Deflator} = \left(\frac{p_x^\prime}{p_x}\right)^{\frac{a}{a+b}} \left(\frac{p_y^\prime}{p_y}\right)^{\frac{b}{a+b}} $$
+"""
 class CobbDouglasDeflator:
-    def __init__(self,a,b,I,px0,py0,px1,py1):
-        CPI_DEFLATOR = (1/(1+b/a))*(px1/px0) + (1/(1+a/b))*(py1/py0)
-        GOOD_DEFLATOR = (px1/px0)**(a/(a+b)) * (py1/py0)**(b/(a+b))
-        
-        cb0 = CobbDouglasConsumer(a=a,b=b,I=I,px=px0,py=py0)
-        cb1 = CobbDouglasConsumer(a=a,b=b,I=I*GOOD_DEFLATOR,px=px1,py=py1)
+    def __init__(self, params=None):
+        if not params:
+            params = {'numer_a':1,'denom_a':2,'numer_b':1,'denom_b':2,'I':100,'px1':1,'py1':1,'px2':1,'py2':2}
 
-        assert np.abs(CPI_DEFLATOR - (px1*cb0.x+py1*cb0.y)/(px0*cb0.x+py0*cb0.y))<0.0001
-        assert np.abs(cb0.U - cb1.U)<0.0001
+        params = {k:params[k] for k in ['numer_a','denom_a','numer_b','denom_b','I','px1','py1','px2','py2']}
 
-        self.a = a
-        self.b = b
-        self.I = I
-        self.px0 = px0
-        self.py0 = py0
-        self.px1 = px1
-        self.py1 = py1
-        self.CPI_DEFLATOR = CPI_DEFLATOR
-        self.GOOD_DEFLATOR = GOOD_DEFLATOR
-        self.cb0 = cb0
+        a = params['numer_a']/params['denom_a']
+        b = params['numer_b']/params['denom_b']
+        px1 = params['px1']
+        px2 = params['px2']
+        py1 = params['py1']
+        py2 = params['py2']
+        I = params['I']
+
+        CPI = ((1/(1+b/a))*(px2/px1) + (1/(1+a/b))*(py2/py1)) * 100
+        CONST_UTIL_DEFLATOR = ((px2/px1)**(a/(a+b))*(py2/py1)**(b/(a+b))) * 100
+
+        # Base period
+        params1 = params.copy()
+        params1['px'] = params['px1']
+        params1['py'] = params['py1']
+        cb1 = CobbDouglasConsumer(params1)
+
+        # Comparison period without COLA
+        params2_no_cola = params.copy()
+        params2_no_cola['px'] = params['px2']
+        params2_no_cola['py'] = params['py2']
+        cb2_no_cola = CobbDouglasConsumer(params2_no_cola)
+
+        # Comparison period with CPI colas
+        params2_cpi = params2_no_cola.copy()
+        params2_cpi['I'] = params['I'] * CPI/100
+        cb2_cpi = CobbDouglasConsumer(params2_cpi)
+
+        # Comparison period with constant utility cola
+        params2_cons = params2_no_cola.copy()
+        params2_cons['I'] = params['I'] * CONST_UTIL_DEFLATOR/100
+        cb2_cons = CobbDouglasConsumer(params2_cons)
+
+        assert np.abs( (cb1.sol['x']*px2 + cb1.sol['y']*py2)/(cb1.sol['x']*px1 + cb1.sol['y']*py1) - CPI/100) < 0.001
+        assert np.abs( cb1.sol['U'] - cb2_cons.sol['U'] ) < 0.001
+
+        self.params = params
         self.cb1 = cb1
+        self.cb2_no_colas = cb2_no_cola
+        self.cb2_cpi = cb2_cpi
+        self.cb2_cons = cb2_cons
 
-    def __repr__(self):
-        return repr({
-            'a': self.a,
-            'b': self.b,
-            'I': self.I,
-            'px0': self.px0,
-            'py0': self.py0,
-            'px1': self.px1,
-            'py1': self.py1,
-            'CPI_DEFLATOR': self.CPI_DEFLATOR,
-            'GOOD_DEFLATOR': self.GOOD_DEFLATOR
-        })
+        sol = {}
+        sol['CPI'] = CPI
+        sol['CONST_UTIL_DEFLATOR'] = CONST_UTIL_DEFLATOR
+        self.sol = sol
 
-    def is_integer(self):
+    def check_solution(self):
         return (
-            (self.cb0.x%1==0) and
-            (self.cb0.y%1==0) 
+            self.cb1.check_solution() and
+            (np.abs(self.cb1.sol['U']%1)<0.001)
         )
 
+    def general_setup(self):
+        return CBD_SETUP.format(
+            'a', 'b', 'I', 'p_x', 'p_y', 'p_x^\\prime', 'p_y^\\prime'
+        ) 
+    def general_solution(self):
+        return CBD_SOLUTION
+
+    def setup(self):
+        return CBD_SETUP.format(
+            f"\\tfrac{{ {self.params['numer_a']:.0f} }}{{ {self.params['denom_a']:.0f} }}",
+            f"\\tfrac{{ {self.params['numer_b']:.0f} }}{{ {self.params['denom_b']:.0f} }}",
+            f"I = {self.params['I']:.0f}", 
+            f"p_x = {self.params['px1']:.0f}", 
+            f"p_y = {self.params['py1']:.0f}",
+            f"p_x^\\prime = {self.params['px2']:.0f}", 
+            f"p_y^\\prime = {self.params['py2']:.0f}",
+        )
+        

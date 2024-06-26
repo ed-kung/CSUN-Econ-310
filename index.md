@@ -46,7 +46,7 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 
 - **Attendance (10%)**
 
-    Attendance in this class will be checked. Everyone starts with full credit (10 pts). For each missed session, an increasing number of points will be deducted. 0 pts are deducted for the first two missed classes. Afterwards, 2 pts are deducted for the third missed class, 4 pts for the fourth, 6 pts for the fifth, and so on. You can earn negative attendance points which will affect the rest of your grade.
+    Attendance in this class will be checked. Everyone starts with full credit (10 pts). For each missed session, an increasing number of points will be deducted. 0 pts are deducted for the first missed class. Afterwards, 1 pt is deducted for the second missed class, 2 pts for the third, and so on. You can earn negative attendance points which will affect the rest of your grade.
     
 - **Homework Assignments (20%)**
 
@@ -73,7 +73,7 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 	|       5 | You followed all instructions. Your work is accurate and demonstrates a mastery of the material.                                   | 
 	|       4 | You failed to follow all instructions OR your work has minor inaccuracies but still demonstrates an understanding of the material. |
 	|       3 | Your work has major inaccuracies OR your work demonstrates only a partial understanding of the material.                           |
-    |       2 | You made an attempt, but your work has major inaccuracies and does not demonstrate an understanding of the material.               |
+    |       2 | You made an attempt, but your work has major inaccuracies or does not demonstrate an understanding of the material (this includes correct answers without shown work).               |
     |       1 | You made only a partial attempt at completing the assignment; or you made an attempt but I could not read it or understand it.                                                                      |
     |       0 | You did not make any attempt at the assignment. Note that if you do not attempt some parts of an assignment, you may receive a zero for the whole assignment. |	
 
@@ -123,15 +123,25 @@ Placeholder text
 
 ## Course Materials
 
-### Required Textbook
+### Textbook (Recommended but not required)
 
-Placeholder text
+This course is primarily based on my own materials. However, the following textbook can serve as a good reference.  It is recommended but not required.
+
+**Intermediate Microeconomics and its Applications**, by Nicholson and Snyder.
+
+<img src="assets/images/textbook.jpg" width="100">
+
+
+### Calculator (Required)
+
+You will need a calculator for this course.  Any calculator 
+
 
 ---
 
 ## Exam Policies and Information
 
-Placeholder text
+Exams will be given in person, on paper.  All exams are open book.  You are allowed to 
 
 ---
 
