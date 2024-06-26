@@ -111,5 +111,5 @@ c(q) = a + bq + cq^2
 \end{q}
 """))
 
-doc.print_pdf(filename, os.path.dirname(os.path.abspath(__file__)))
+doc.print_pdf(filename, "tex")
 

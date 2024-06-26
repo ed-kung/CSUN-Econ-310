@@ -72,7 +72,106 @@ class SupplyPoly:
         q = ((p-b)/(k*c))**(1/(k-1))
         profit = p*q - a - b*q - c*q**k
         producer_surplus = profit - a
+        assert q>0
+        assert p>b
+        assert profit>0
         return {'q':q, 'profit':profit, 'producer_surplus':producer_surplus}
+        
+
+DEMANDPOLY_SETUP = r"""
+A price-taking consumer with income ${}$ has utility over numeraire consumption $c$ and a commodity $q$ given by:
+
+$$ u(c,q) = c + {} $$
+"""
+DEMANDPOLY_SOLUTION = r"""
+The demand curve is:
+
+$$ q = \left( \frac{a-p}{kb} \right)^{\frac{1}{k-1}} $$
+"""
+class DemandPoly:
+    def __init__(self, params=None):
+        if not params:
+            params = {'a':10,'b':0.5,'k':2,'Y':100}
+        params = {k:params[k] for k in ['a','b','k','Y']}
+        self.params = params
+        
+    def general_setup(self):
+        return DEMANDPOLY_SETUP.format(
+            'Y','aq - bq^k'
+        )
+    def general_solution(self):
+        return DEMANDPOLY_SOLUTION
+    def setup(self):
+        k = self.params['k']
+        coefs = np.zeros(k+1)
+        coefs[0] = 0
+        coefs[1] = self.params['a']
+        coefs[k] = -self.params['b']
+        return DEMANDPOLY_SETUP.format(
+            f"Y = {self.params['Y']:.0f}",
+            polyeq('q', coefs=coefs)
+        )
+    def eval(self, p):
+        a = self.params['a']
+        b = self.params['b']
+        k = self.params['k']
+        Y = self.params['Y']
+        q = ((a-p)/(k*b))**(1/(k-1))
+        c = Y - p*q
+        utility = Y - p*q + a*q - b*q**k
+        consumer_surplus = utility - Y
+        assert q>0
+        assert c>0
+        assert p<a
+        return {'q':q, 'utility':utility, 'consumer_surplus':consumer_surplus}
+        
+
+DEMANDCE_SETUP = r"""
+A price-taking consumer with income ${}$ has utility over numeraire consumption $c$ and a commodity $q$ given by:
+
+$$ u(c,q) = c + {} $$
+"""
+DEMANDCE_SOLUTION = r"""
+The demand curve is:
+
+$$ q = \left( \frac{p}{ka} \right)^{\frac{1}{k-1}} $$
+"""
+class DemandCE:
+    def __init__(self, params=None):
+        if not params:
+            params = {'numer_k':1,'denom_k':2,'a':1,'Y':100}
+        params = {k:params[k] for k in ['numer_k', 'denom_k', 'a', 'Y']}
+        self.params = params
+        
+    def general_setup(self):
+        return DEMANDCE_SETUP.format(
+            'Y','aq^k'
+        )
+    def general_solution(self):
+        return DEMANDCE_SOLUTION
+    def setup(self):
+        numer_k = self.params['numer_k']
+        denom_k = self.params['denom_k']
+        a = self.params['a']
+        if a==1:
+            coef = ''
+        else:
+            coef = f"{a}"
+        return DEMANDCE_SETUP.format(
+            f"Y = {self.params['Y']:.0f}",
+            f"{coef}q^{{ \\frac{{ {numer_k} }}{{ {denom_k} }} }}"
+        )
+    def eval(self, p):
+        a = self.params['a']
+        k = self.params['numer_k'] / self.params['denom_k']
+        Y = self.params['Y']
+        q = (p/(k*a))**(1/(k-1))
+        c = Y - p*q
+        utility = Y - p*q + a*q**k
+        consumer_surplus = utility - Y
+        assert q>0
+        assert c>0
+        return {'q':q, 'utility':utility, 'consumer_surplus':consumer_surplus}
 
 
 SREQ_SETUP = r"""
