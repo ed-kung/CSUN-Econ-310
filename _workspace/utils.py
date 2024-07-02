@@ -346,7 +346,73 @@ class AdValoremSR:
         return t
 
 
+LAFFER_SOLUTION = r"""
+The general solutions are:
 
+$$ p = \frac{\alpha N / M}{1 + N/M - t} $$
+
+$$ Q = \alpha N \left( \frac{1-t}{1+N/M-t} \right) $$
+"""
+class Laffer:
+    def __init__(self, params=None):
+        if not params:
+            params = {'N':400,'M':200,'alpha':15,'tp':0.5}
+        params = {k:params[k] for k in ['N','M','alpha','tp']}
+        self.params = params.copy()
+        params['beta'] = 1
+        params['gamma'] = 0
+        params['delta'] = 0
+        params['eta'] = 1
+        params['Y'] = 100
+        params['tc'] = 0
+        av = AdValoremSR(params)
+        sreq = SREQ(params)
+        self.av = av
+        self.sreq = sreq
+        
+        sol = {}
+        sol['p'] = self.formula_p()
+        sol['Q'] = self.formula_q()
+        self.sol = sol
+    
+    def check_solution(self):
+        N = self.params['N']
+        M = self.params['M']
+        alpha = self.params['alpha']
+        return (
+            ((alpha*N/M)%1 < 0.001) and
+            ((alpha*N)%1 < 0.001) and
+            (self.av.check_solution()) and
+            (self.sreq.check_solution())
+        )
+    
+    def general_setup(self):
+        setup = SREQ_SETUP.format(
+            'N', 'Y', '\\alpha q - \\tfrac{1}{2} q^2', 'M', '\\tfrac{1}{2} q^2'
+        )
+        setup += "An ad valorem tax rate of $t$ is placed on the producers."
+        return setup
+    
+    def general_solution(self):
+        return LAFFER_SOLUTION
+    
+    def setup(self):
+        setup = self.sreq.setup()
+        setup += "An ad valorem tax rate of $t$ is placed on the producers."
+        return setup
+    
+    def formula_p(self):
+        N = self.params['N']
+        M = self.params['M']
+        alpha = self.params['alpha']
+        return fr"$$ p = \frac{{ {alpha*N/M:.0f} }}{{ {1+N/M:.0f} - t }} $$"
+    
+    def formula_q(self):
+        N = self.params['N']
+        M = self.params['M']
+        alpha = self.params['alpha']
+        return fr"$$ Q = {alpha*N:,.0f} \left( \frac{{ 1-t }}{{ {1+N/M:.0f} - t }} \right) $$"
+        
 
 LREQ_SETUP = r"""
 A commodity $q$ is traded at price $p$ in a competitive market with price-taking consumers and firms. \\
