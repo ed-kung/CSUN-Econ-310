@@ -504,6 +504,8 @@ class LREQ:
             polyeq('q', [self.params['gamma'], self.params['delta'], 0.5*self.params['eta']])
         )
 
+
+    
 CB_SETUP = r"""
 A consumer with income ${}$ has a utility function over two goods, $x$ and $y$, given by:
 
