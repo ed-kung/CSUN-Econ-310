@@ -1,6 +1,12 @@
 {% assign math = page.math | default: layout.math | default: site.math %}
+{% assign python = page.python | default: layout.python | default: site.python %}
 
 {% case math %}
   {% when "mathjax" %}
     {% include mathjax.html %}
+{% endcase %}
+
+{% case python %}
+  {% when "pyscript" %}
+    {% include pyscript.html %}
 {% endcase %}
