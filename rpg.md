@@ -1,11 +1,15 @@
 ---
 layout: default
-title: pyscript example
+title: Random Problem Generator
 nav_order: 5
 python: pyscript
 ---
 
-# Pyscript Example
+# Random Problem Generator
+
+<dialog id="loading">
+Please wait while the application loads...
+</dialog>
 
 <label for="dropdown">Generate problem from week:</label>
 
@@ -31,5 +35,5 @@ python: pyscript
 </div>
 </details>
 
-<script type="py" src="/CSUN-Econ-310/main.py" config="/CSUN-Econ-310/pyscript.toml">
+<script type="py" src="/CSUN-Econ-310/rpg.py" config="/CSUN-Econ-310/rpg.toml">
 </script>
