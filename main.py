@@ -1,49 +1,35 @@
-import panel as pn
-import numpy as np
-import pandas as pd
-import time
+from js import MathJax
+from pyscript import window, document, when
+import utils
 
-pn.extension('mathjax', sizing_mode="stretch_width")
+SETUP = r"""
+Supply and demand are given by the following equations:
 
-lectures = [
-    "1. Math Review",
-    "2. Single Variable Optimization",
-    "3. Supply Curves",
-    "4. Demand Curves"
-]
+$$\begin{align}
+q_d &= 120 - p \\
+q_s &= 2p - 30
+\end{align}$$
 
-latex_example = r"""
-$y = f(x)$
+Calculate the equilibrium price and quantity of this market.
 """
 
-intro_pane = pn.pane.LaTeX(object=r"Generate a problem for lecture:")
-intro_pane = "Generate a problem for lecture:"
-problem_pane = pn.pane.LaTeX(object=r"Please select a problem type.")
-solution_pane = pn.pane.HTML("$$y=f(x)$$", disable_math=False)
+@when("click", "#generate_button")
+def generate_problem():
+    
+    prob = utils.SREQ()
+    
+    problem_selection = document.getElementById("problem_selection").value
+    
+    element = document.getElementById("problem")
+    element.innerHTML = SETUP
+    
+    element = document.getElementById("solution")
+    element.innerHTML = prob.general_solution()
 
-problem_selector = pn.widgets.RadioBoxGroup(
-    name='RadioBoxGroup',
-    options=lectures,
-    inline=False
-)
+    #child = document.createElement("div")
+    #child.innerHTML = f"You selected problem type: {problem_selection}"
+    #element = document.getElementById("problem")
+    #element.appendChild(child)
 
-generate_button = pn.widgets.Button(
-    name='Generate!',
-    button_type='primary'
-)
+    MathJax.typesetPromise()
 
-def b(event):
-    problem_pane.object = fr"You selected {problem_selector.value}."
-
-generate_button.on_click(b)
-
-pn.Column(
-    intro_pane, 
-    problem_selector, 
-    generate_button,
-    problem_pane, 
-    solution_pane, 
-    height=400
-).servable(target='problem_generator')
-
-time.sleep(2)

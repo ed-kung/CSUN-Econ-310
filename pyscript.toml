@@ -1,6 +1,6 @@
 name = "pyscript example"
 description = "A simple pyscript example"
-packages = [
-	"panel==1.3.8",
-	"bokeh==3.2.2"
-]
+packages = ["numpy", "pandas"]
+
+[files]
+"https://raw.githubusercontent.com/ed-kung/CSUN-Econ-310/main/_workspace/utils.py" = ""

@@ -1,10 +1,11 @@
 import numpy as np
 import pandas as pd
 
-def polyeq(var='x', coefs=[1,1,1], remove_first_plus_minus=True):
+def polyeq(var='x', coefs=[1,1,1], powers=[0,1,2]):
     t = ''
-    for p in range(len(coefs)):
-        c = coefs[p]
+    for i in range(len(coefs)):
+        c = coefs[i]
+        p = powers[i]
         if c!=0:
             if c>0:
                 t+='+ '
@@ -19,8 +20,8 @@ def polyeq(var='x', coefs=[1,1,1], remove_first_plus_minus=True):
                     t+=f'{var} '
                 else:
                     t+=f'{var}^{p}'
-    if remove_first_plus_minus:
-        return t[2:]
+    if t[0]=='+':
+        return t[1:]
     else:
         return t
 
@@ -30,10 +31,113 @@ def select_rows(df, params):
         idx = (idx) & (df[k]==v)
     return df.loc[idx]
 
+def is_divisible(a,b):
+    return (np.abs(a/b - np.round(a/b))<0.0001)
+
+def get_random_prob(ProbClass, CsvFile):
+    df = pd.read_csv(CsvFile)
+    params = dict(df.sample(1).reset_index(drop=True).loc[0])
+    return ProbClass(params)
+
+
+"""
+Linear Supply and Demand
+"""
+class LinearSD:
+    def __init__(self, params=None):
+        if not params:
+            params = {'a':120,'b':1,'c':2,'d':30}
+        params = {k:params[k] for k in ['a','b','c','d']}
+        a,b,c,d = params['a'],params['b'],params['c'],params['d']
+        p = (a+d)/(b+c)
+        q = a - b*p
+        sol = {'p':p, 'q':q}
+        self.params = params
+        self.sol = sol
+    def general_setup(self):
+        return fr"""
+Supply and demand are given by the following equations:
+
+$$\begin{{align}}
+q_d &= a - bp \\
+q_s &= cp - d
+\end{{align}}$$
+
+The general solution is:
+
+$$p = \frac{{ a+d }}{{ b + c }}$$
+"""
+    def setup(self):
+        params = self.params
+        a,b,c,d = params['a'],params['b'],params['c'],params['d']
+        deq = polyeq('p',[a,-b],[0,1])
+        seq = polyeq('p',[c,-d],[1,0])
+        return fr"""
+Supply and demand are given by the following equations:
+
+$$\begin{{align}}
+q_d &= {deq} \\
+q_s &= {seq}
+\end{{align}}$$
+"""
+    def check_solution(self):
+        p, q = self.sol['p'], self.sol['q']
+        return (
+            (is_divisible(p,1)) and
+            (is_divisible(q,1)) and
+            (p>0) and (q>0)
+        )
+
+
+"""
+Constant Elasticity Supply and Demand
+"""
+class CESSD:
+    def __init__(self, params=None):
+        if not params:
+            params = {'A':120,'B':60,'a':1,'b':2,'d':3}
+        params = {k:params[k] for k in ['A','B','a','b','d']}
+        A,B,a,b,d = params['A'],params['B'],params['a'],params['b'],params['d']
+        self.params = params
+        p = (A/B)**(d/(a+b))
+        q = A*p**(-a/d)
+        self.sol = {'p':p, 'q':q}
+    def general_setup(self):
+        return fr"""
+Supply and demand are given by the following equations:
+
+$$\begin{{align}}
+q_d &= Ap^{{ -a/d }}  \\
+q_s &= Bp^{{ b/d }}
+\end{{align}}$$
+
+The general solution is:
+
+$$p = \left( \frac{{A}}{{B}} \right)^{{ \frac{{d}}{{a+b}} }}$$
+"""
+    def setup(self):
+        params = self.params
+        A,B,a,b,d = params['A'],params['B'],params['a'],params['b'],params['d']
+        return fr"""
+Supply and demand are given by the following equations:
+
+$$\begin{{align}}
+q_d &= {A:.0f}p^{{ -{a:.0f}/{d:.0f} }}  \\
+q_s &= {B:.0f}p^{{ {b:.0f}/{d:.0f} }}
+\end{{align}}$$
+"""
+    def check_solution(self):
+        params = self.params
+        A,B,a,b,d = params['A'],params['B'],params['a'],params['b'],params['d']
+        p,q = self.sol['p'], self.sol['q']
+        return (
+            (is_divisible(A/B,1)) and
+            (p>0.1) and (q>0.1)
+        )
 
 
 SUPPLYPOLY_SETUP = r"""
-A price-taking firm produces a commodity that it can sell at price $p$. The firm's cost function is:
+A price-taking firm produces a commodity that it can sell at price \(p\). The firm's cost function is:
 
 $$ c(q) = {} $$
 """
@@ -47,8 +151,13 @@ class SupplyPoly:
         if not params:
             params = {'a':0,'b':0,'c':0.5,'k':2}
         params = {k:params[k] for k in ['a','b','c','k']}
+        sol = {}
+        sol['coefs'] = [
+            -params['b'] / (params['k']*params['c']), 
+            1/(params['k']*params['c'])
+        ]
         self.params = params
-
+        self.sol = sol
     def general_setup(self):
         return SUPPLYPOLY_SETUP.format(
             'a + bq + cq^k'
@@ -56,26 +165,19 @@ class SupplyPoly:
     def general_solution(self):
         return SUPPLYPOLY_SOLUTION
     def setup(self):
-        k = self.params['k']
-        coefs = np.zeros(k+1)
-        coefs[0] = self.params['a']
-        coefs[1] = self.params['b']
-        coefs[k] = self.params['c']
-        return SUPPLYPOLY_SETUP.format(
-            polyeq('q', coefs=coefs)
-        )
-    def eval(self, p):
         a = self.params['a']
         b = self.params['b']
         c = self.params['c']
         k = self.params['k']
-        q = ((p-b)/(k*c))**(1/(k-1))
-        profit = p*q - a - b*q - c*q**k
-        producer_surplus = profit - a
-        assert q>0
-        assert p>b
-        assert profit>0
-        return {'q':q, 'profit':profit, 'producer_surplus':producer_surplus}
+        coefs = [a,b,c]
+        return SUPPLYPOLY_SETUP.format(
+            polyeq('q', coefs=coefs)
+        )
+    def check_solution(self):
+        return (
+            (is_divisible(self.sol['coefs'][0], 1)) and
+            (is_divisible(self.sol['coefs'][1], 0.1))
+        )
         
 
 DEMANDPOLY_SETUP = r"""
