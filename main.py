@@ -1,35 +1,33 @@
+import os
+import json
+import numpy as np
 from js import MathJax
 from pyscript import window, document, when
-import utils
 
-SETUP = r"""
-Supply and demand are given by the following equations:
-
-$$\begin{align}
-q_d &= 120 - p \\
-q_s &= 2p - 30
-\end{align}$$
-
-Calculate the equilibrium price and quantity of this market.
-"""
-
-@when("click", "#generate_button")
+@when("click", "#button")
 def generate_problem():
     
-    prob = utils.SREQ()
+    wk = document.getElementById("dropdown").value
+    filename = f"{wk}_practice.json"
     
-    problem_selection = document.getElementById("problem_selection").value
+    if os.path.exists(filename):
+        with open(filename, 'r') as f:
+            probs = json.load(f)
+        myprob = np.random.choice(probs)
+        setup = myprob['setup']
+        solution = myprob['solution']
+        element = document.getElementById("problem")
+        element.innerHTML = setup
+        element = document.getElementById("solution")
+        element.innerHTML = solution
+    else:
+        element = document.getElementById("problem")
+        element.innerHTML = "Sorry, there aren't any practice problems for this week yet!"
+        element = document.getElementById("solution")
+        element.innerHTML = ""
     
-    element = document.getElementById("problem")
-    element.innerHTML = SETUP
+    element = document.getElementById("details")
+    element.removeAttribute('open')
     
-    element = document.getElementById("solution")
-    element.innerHTML = prob.general_solution()
-
-    #child = document.createElement("div")
-    #child.innerHTML = f"You selected problem type: {problem_selection}"
-    #element = document.getElementById("problem")
-    #element.appendChild(child)
-
     MathJax.typesetPromise()
 

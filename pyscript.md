@@ -7,15 +7,16 @@ python: pyscript
 
 # Pyscript Example
 
-<label for="problem_selection">Generate problem for lecture:</label>
+<label for="dropdown">Generate problem from week:</label>
 
-<select id="problem_selection">
-    <option value="01_math_review">1. Math Review</option>
-    <option value="02_single_variable_optimization">2. Single Variable Optimization</option>
-    <option value="03_supply_curves">3. Supply Curves</option>
+<select id="dropdown">
+    <option value="wk01">1. Math Review</option>
+    <option value="wk02">2. Supply and Demand Curves</option>
+    <option value="wk03">3. Short Run Equlibrium and Taxation</option>
+    <option value="wk04">4. Long Run Equilibrium</option>
 </select>
 
-<button id="generate_button" pys-onClick="generate_problem">Generate</button>
+<button id="button" pys-onClick="generate_problem">Generate</button>
 
 <p><h3>Problem:</h3></p>
 
@@ -24,7 +25,7 @@ python: pyscript
 
 ---
 
-<details>
+<details id="details">
 <summary>Solution:</summary>
 <div id="solution">
 </div>

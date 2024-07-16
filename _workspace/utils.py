@@ -1,38 +1,62 @@
 import numpy as np
 import pandas as pd
 
+def is_divisible(a,b):
+    return (np.abs(a/b - np.round(a/b))<0.0001)
+
+def inline_frac(a,b):
+    n = a/b
+    t=''
+    if n<0:
+        t+='-'
+    if is_divisible(n,1):
+        n = np.round(n)
+        t+=f'{np.abs(n):g}'
+    else:
+        t+=f'{np.abs(a):g}/{np.abs(b):g}'
+    return t
+
+def term(c,x,pn,pd=1,rm=False):
+    if c==0:
+        return ''
+    elif c>0:
+        t='+'
+    else:
+        t='-'
+    p = pn/pd
+    if p==0:
+        t+=f'{np.abs(c):g}'
+    elif p==1:
+        if np.abs(c)!=1:
+            t+=f'{np.abs(c):g}'
+        t+=f'{x}'
+    else:
+        if np.abs(c)!=1:
+            t+=f'{np.abs(c):g}'
+        t+=f'{x}^{{ {inline_frac(pn,pd)} }}'
+    if rm and (t[0]=='+'):
+        return t[1:]
+    return t
+
 def polyeq(var='x', coefs=[1,1,1], powers=[0,1,2]):
     t = ''
     for i in range(len(coefs)):
         c = coefs[i]
         p = powers[i]
-        if c!=0:
-            if c>0:
-                t+='+ '
-            else:
-                t+='- '
-            if p==0:
-                t+=f'{np.abs(c):g} '
-            else:
-                if np.abs(c)!=1:
-                    t+=f'{np.abs(c):g}'
-                if p==1:
-                    t+=f'{var} '
-                else:
-                    t+=f'{var}^{p}'
+        t+=term(c,var,p,pd=1,rm=(i==0))
     if t[0]=='+':
         return t[1:]
+    return t
+
+def cbeq(A=1,x='x',xn=1,xd=2,y='y',yn=1,yd=2):
+    if xn==0 and yn==0:
+        return f'{A:g}'
+    elif xn==0:
+        return term(A,y,yn,yd,rm=True)
+    elif yn==0:
+        return term(A,x,xn,xd,rm=True)
     else:
-        return t
-
-def select_rows(df, params):
-    idx = True
-    for k, v in params.items():
-        idx = (idx) & (df[k]==v)
-    return df.loc[idx]
-
-def is_divisible(a,b):
-    return (np.abs(a/b - np.round(a/b))<0.0001)
+        return term(A,x,xn,xd,rm=True) + term(1,y,yn,yd,rm=True)
 
 def get_random_prob(ProbClass, CsvFile):
     df = pd.read_csv(CsvFile)
@@ -122,8 +146,8 @@ $$p = \left( \frac{{A}}{{B}} \right)^{{ \frac{{d}}{{a+b}} }}$$
 Supply and demand are given by the following equations:
 
 $$\begin{{align}}
-q_d &= {A:.0f}p^{{ -{a:.0f}/{d:.0f} }}  \\
-q_s &= {B:.0f}p^{{ {b:.0f}/{d:.0f} }}
+q_d &= {term(A,'p',-a,d,rm=True)}  \\
+q_s &= {term(B,'p',b,d,rm=True)}
 \end{{align}}$$
 """
     def check_solution(self):
@@ -134,6 +158,70 @@ q_s &= {B:.0f}p^{{ {b:.0f}/{d:.0f} }}
             (is_divisible(A/B,1)) and
             (p>0.1) and (q>0.1)
         )
+
+
+"""
+Simply Cobb Douglas
+"""
+class SimplifyCB:
+    def __init__(self, params=None):
+        if not params:
+            params = {'A':4,'B':12,'D':3,'a':1,'b':-2,'c':-2,'d':1}
+        params = {k:params[k] for k in ['A','B','D','a','b','c','d']}
+        A,B,D,a,b,c,d = params['A'],params['B'],params['D'],params['a'],params['b'],params['c'],params['d']
+        mygcd = np.gcd(int(A),int(B))
+        numerC = A/mygcd
+        denomC = B/mygcd
+        xp = a-c
+        yp = b-d
+        numer = ''
+        denom = ''
+        if numerC>1:
+            numer += term(numerC,'',0,rm=True)
+        if denomC>1:
+            denom += term(denomC,'',0,rm=True)
+        if xp>0:
+            numer += term(1,'x',xp,D,rm=True)
+        elif xp<0:
+            denom += term(1,'x',np.abs(xp),D,rm=True)
+        if yp>0:
+            numer += term(1,'y',yp,D,rm=True)
+        elif yp<0:
+            denom += term(1,'y',np.abs(yp),D,rm=True)
+        sol = {'numerC':numerC,'denomC':denomC,'xp':xp,'yp':yp}
+        self.numer = numer
+        self.denom = denom
+        self.params = params
+        self.sol = sol
+    def general_setup(self):
+        return fr"""
+Simplify:
+
+$$ \frac{{ Ax^{{a/D}}y^{{b/D}} }}{{ Bx^{{c/D}}y^{{d/D}} }} $$
+"""
+    def setup(self):
+        params = self.params
+        A,B,D,a,b,c,d = params['A'],params['B'],params['D'],params['a'],params['b'],params['c'],params['d']
+        return fr"""
+Simplify:
+
+$$ \frac{{ {cbeq(A,'x',a,D,'y',b,D)} }}{{ {cbeq(B,'x',c,D,'y',d,D)} }} $$
+"""
+    def check_solution(self):
+        params = self.params
+        A,B,D,a,b,c,d = params['A'],params['B'],params['D'],params['a'],params['b'],params['c'],params['d']
+        return (
+            (is_divisible(A,1)) and
+            (is_divisible(B,1)) and
+            ((a==0)+(b==0)+(c==0)+(d==0)<=1)
+        )
+    def solution(self):
+        if len(self.denom)==0:
+            return fr"$$ {self.numer} $$"
+        elif len(self.numer)==0:
+            return fr"$$ \frac{{1}}{{ {self.denom} }} $$"
+        else:
+            return fr"$$ \frac{{ {self.numer} }}{{ {self.denom} }} $$"
 
 
 SUPPLYPOLY_SETUP = r"""
