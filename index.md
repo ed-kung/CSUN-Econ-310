@@ -31,8 +31,8 @@ nav_order: 1
 
 ### Lectures
 
-- Section 02: TuTh 12:30pm - 1:45pm @ Bookstein
-- Section 04: Tu 7:00pm - 9:45pm @ Bookstein
+- Section 02: TuTh 10:00am - 11:15am @ Bookstein 1125
+- Section 04: Tu 7:00pm - 9:45pm @ Bookstein 1123
 
 ### Office Hours
 
@@ -101,7 +101,10 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 |   15 | 12/2 - 12/6   | Risk and Insurance                 | Saving and Borrowing                        |
 |   16 | 12/9 - 12/13  | Review Session                       | **NO CLASS - SEMESTER ENDS**                |
 
-Final Exam date TBD.
+Final Exam: 
+
+- Section 02 (TuTh 10:00am): Thursday 12/12 10:15am - 12:15pm
+- Section 04 (Tu 7:00pm): Tuesday 12/17 8:00pm - 10:00pm
 
 ---
 
