@@ -6,6 +6,7 @@ def is_divisible(a,b):
 
 def inline_frac(a,b):
     n = a/b
+    gcd = np.gcd(int(a),int(b))
     t=''
     if n<0:
         t+='-'
@@ -13,7 +14,7 @@ def inline_frac(a,b):
         n = np.round(n)
         t+=f'{np.abs(n):g}'
     else:
-        t+=f'{np.abs(a):g}/{np.abs(b):g}'
+        t+=f'{np.abs(a/gcd):g}/{np.abs(b/gcd):g}'
     return t
 
 def term(c,x,pn,pd=1,rm=False):
@@ -223,6 +224,55 @@ $$ \frac{{ {cbeq(A,'x',a,D,'y',b,D)} }}{{ {cbeq(B,'x',c,D,'y',d,D)} }} $$
         else:
             return fr"$$ \frac{{ {self.numer} }}{{ {self.denom} }} $$"
 
+        
+"""
+Cobb Douglas Indifference Curve
+"""
+class CobbDouglasIC:
+    def __init__(self, params=None):
+        if not params:
+            params = {'A':1,'x':'x','a':1,'b':2,'y':'y','c':1,'d':2,'U':2}
+        params = {k:params[k] for k in ['A','x','a','b','y','c','d','U']}
+        A,x,a,b,y,c,d,U=params['A'],params['x'],params['a'],params['b'],params['y'],params['c'],params['d'],params['U']
+        self.params = params
+    def general_setup(self):
+        return fr"""
+A consumer has utility function over goods \(x\) and \(y\) given by:
+
+$$ u(x,y) = Ax^{{a/b}}y^{{c/d}} $$
+
+Find the indifference curve with \( u(x,y) = U \).
+
+Solution:
+
+$$ y = \left( \frac{{U}}{{A}} \right)^{{d/c}} x^{{ -\frac{{ ad }}{{ bc }} }}  $$
+"""
+    def setup(self):
+        params = self.params
+        A,x,a,b,y,c,d,U=params['A'],params['x'],params['a'],params['b'],params['y'],params['c'],params['d'],params['U']
+        return fr"""
+A consumer has utility function over goods \({x}\) and \({y}\) given by:
+
+$$ u({x},{y}) = {cbeq(A,x,a,b,y,c,d)} $$
+
+Find the indifference curve with \( u({x},{y}) = {U} \).
+"""
+    def solution(self):
+        params = self.params
+        A,x,a,b,y,c,d,U=params['A'],params['x'],params['a'],params['b'],params['y'],params['c'],params['d'],params['U']
+        cons = (U/A)**(d/c)
+        pow_numer = a*d
+        pow_denom = b*c
+        gcd = np.gcd(pow_numer, pow_denom)
+        pow_numer = pow_numer/gcd
+        pow_denom = pow_denom/gcd
+        return fr"$$ {y} = {term(cons,x,-pow_numer,pow_denom,rm=True)} $$"
+    def check_solution(self):
+        params = self.params
+        A,x,a,b,y,c,d,U=params['A'],params['x'],params['a'],params['b'],params['y'],params['c'],params['d'],params['U']
+        return (
+            (a>0) and (b>0) and (c>0) and (d>0)
+        )
 
 SUPPLYPOLY_SETUP = r"""
 A price-taking firm produces a commodity that it can sell at price \(p\). The firm's cost function is:
