@@ -4,60 +4,112 @@ import pandas as pd
 def is_divisible(a,b):
     return (np.abs(a/b - np.round(a/b))<0.0001)
 
-def inline_frac(a,b):
-    n = a/b
-    gcd = np.gcd(int(a),int(b))
+class Number:
+    def __init__(self, n, d=1):
+        self.v = n/d
+        if is_divisible(n,1) and is_divisible(d,1):
+            gcd = np.gcd(int(n),int(d))
+            self.n = n/gcd
+            self.d = d/gcd
+        else:
+            self.n = n
+            self.d = d
+    def as_decimal(self,rmplus=False):
+        t=''
+        if self.v<0:
+            t+='-'
+        else:
+            t+='+'
+        t+=f'{self.v:g}'
+        if rmplus and t[0]=='+':
+            t=t[1:]
+        return t
+    def as_frac(self, inline=True, rmplus=False):
+        t=''
+        if self.v<0:
+            t+='-'
+        else:
+            t+='+'
+        if is_divisible(self.v, 1):
+            t+=f'{np.abs(self.v):.0f}'
+        else:
+            if inline:
+                t+=f'{np.abs(self.n):g} / {np.abs(self.d):g}'
+            else:
+                t+=fr'\frac{{ {np.abs(self.n):g} }}{{ {np.abs(self.d):g} }}'
+        if rmplus and t[0]=='+':
+            t=t[1:]
+        return t
+
+def print_exponentiated_numbers(x,y):
+    if type(x)!=Number:
+        x = Number(x)
+    if type(y)!=Number:
+        y = Number(y)
+    if y.v==1:
+        return x.as_frac(inline=False,rmplus=True)
+    if y.v==-1:
+        return Number(x.d, x.n).as_frac(inline=False,rmplus=True)
+    if x.v==1:
+        return '1'
+    if x.v==0:
+        return '0'
+    if y.v==0:
+        return '1'
+    if is_divisible(x.v**y.v,1):
+        return fr"{x.v**y.v:g}"
+    if x.v>0 and is_divisible(x.v,1):
+        return fr"{x.v:g}^{{ {y.as_frac(inline=True,rmplus=True)} }}"
+    else:
+        return fr"\left( {x.as_frac(inline=False,rmplus=True)} \right)^{{ {y.as_frac(inline=True,rmplus=True)} }}"
+
+def term(c,x,p,asfrac=True,rmplus=False):
+    if type(c)!=Number:
+        c = Number(c)
+    if type(p)!=Number:
+        p = Number(p)
     t=''
-    if n<0:
-        t+='-'
-    if is_divisible(n,1):
-        n = np.round(n)
-        t+=f'{np.abs(n):g}'
-    else:
-        t+=f'{np.abs(a/gcd):g}/{np.abs(b/gcd):g}'
-    return t
-
-def term(c,x,pn,pd=1,rm=False):
-    if c==0:
+    if c.v==0:
         return ''
-    elif c>0:
-        t='+'
+    elif c.v==1:
+        t+='+'
+    elif c.v==-1:
+        t+='-'
     else:
-        t='-'
-    p = pn/pd
-    if p==0:
-        t+=f'{np.abs(c):g}'
-    elif p==1:
-        if np.abs(c)!=1:
-            t+=f'{np.abs(c):g}'
-        t+=f'{x}'
-    else:
-        if np.abs(c)!=1:
-            t+=f'{np.abs(c):g}'
-        t+=f'{x}^{{ {inline_frac(pn,pd)} }}'
-    if rm and (t[0]=='+'):
-        return t[1:]
+        if asfrac:
+            t+=c.as_frac(inline=False, rmplus=False)
+        else:
+            t+=c.as_decimal(rmplus=False)
+    if p.v==1:
+        t+=x
+    elif p.v!=0:
+        if asfrac:
+            t+=fr'{x}^{{ {p.as_frac(inline=True, rmplus=True)} }}'
+        else:
+            t+=fr'{x}^{{ {p.as_decimal(rmplus=True)} }}'
+    if rmplus and t[0]=='+':
+        t = t[1:]
     return t
-
+    
 def polyeq(var='x', coefs=[1,1,1], powers=[0,1,2]):
     t = ''
     for i in range(len(coefs)):
         c = coefs[i]
         p = powers[i]
-        t+=term(c,var,p,pd=1,rm=(i==0))
+        t+=term(c,var,p,asfrac=True,rmplus=False)
     if t[0]=='+':
         return t[1:]
     return t
 
-def cbeq(A=1,x='x',xn=1,xd=2,y='y',yn=1,yd=2):
-    if xn==0 and yn==0:
+def cbeq(A=1,x='x',a=Number(1,2),y='y',b=Number(1,2)):
+    if a.v==0 and b.v==0:
         return f'{A:g}'
-    elif xn==0:
-        return term(A,y,yn,yd,rm=True)
-    elif yn==0:
-        return term(A,x,xn,xd,rm=True)
+    elif a.v==0:
+        return term(A,y,b,asfrac=True,rmplus=True)
+    elif b.v==0:
+        return term(A,x,a,asfrac=True,rmplus=True)
     else:
-        return term(A,x,xn,xd,rm=True) + term(1,y,yn,yd,rm=True)
+        return term(A,x,a,asfrac=True,rmplus=True) + term(1,y,b,asfrac=True,rmplus=True)
 
 def get_random_prob(ProbClass, CsvFile):
     df = pd.read_csv(CsvFile)
@@ -147,8 +199,8 @@ $$p = \left( \frac{{A}}{{B}} \right)^{{ \frac{{d}}{{a+b}} }}$$
 Supply and demand are given by the following equations:
 
 $$\begin{{align}}
-q_d &= {term(A,'p',-a,d,rm=True)}  \\
-q_s &= {term(B,'p',b,d,rm=True)}
+q_d &= {term(A,'p',Number(-a,d),rmplus=True)}  \\
+q_s &= {term(B,'p',Number(b,d),rmplus=True)}
 \end{{align}}$$
 """
     def check_solution(self):
@@ -170,25 +222,25 @@ class SimplifyCB:
             params = {'A':4,'B':12,'D':3,'a':1,'b':-2,'c':-2,'d':1}
         params = {k:params[k] for k in ['A','B','D','a','b','c','d']}
         A,B,D,a,b,c,d = params['A'],params['B'],params['D'],params['a'],params['b'],params['c'],params['d']
-        mygcd = np.gcd(int(A),int(B))
-        numerC = A/mygcd
-        denomC = B/mygcd
+        C = Number(A,B)
+        numerC = C.n
+        denomC = C.d
         xp = a-c
         yp = b-d
         numer = ''
         denom = ''
         if numerC>1:
-            numer += term(numerC,'',0,rm=True)
+            numer += term(numerC,'',0,rmplus=True)
         if denomC>1:
-            denom += term(denomC,'',0,rm=True)
+            denom += term(denomC,'',0,rmplus=True)
         if xp>0:
-            numer += term(1,'x',xp,D,rm=True)
+            numer += term(1,'x',Number(xp,D),rmplus=True)
         elif xp<0:
-            denom += term(1,'x',np.abs(xp),D,rm=True)
+            denom += term(1,'x',Number(np.abs(xp),D),rmplus=True)
         if yp>0:
-            numer += term(1,'y',yp,D,rm=True)
+            numer += term(1,'y',Number(yp,D),rmplus=True)
         elif yp<0:
-            denom += term(1,'y',np.abs(yp),D,rm=True)
+            denom += term(1,'y',Number(np.abs(yp),D),rmplus=True)
         sol = {'numerC':numerC,'denomC':denomC,'xp':xp,'yp':yp}
         self.numer = numer
         self.denom = denom
@@ -206,7 +258,7 @@ $$ \frac{{ Ax^{{a/D}}y^{{b/D}} }}{{ Bx^{{c/D}}y^{{d/D}} }} $$
         return fr"""
 Simplify:
 
-$$ \frac{{ {cbeq(A,'x',a,D,'y',b,D)} }}{{ {cbeq(B,'x',c,D,'y',d,D)} }} $$
+$$ \frac{{ {cbeq(A,'x',Number(a,D),'y',Number(b,D))} }}{{ {cbeq(B,'x',Number(c,D),'y',Number(d,D))} }} $$
 """
     def check_solution(self):
         params = self.params
@@ -260,19 +312,20 @@ Find the indifference curve with \( u({x},{y}) = {U} \).
     def solution(self):
         params = self.params
         A,x,a,b,y,c,d,U=params['A'],params['x'],params['a'],params['b'],params['y'],params['c'],params['d'],params['U']
-        cons = (U/A)**(d/c)
-        pow_numer = a*d
-        pow_denom = b*c
-        gcd = np.gcd(pow_numer, pow_denom)
-        pow_numer = pow_numer/gcd
-        pow_denom = pow_denom/gcd
-        return fr"$$ {y} = {term(cons,x,-pow_numer,pow_denom,rm=True)} $$"
+        if U/A==1:
+            cons = ''
+        else:
+            cons = print_exponentiated_numbers(Number(U,A), Number(d,c))
+        return fr"$$ y = {cons}{term(1,x,Number(-a*d,b*c),rmplus=True)} $$"
     def check_solution(self):
         params = self.params
         A,x,a,b,y,c,d,U=params['A'],params['x'],params['a'],params['b'],params['y'],params['c'],params['d'],params['U']
         return (
             (a>0) and (b>0) and (c>0) and (d>0)
         )
+
+
+
 
 SUPPLYPOLY_SETUP = r"""
 A price-taking firm produces a commodity that it can sell at price \(p\). The firm's cost function is:
