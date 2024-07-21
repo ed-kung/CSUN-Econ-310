@@ -68,25 +68,31 @@ def term(c,x,p,asfrac=True,rmplus=False):
         c = Number(c)
     if type(p)!=Number:
         p = Number(p)
+    if asfrac:
+        cstr = c.as_frac(inline=False,rmplus=False)
+        pstr = p.as_frac(inline=True,rmplus=True)
+    else:
+        cstr = c.as_decimal(rmplus=False)
+        pstr = p.as_decimal(rmplus=True)
     t=''
     if c.v==0:
         return ''
-    elif c.v==1:
-        t+='+'
-    elif c.v==-1:
-        t+='-'
+    if p.v==0:
+        t+=cstr
+    elif p.v==1:
+        if c.v==1:
+            t+=f"+{x}"
+        elif c.v==-1:
+            t+=f"-{x}"
+        else:
+            t+=f"{cstr}{x}"
     else:
-        if asfrac:
-            t+=c.as_frac(inline=False, rmplus=False)
+        if c.v==1:
+            t+=fr"+{x}^{{ {pstr} }}"
+        elif c.v==-1:
+            t+=fr"-{x}^{{ {pstr} }}"
         else:
-            t+=c.as_decimal(rmplus=False)
-    if p.v==1:
-        t+=x
-    elif p.v!=0:
-        if asfrac:
-            t+=fr'{x}^{{ {p.as_frac(inline=True, rmplus=True)} }}'
-        else:
-            t+=fr'{x}^{{ {p.as_decimal(rmplus=True)} }}'
+            t+=fr"{cstr}{x}^{{ {pstr} }}"
     if rmplus and t[0]=='+':
         t = t[1:]
     return t
