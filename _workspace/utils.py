@@ -11,6 +11,15 @@ class Number:
             gcd = np.gcd(int(n),int(d))
             self.n = n/gcd
             self.d = d/gcd
+        elif is_divisible(n,d):
+            self.n = n/d
+            self.d = 1
+        elif is_divisible(d,n):
+            self.n = 1
+            self.d = d/n
+        elif d<1:
+            self.n = n/d
+            self.d = 1
         else:
             self.n = n
             self.d = d
@@ -32,6 +41,8 @@ class Number:
             t+='+'
         if is_divisible(self.v, 1):
             t+=f'{np.abs(self.v):.0f}'
+        elif self.d==1:
+            t+=f'{np.abs(self.v):g}'
         else:
             if inline:
                 t+=f'{np.abs(self.n):g} / {np.abs(self.d):g}'
@@ -332,165 +343,207 @@ Find the indifference curve with \( u({x},{y}) = {U} \).
 
 
 
-
-SUPPLYPOLY_SETUP = r"""
-A price-taking firm produces a commodity that it can sell at price \(p\). The firm's cost function is:
-
-$$ c(q) = {} $$
 """
-SUPPLYPOLY_SOLUTION = r"""
-The supply curve is:
-
-$$ q = \left( \frac{p - b}{kc} \right)^{\frac{1}{k-1}} $$
+Supply Curve from Polynomial Cost Function
 """
 class SupplyPoly:
     def __init__(self, params=None):
         if not params:
-            params = {'a':0,'b':0,'c':0.5,'k':2}
-        params = {k:params[k] for k in ['a','b','c','k']}
-        sol = {}
-        sol['coefs'] = [
-            -params['b'] / (params['k']*params['c']), 
-            1/(params['k']*params['c'])
-        ]
+            params = {'a':0,'b':0,'c':0.5,'k':2,'M':1}
+        params = {k:params[k] for k in ['a','b','c','k','M']}
         self.params = params
-        self.sol = sol
     def general_setup(self):
-        return SUPPLYPOLY_SETUP.format(
-            'a + bq + cq^k'
-        )
-    def general_solution(self):
-        return SUPPLYPOLY_SOLUTION
-    def setup(self):
-        a = self.params['a']
-        b = self.params['b']
-        c = self.params['c']
-        k = self.params['k']
-        coefs = [a,b,c]
-        return SUPPLYPOLY_SETUP.format(
-            polyeq('q', coefs=coefs)
-        )
-    def check_solution(self):
-        return (
-            (is_divisible(self.sol['coefs'][0], 1)) and
-            (is_divisible(self.sol['coefs'][1], 0.1))
-        )
-        
+        return fr"""
+There are \(M\) identical, price-taking firms that can produce a commodity which sells at price \(p\). Each firm's cost function is:
 
-DEMANDPOLY_SETUP = r"""
-A price-taking consumer with income ${}$ has utility over numeraire consumption $c$ and a commodity $q$ given by:
+$$ c(q) = a + bq + cq^k $$
 
-$$ u(c,q) = c + {} $$
+The supply curve is:
+
+$$ Q = M \left( \frac{{ p - b }}{{ kc }} \right)^{{ \frac{{1}}{{k-1}} }} $$
 """
-DEMANDPOLY_SOLUTION = r"""
-The demand curve is:
+    def setup(self):
+        params = self.params
+        a,b,c,k,M = params['a'],params['b'],params['c'],params['k'],params['M']
+        cost_function = polyeq('q',[a,b,c],[0,1,k])
+        if self.params['M']==1:
+            return fr"""
+A price-taking firm produces a commodity that sells at price \(p\). The firm's cost function is:
 
-$$ q = \left( \frac{a-p}{kb} \right)^{\frac{1}{k-1}} $$
+$$ c(q) = {cost_function} $$
+"""
+        else:
+            return fr"""
+There are \({M:g}\) identical, price-taking firms that can produce a commodity which sells at price \(p\). Each firm's cost function is:
+
+$$ c(q) = {cost_function} $$
+"""
+    def solution(self):
+        params = self.params
+        a,b,c,k,M = params['a'],params['b'],params['c'],params['k'],params['M']
+        
+        c = Number(c,1)
+        kc = Number(k*c.n, c.d)
+        
+        if kc.v==1:
+            inner_equation = polyeq('p',[1,-b],[1,0])
+        elif is_divisible(kc.v, 1):
+            inner_equation = fr"\frac{{ {polyeq('p',[1,-b],[1,0])} }}{{ {kc.v:g} }}"
+        else:
+            inner_equation = fr"\frac{{ {polyeq('p',[c.d,-b*c.d],[1,0])} }}{{ {k*c.n:g} }}"
+        if M>1:
+            if k==2:
+                return fr" {M:g} \left( {inner_equation} \right) "
+            else:
+                return fr" {M:g} \left( {inner_equation} \right)^{{ 1/{k-1:g} }}"
+        if M==1:
+            if k==2:
+                return inner_equation
+            else:
+                return fr" \left( {inner_equation} \right)^{{ 1/{k-1:g} }}"
+    def eval(self, p):
+        params = self.params
+        a,b,c,k,M = params['a'],params['b'],params['c'],params['k'],params['M']
+        q = ((p-b)/(k*c))**(1/(k-1))
+        Q = M*q
+        profit = p*q - a - b*q - c*q**k
+        total_profit = M*profit
+        return {'p':p, 'q':q, 'Q':Q, 'profit':profit, 'total_profit':total_profit}
+
+    
+"""
+Demand Curve from Polynomial Utility
 """
 class DemandPoly:
     def __init__(self, params=None):
         if not params:
-            params = {'a':10,'b':0.5,'k':2,'Y':100}
-        params = {k:params[k] for k in ['a','b','k','Y']}
+            params = {'Y':100,'a':10,'b':0.5,'k':2,'N':1}
+        params = {k:params[k] for k in ['Y','a','b','k','N']}
         self.params = params
-        
     def general_setup(self):
-        return DEMANDPOLY_SETUP.format(
-            'Y','aq - bq^k'
-        )
-    def general_solution(self):
-        return DEMANDPOLY_SOLUTION
-    def setup(self):
-        k = self.params['k']
-        coefs = np.zeros(k+1)
-        coefs[0] = 0
-        coefs[1] = self.params['a']
-        coefs[k] = -self.params['b']
-        return DEMANDPOLY_SETUP.format(
-            f"Y = {self.params['Y']:.0f}",
-            polyeq('q', coefs=coefs)
-        )
-    def eval(self, p):
-        a = self.params['a']
-        b = self.params['b']
-        k = self.params['k']
-        Y = self.params['Y']
-        q = ((a-p)/(k*b))**(1/(k-1))
-        c = Y - p*q
-        utility = Y - p*q + a*q - b*q**k
-        consumer_surplus = utility - Y
-        assert q>0
-        assert c>0
-        assert p<a
-        return {'q':q, 'utility':utility, 'consumer_surplus':consumer_surplus}
-        
+        return fr"""
+There are \(N\) identical, price-taking consumers with income \(Y\). Each consumer has utility over numeraire consumption \(c\) and a commodity \(q\) given by:
 
-DEMANDCE_SETUP = r"""
-A price-taking consumer with income ${}$ has utility over numeraire consumption $c$ and a commodity $q$ given by:
+$$ u(c,q) = c + aq - bq^k $$
 
-$$ u(c,q) = c + {} $$
-"""
-DEMANDCE_SOLUTION = r"""
 The demand curve is:
 
-$$ q = \left( \frac{p}{ka} \right)^{\frac{1}{k-1}} $$
+$$ q = \left( \frac{{ a - p }}{{ kb }} \right)^{{ \frac{{1}}{{k-1}} }} $$
+"""
+    def setup(self):
+        params = self.params
+        Y,a,b,k,N = params['Y'],params['a'],params['b'],params['k'],params['N']
+        utility_function = polyeq('q',[a,-b],[1,k])
+        if self.params['N']==1:
+            return fr"""
+A price-taking consumer with income \(Y={Y:g}\) has utility over numeraire consumption \(c\) and a commodity \(q\) given by:
+
+$$ u(c,q) = c + {utility_function} $$
+"""
+        else:
+            return fr"""
+There are \({N:g}\) identical, price-taking consumers with income \(Y={Y:g}\). Each consumer has utility over numeraire consumption \(c\) and a commodity \(q\) given by:
+
+$$ u(c,q) = c + {utility_function} $$
+"""
+    def solution(self):
+        params = self.params
+        Y,a,b,k,N = params['Y'],params['a'],params['b'],params['k'],params['N']
+        
+        b = Number(b,1)
+        kb = Number(k*b.n, b.d)
+        
+        if kb.v==1:
+            inner_equation = polyeq('p',[a,-1],[0,1])
+        elif is_divisible(kb.v, 1):
+            inner_equation = fr"\frac{{ {polyeq('p',[a,-1],[0,1])} }}{{ {kb.v:g} }}"
+        else:
+            inner_equation = fr"\frac{{ {polyeq('p',[a*b.d, -b.d],[0,1])} }}{{ {k*b.n:g} }}"
+        if N>1:
+            if k==2:
+                return fr" {N:g} \left( {inner_equation} \right) "
+            else:
+                return fr" {N:g} \left( {inner_equation} \right)^{{ 1/{k-1:g} }}"
+        if N==1:
+            if k==2:
+                return inner_equation
+            else:
+                return fr" \left( {inner_equation} \right)^{{ 1/{k-1:g} }}"
+    def eval(self, p):
+        params = self.params
+        Y,a,b,k,N = params['Y'],params['a'],params['b'],params['k'],params['N']
+        q = ((a-p)/(k*b))**(1/(k-1))
+        Q = N*q
+        utility = Y - p*q + a*q - b*q**k
+        total_utility = N*utility
+        c = Y - p*q
+        return {'p':p, 'q':q, 'Q':Q, 'utility':utility, 'total_utility':total_utility, 'c':c}
+    
+    
+"""
+Demand Curve with Constant Elasticity
 """
 class DemandCE:
     def __init__(self, params=None):
         if not params:
-            params = {'numer_k':1,'denom_k':2,'a':1,'Y':100}
-        params = {k:params[k] for k in ['numer_k', 'denom_k', 'a', 'Y']}
+            params = {'Y':100,'a':1,'kn':1,'kd':2,'N':1}
+        params = {k:params[k] for k in ['Y','a','kn','kd','N']}
         self.params = params
-        
     def general_setup(self):
-        return DEMANDCE_SETUP.format(
-            'Y','aq^k'
-        )
-    def general_solution(self):
-        return DEMANDCE_SOLUTION
+        return fr"""
+There are \(N\) identical, price-taking consumers with income \(Y\). Each consumer has utility over numeraire consumption \(c\) and a commodity \(q\) given by:
+
+$$ u(c,q) = c + aq^{{ \frac{{ kn }}{{ kd }} }} $$
+
+The demand curve is:
+
+$$ q = \left( \frac{{ kd }}{{ kn \cdot a }} p \right)^{{ \frac{{kd}}{{kn - kd}} }} $$
+"""
     def setup(self):
-        numer_k = self.params['numer_k']
-        denom_k = self.params['denom_k']
-        a = self.params['a']
-        if a==1:
-            coef = ''
+        params = self.params
+        Y,a,kn,kd,N = params['Y'],params['a'],params['kn'],params['kd'],params['N']
+        utility_function = term(a,'q',Number(kn,kd),rmplus=True)
+        if self.params['N']==1:
+            return fr"""
+A price-taking consumer with income \(Y={Y:g}\) has utility over numeraire consumption \(c\) and a commodity \(q\) given by:
+
+$$ u(c,q) = c + {utility_function} $$
+"""
         else:
-            coef = f"{a}"
-        return DEMANDCE_SETUP.format(
-            f"Y = {self.params['Y']:.0f}",
-            f"{coef}q^{{ \\frac{{ {numer_k} }}{{ {denom_k} }} }}"
-        )
-    def eval(self, p):
-        a = self.params['a']
-        k = self.params['numer_k'] / self.params['denom_k']
-        Y = self.params['Y']
-        q = (p/(k*a))**(1/(k-1))
-        c = Y - p*q
-        utility = Y - p*q + a*q**k
-        consumer_surplus = utility - Y
-        assert q>0
-        assert c>0
-        return {'q':q, 'utility':utility, 'consumer_surplus':consumer_surplus}
+            return fr"""
+There are \({N:g}\) identical, price-taking consumers with income \(Y={Y:g}\). Each consumer has utility over numeraire consumption \(c\) and a commodity \(q\) given by:
 
-
-SREQ_SETUP = r"""
-A commodity $q$ is traded at price $p$ in a competitive market with price-taking consumers and firms. \\
+$$ u(c,q) = c + {utility_function} $$
+"""
+    def solution(self):
+        params = self.params
+        Y,a,kn,kd,N = params['Y'],params['a'],params['kn'],params['kd'],params['N']
         
-There are ${}$ identical consumers each with income ${}$. Each consumer has a utility function over numeraire consumption $c$ and commodity $q$ given by:
-
-$$u(c,q) = c + {}$$
-
-There are ${}$ identical firms each with cost function given by:
-
-$$c(q) = {}$$
+        inner_equation = polyeq('p',[Number(kd,kn*a)],[1])
+        
+        if N>1:
+            if kd/(kn*a)==1:
+                return fr"{N:g} p^{{ {Number(kd,kn-kd).as_frac(inline=True,rmplus=True)} }}"
+            else:
+                return fr"{N:g} \left( {Number(kd,kn*a).as_frac(inline=False,rmplus=True)} p \right)^{{ {Number(kd,kn-kd).as_frac(inline=True,rmplus=True)} }}"
+        else:
+            if kd/(kn*a)==1:
+                return fr"p^{{ {Number(kd,kn-kd).as_frac(inline=True,rmplus=True)} }}"
+            else:
+                return fr"\left( {Number(kd,kn*a).as_frac(inline=False,rmplus=True)} p \right)^{{ {Number(kd,kn-kd).as_frac(inline=True,rmplus=True)} }}"
+    def eval(self, p):
+        params = self.params
+        Y,a,kn,kd,N = params['Y'],params['a'],params['kn'],params['kd'],params['N']
+        q = ((kd/(kn*a))*p)**(kd/(kn-kd))
+        Q = N*q
+        utility = Y - p*q + a*q**(kn/kd)
+        total_utility = N*utility
+        c = Y - p*q
+        return {'p':p, 'q':q, 'Q':Q, 'utility':utility, 'total_utility':total_utility, 'c':c}
+    
 
 """
-SREQ_SOLUTION = r"""
-The general solutions are:
-
-$$Q = \frac{\alpha - \delta}{\beta/N + \eta/M}$$
-
-$$p = \frac{N \eta \alpha + M \beta \delta}{N \eta + M \beta}$$
+Short Run Equilibrium
 """
 class SREQ:
     def __init__(self, params=None):
@@ -527,7 +580,38 @@ class SREQ:
 
         self.params = params
         self.sol = sol
+    def general_setup(self):
+        return fr"""
+A commodity \(q\) is traded at price \(p\) in a competitive market with price-taking consumers and firms. \\
         
+There are \(N\) identical consumers each with income \(Y\). Each consumer has a utility function over numeraire consumption \(c\) and commodity \(q\) given by:
+
+$$u(c,q) = c + \alpha q - \frac{{1}}{{2}} \beta q^2 $$
+
+There are \(M\) identical firms each with cost function given by:
+
+$$c(q) = \gamma + \delta q + \frac{{1}}{{2}} \eta q^2 $$
+
+The general solutions are:
+
+$$ Q = \frac{{ \alpha - \delta }}{{ \beta/N + \eta/M }} $$
+
+$$ p = \frac{{ N \eta \alpha + M \beta \delta }}{{ N \eta + M \beta }} $$
+"""
+    def setup(self):
+        params = self.params
+        N, M, Y, alpha, beta, gamma, delta, eta = params['N'], params['M'], params['Y'], params['alpha'], params['beta'], params['gamma'], params['delta'], params['eta']
+        return fr"""
+A commodity \(q\) is traded at price \(p\) in a competitive market with price-taking consumers and firms. \\
+        
+There are \({N:,g}\) identical consumers each with income \(Y={Y:g}\). Each consumer has a utility function over numeraire consumption \(c\) and commodity \(q\) given by:
+
+$$u(c,q) = c + {polyeq('q',[alpha, -0.5*beta],[1,2])} $$
+
+There are \({M:,g}\) identical firms each with cost function given by:
+
+$$c(q) = {polyeq('q',[gamma,delta,0.5*eta],[0,1,2])} $$
+"""
     def check_solution(self):
         sol = self.sol
         return (
@@ -535,27 +619,10 @@ class SREQ:
             (sol['qd']>0) and
             (sol['qs']>0) and
             (sol['p']>0) and
-            (np.abs(sol['p']%1)<0.001) and
-            (np.abs(sol['qd']%1)<0.001) and
-            (np.abs(sol['qs']%1)<0.001)
+            (is_divisible(sol['p'],1)) and
+            (is_divisible(sol['qd'],1)) and
+            (is_divisible(sol['qs'],1)) 
         )
-
-    def general_setup(self):
-        return SREQ_SETUP.format(
-            'N', 'Y', '\\alpha q - \\tfrac{1}{2} \\beta q^2', 'M', '\\gamma + \\delta q + \\tfrac{1}{2} \\eta q^2'
-        ) 
-    def general_solution(self):
-        return SREQ_SOLUTION
-        
-    def setup(self):
-        return SREQ_SETUP.format(
-            f"{self.params['N']:,.0f}", 
-            f"Y={self.params['Y']:,.0f}",
-            polyeq('q', [0, self.params['alpha'], -0.5*self.params['beta']]),
-            f"{self.params['M']:,.0f}",
-            polyeq('q', [self.params['gamma'], self.params['delta'], 0.5*self.params['eta']])
-        )
-
 
 
 ADVALOREMSR_SOLUTION = r"""
@@ -565,25 +632,16 @@ $$Q = \frac{(1-t_p)\alpha - (1+t_c)\delta}{(1-t_p)\beta/N + (1+t_c)\eta/M}$$
 
 $$p = \frac{N \eta \alpha + M \beta \delta}{(1+t_c) N \eta + (1-t_p) M \beta}$$
 """
+"""
+Ad Valorem Taxes
+"""
 class AdValoremSR:
     def __init__(self, params=None):
         if not params:
             params = {'N':3000, 'M':200, 'Y':100, 'alpha':10, 'beta':2, 'gamma':0, 'delta':0, 'eta':0.2, 'tc':0.1, 'tp':0}
-
         params = {k:params[k] for k in ['N','M','Y','alpha','beta','gamma','delta','eta','tc','tp']}
-
         no_tax = SREQ(params)
-        
-        N = params['N']
-        M = params['M']
-        Y = params['Y']
-        alpha = params['alpha']
-        beta = params['beta']
-        gamma = params['gamma']
-        delta = params['delta']
-        eta = params['eta']
-        tc = params['tc']
-        tp = params['tp']
+        N, M, Y, alpha, beta, gamma, delta, eta, tc, tp = params['N'], params['M'], params['Y'], params['alpha'], params['beta'], params['gamma'], params['delta'], params['eta'], params['tc'], params['tp']
 
         Q = ((1-tp)*alpha - (1+tc)*delta)/((1+tc)*eta/M + (1-tp)*beta/N)
         p = (N*eta*alpha + M*beta*delta)/(N*eta*(1+tc) + M*beta*(1-tp))
@@ -616,33 +674,41 @@ class AdValoremSR:
 
         self.lump_sum = lumpsum
 
+    def general_setup(self):
+        t = self.no_tax.general_setup()
+        t+= r"""
+An ad-valorem tax rate of \(t_c\) is placed on the consumers and an ad-valorem tax rate of \(t_p\) is placed on the producers.
+
+The general solutions are:
+
+$$Q = \frac{(1-t_p)\alpha - (1+t_c)\delta}{(1-t_p)\beta/N + (1+t_c)\eta/M}$$
+
+$$p = \frac{N \eta \alpha + M \beta \delta}{(1+t_c) N \eta + (1-t_p) M \beta}$$
+"""
+        return t
+    
+    def setup(self):
+        params = self.params
+        N, M, Y, alpha, beta, gamma, delta, eta, tc, tp = params['N'], params['M'], params['Y'], params['alpha'], params['beta'], params['gamma'], params['delta'], params['eta'], params['tc'], params['tp']
+        t = self.no_tax.setup()
+        if tc>0:
+            t+=fr"An ad-valorem tax rate of \({tc*100:g}\% \) is placed on the consumers. "
+        if tp>0:
+            t+=fr"An ad-valorem tax rate of \({tp*100:G}\% \) is placed on the producers. "
+        return t
+    
     def check_solution(self):
         return (
             (self.sol['c']>0) and
             (self.sol['p']>0) and
             (self.sol['qd']>0) and
             (self.sol['qs']>0) and
-            (np.abs(self.sol['p']%1)<0.0001) and
-            (np.abs(self.sol['qd']%1)<0.0001) and
-            (np.abs(self.sol['qs']%1)<0.0001) and
-            (self.no_tax.check_solution())
+            is_divisible(self.sol['p'],1) and 
+            is_divisible(self.sol['qd'],1) and 
+            is_divisible(self.sol['qs'],1) and 
+            self.no_tax.check_solution()
         )
 
-    def general_setup(self):
-        t = self.no_tax.general_setup()
-        t+= r"An ad-valorem tax rate of $t_c$ is placed on the consumers and an ad-valorem tax rate of $t_p$ is placed on the producers."
-        return t
-
-    def general_solution(self):
-        return ADVALOREMSR_SOLUTION
-
-    def setup(self):
-        t = self.no_tax.setup()
-        if self.params['tc']>0:
-            t+= r"An ad-valorem tax rate of ${}\%$ is placed on the consumers. ".format(f"{self.params['tc']*100:g}")
-        if self.params['tp']>0:
-            t+= r"An ad-valorem tax rate of ${}\%$ is placed on the producers. ".format(f"{self.params['tp']*100:g}")
-        return t
 
 
 LAFFER_SOLUTION = r"""

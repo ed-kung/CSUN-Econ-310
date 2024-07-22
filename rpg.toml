@@ -4,4 +4,6 @@ packages = ["numpy", "pandas"]
 
 [files]
 "https://raw.githubusercontent.com/ed-kung/CSUN-Econ-310/main/_workspace/utils.py" = ""
-"https://raw.githubusercontent.com/ed-kung/CSUN-Econ-310/main/_workspace/wk01_practice.json" = ""
+"/CSUN-Econ-310/assets/data/wk01_practice.json" = ""
+"/CSUN-Econ-310/assets/data/wk02_practice.json" = ""
+"/CSUN-Econ-310/assets/data/wk03_practice.json" = ""
