@@ -74,7 +74,7 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 	|       4 | You failed to follow all instructions OR your work has minor inaccuracies but still demonstrates an understanding of the material. |
 	|       3 | Your work has major inaccuracies OR your work demonstrates only a partial understanding of the material.                           |
     |       2 | You made an attempt, but your work has major inaccuracies or does not demonstrate an understanding of the material (this includes correct answers without shown work).               |
-    |       1 | You made only a partial attempt at completing the assignment; or you made an attempt but I could not read it or understand it.                                                                      |
+    |       1 | You made only a partial attempt at completing the assignment; or you made an attempt but I had trouble reading or understanding it. |
     |       0 | You did not make any attempt at the assignment. Note that if you do not attempt some parts of an assignment, you may receive a zero for the whole assignment. |	
 
 
@@ -126,71 +126,76 @@ Placeholder text
 
 ## Course Materials
 
-### Textbook (Recommended but not required)
-
-This course is primarily based on my own materials. However, the following textbook can serve as a good reference.  It is recommended but not required.
-
-**Intermediate Microeconomics and its Applications**, by Nicholson and Snyder.
+**Textbook (Recommended but not required)**
 
 <img src="assets/images/textbook.jpg" width="100">
 
+This course is primarily based on my own materials. However, *Intermediate Microeconomics and its Applications* by Nicholson and Snyder can serve as a helpful reference. 
 
-### Calculator (Required)
 
-You will need a calculator for this course.  Any calculator 
+**Calculator (Required)**
 
+<img src="assets/images/calculator.jpg" width="100">
+
+You will need a calculator for this course.  Any calculator is fine.
+
+**Green Books (Required)**
+
+<img src="assets/images/greenbook.webp" width="100">
+
+You will need these for exams.
 
 ---
 
 ## Exam Policies and Information
 
-Exams will be given in person, on paper.  All exams are open book.  You are allowed to 
+Exams will be given in person, on paper.  All exams are open book.  You are allowed to use a calculator, but no other electronic device besides that.  You can bring printed or hand written notes.
 
 ---
 
 ## Additional Course Policies and Resources
 
-### Communications Policy
+**Communications Policy**
 
 My preferred form of communication is in-person after class or at office hours, or by email. If you email me and I do not respond within 24 hours, do not hesitate to re-send the email. Sometimes emails get lost in the shuffle.
 
-### Late and Missing Assignment Policy
+**Late and Missing Assignment Policy**
 
 Requests for absences, extensions, or late submissions must be submitted by email with accompanying documentation. Only unanticipated family and medical emergencies, or other extraordinary events, will be considered valid reasons. Events that could have reasonably been anticipated, such as heavy academic workload, busy work schedule, or friends' birthday parties, will not be accepted as valid reasons.
 
-### Academic Integrity
+**Academic Integrity**
 
 By taking this course, you certify that all work is your own. Plagiarism is not allowed, and you are not allowed to have someone else do any course work in your place unless explicitly allowed by the syllabus. If it is discovered that you have violated academic integrity on any assignment, you will receive a grade of zero for that assignment. Repeated violations of academic integrity may result in a failing grade for the entire course.
 
-### Minimum Attempt Policy
+**Minimum Attempt Policy**
 
 You must at least attempt to answer every question on an assignment. If you skip a question without attempting an answer, you may receive a grade of zero for the entire assignment.
 
-Why do I have a minimum attempt policy? Because demonstrating effort is important, especially in the workplace. Not even attempting a task is worse than attempting it and getting it wrong. I want to encourage all students to at least make an attempt at all tasks. As Kobe Bryant said, "You miss 100% of the shots you don't take."
+Why do I have a minimum attempt policy? Because demonstrating effort is important, especially in the workplace. Not even attempting a task is worse than attempting it and getting it wrong. I want to encourage all students to at least make an attempt at all tasks. As Wayne Gretzky said, "You miss 100% of the shots you don't take."
 
-### Special Needs
+**Special Needs**
 
 If you have a disability or need special accommodations, please register with the Disability Resources and Educational Services ([DRES](https://www.csun.edu/dres)) office or the National Center of Deafness ([NCOD](https://www.csun.edu/ncod)). If you would like to discuss your need for accommodations with me, please contact me to set up an appointment.
 
 Special consideration may be given to students with caregiving responsibilities at home (children, disabled family members, etc.). Please get in touch with me if you need an extension and have caregiving responsibilities.
 
-### Emergency Food and Shelter
+**Emergency Food and Shelter**
 
 If you are experiencing an emergency need for food or shelter, do not hesitate to utilize the resources available to you on campus. More information: https://www.csun.edu/heart.
 
-### University Counseling Services
+**University Counseling Services**
 
 If you have need for counseling regarding any personal or academic issues, do not hesitate to reach out to the University's counseling services. More information: https://www.csun.edu/counseling/students.
 
-### Tutoring Services
+**Tutoring Services**
 
 Tutoring services may be available for this course. Please contact the Economics Department for information: https://www.csun.edu/economics.
 
-### Diversity Statement
+**Diversity Statement**
 
 It is my intent that students from diverse backgrounds and perspectives will be well served by this course, that students' learning needs will be addressed both in and out of the classroom, and that the diversity students bring to the class will be viewed as a resource, strength, and benefit. It is my intent to present materials and activities in a way that is respectful to students from all backgrounds, and that students from all backgrounds have an equal opportunity to succeed in the course. If you have any concerns, feel free to reach out to me.
 
-### All Other Policies
+**All Other Policies**
 
 In general, the course follows all relevant CSUN policies and procedures as documented here: https://catalog.csun.edu/policies/alphabetical. Please pay special attention to the rules on **attendance** and **academic dishonesty**.
 

@@ -711,117 +711,91 @@ $$p = \frac{N \eta \alpha + M \beta \delta}{(1+t_c) N \eta + (1-t_p) M \beta}$$
 
 
 
-LAFFER_SOLUTION = r"""
-The general solutions are:
-
-$$ p = \frac{\alpha N / M}{1 + N/M - t} $$
-
-$$ Q = \alpha N \left( \frac{1-t}{1+N/M-t} \right) $$
+"""
+Laffer Curve
 """
 class Laffer:
     def __init__(self, params=None):
         if not params:
-            params = {'N':400,'M':200,'alpha':15,'tp':0.5}
-        params = {k:params[k] for k in ['N','M','alpha','tp']}
+            params = {'N':400,'M':200,'alpha':15}
+        params = {k:params[k] for k in ['N','M','alpha']}
         self.params = params.copy()
         params['beta'] = 1
         params['gamma'] = 0
         params['delta'] = 0
         params['eta'] = 1
         params['Y'] = 100
-        params['tc'] = 0
-        av = AdValoremSR(params)
         sreq = SREQ(params)
-        self.av = av
         self.sreq = sreq
-        
-        sol = {}
-        sol['p'] = self.formula_p()
-        sol['Q'] = self.formula_q()
-        self.sol = sol
-    
-    def check_solution(self):
-        N = self.params['N']
-        M = self.params['M']
-        alpha = self.params['alpha']
-        return (
-            ((alpha*N/M)%1 < 0.001) and
-            ((alpha*N)%1 < 0.001) and
-            (self.av.check_solution()) and
-            (self.sreq.check_solution())
-        )
-    
     def general_setup(self):
-        setup = SREQ_SETUP.format(
-            'N', 'Y', '\\alpha q - \\tfrac{1}{2} q^2', 'M', '\\tfrac{1}{2} q^2'
-        )
-        setup += "An ad valorem tax rate of $t$ is placed on the producers."
-        return setup
-    
-    def general_solution(self):
-        return LAFFER_SOLUTION
-    
-    def setup(self):
-        setup = self.sreq.setup()
-        setup += "An ad valorem tax rate of $t$ is placed on the producers."
-        return setup
-    
-    def formula_p(self):
-        N = self.params['N']
-        M = self.params['M']
-        alpha = self.params['alpha']
-        return fr"$$ p = \frac{{ {alpha*N/M:.0f} }}{{ {1+N/M:.0f} - t }} $$"
-    
-    def formula_q(self):
-        N = self.params['N']
-        M = self.params['M']
-        alpha = self.params['alpha']
-        return fr"$$ Q = {alpha*N:,.0f} \left( \frac{{ 1-t }}{{ {1+N/M:.0f} - t }} \right) $$"
+        return fr"""
+A commodity \(q\) is traded at price \(p\) in a competitive market with price-taking consumers and firms. \\
         
+There are \(N\) identical consumers each with income \(Y\). Each consumer has a utility function over numeraire consumption \(c\) and commodity \(q\) given by:
 
-LREQ_SETUP = r"""
-A commodity $q$ is traded at price $p$ in a competitive market with price-taking consumers and firms. \\
-        
-There are ${}$ identical consumers each with income ${}$. Each consumer has a utility function over numeraire consumption $c$ and commodity $q$ given by:
+$$u(c,q) = c + \alpha q - \frac{{1}}{{2}} q^2 $$
 
-$$u(c,q) = c + {}$$
+There are \(M\) identical firms each with cost function given by:
 
-There are ${}$ identical firms each with cost function given by:
+$$c(q) = \frac{{1}}{{2}} q^2 $$
 
-$$c(q) = {}$$
+An ad-valorem tax rate of \(t\) is levied on the producers.
 
-The number of firms is fixed in the short run, but in the long run firms can freely enter or exit the market. Thus, the number of firms is flexible in the long run.
-"""
-LREQ_SOLUTION = r"""
 The general solutions are:
 
-$$q_s = \sqrt{2\gamma / \eta}$$
+$$ p = \frac{{\alpha N / M}}{{1 + N/M - t}} $$
 
-$$p = \delta + \eta q_s$$
+$$ Q = \alpha N \left( \frac{{1-t}}{{1+N/M-t}} \right) $$
+"""
+    def setup(self):
+        t = self.sreq.setup()
+        t+=fr"""
+An ad-valorem tax rate of \(t\) is levied on the producers.
+"""
+        return t
+    def check_solution(self):
+        params = self.params
+        N, M, alpha = params['N'], params['M'], params['alpha']
+        return (
+            is_divisible(alpha*N, M) and 
+            is_divisible(alpha*N, 1) and
+            is_divisible(N,M) 
+        )
+    def formula_p(self):
+        params = self.params
+        N, M, alpha = params['N'], params['M'], params['alpha']
+        numer = alpha*N/M
+        denom = 1 + N/M
+        return fr"\frac{{ {numer:,g} }}{{ {denom:,g} - t }}"
+    def formula_q(self):
+        params = self.params
+        N, M, alpha = params['N'], params['M'], params['alpha']
+        denom = 1 + N/M
+        return fr"{alpha*N:,g} \left( \frac{{ 1-t }}{{ {denom:,g} - t }} \right)"
+    def get_plot_xy(self):
+        params = self.params
+        N, M, alpha = params['N'], params['M'], params['alpha']
+        t = np.arange(0,1,0.01)
+        p = (alpha*N/M)/(1 + N/M - t)
+        Q = alpha*N*((1-t)/(1+N/M-t))
+        revenue = t*p*Q
+        return t, revenue
+    
 
-$$q_d = \frac{\alpha - p}{\beta}$$
+"""
+Long Run Equilibrium
 """
 class LREQ:
     def __init__(self, params=None):
         if not params:
             params = {'N':3000, 'Y':100, 'alpha':10, 'beta':1, 'gamma':32, 'delta':0, 'eta':1}
-            
         params = {k:params[k] for k in ['N','Y','alpha','beta','gamma','delta','eta']}
-
-        N = params['N']
-        Y = params['Y']
-        alpha = params['alpha']
-        beta = params['beta']
-        gamma = params['gamma']
-        delta = params['delta']
-        eta = params['eta']
-
+        N, Y, alpha, beta, gamma, delta, eta = params['N'], params['Y'], params['alpha'], params['beta'], params['gamma'], params['delta'], params['eta']
         qs = np.sqrt(2*gamma/eta)
         p = delta + eta*qs
         qd = (alpha - p)/beta
         Q = N*qd
         M = Q/qs
-        
         sol = {}
         sol['Q'] = Q
         sol['p'] = p
@@ -836,38 +810,60 @@ class LREQ:
         sol['utility'] = sol['c'] + alpha * sol['qd'] - 0.5 * beta * sol['qd']**2
         sol['total_utility'] = N*sol['utility']
         sol['total_surplus'] = sol['total_profit'] + sol['total_utility']
-
         self.params = params
         self.sol = sol
-    
     def check_solution(self):
+        params = self.params
         sol = self.sol
         return (
             (sol['c']>0) and
             (sol['qd']>0) and
             (sol['qs']>0) and
             (sol['p']>0) and
-            (np.abs(sol['p']%1)<0.001) and
-            (np.abs(sol['qd']%1)<0.001) and
-            (np.abs(sol['qs']%1)<0.001) and
-            (np.abs(sol['M']%1)<0.001)
+            is_divisible(sol['p'],1) and
+            is_divisible(sol['qd'],1) and
+            is_divisible(sol['qs'],1) and
+            is_divisible(sol['M'],1) and
+            (params['N'] > sol['M'])
         )
-
     def general_setup(self):
-        return LREQ_SETUP.format(
-            'N', 'Y', '\\alpha q - \\tfrac{1}{2} \\beta q^2', 'M', '\\gamma + \\delta q + \\tfrac{1}{2} \\eta q^2'
-        ) 
-    def general_solution(self):
-        return LREQ_SOLUTION
+        return fr"""
+A commodity \(q\) is traded at price \(p\) in a competitive market with price-taking consumers and firms. \\
         
+There are \(N\) identical consumers each with income \(Y\). Each consumer has a utility function over numeraire consumption \(c\) and commodity \(q\) given by:
+
+$$u(c,q) = c + \alpha q - \frac{{1}}{{2}} \beta q^2$$
+
+There are \(M\) identical firms each with cost function given by:
+
+$$c(q) = \gamma + \delta q + \frac{{1}}{{2}} \eta q^2 $$
+
+The number of firms is fixed in the short run, but in the long run firms can freely enter or exit the market. Thus, the number of firms is flexible in the long run.
+
+The general solutions are:
+
+$$q_s = \sqrt{{2\gamma / \eta}}$$
+
+$$p = \delta + \eta q_s$$
+
+$$q_d = \frac{{\alpha - p}}{{\beta}}$$
+"""
     def setup(self):
-        return LREQ_SETUP.format(
-            f"{self.params['N']:,.0f}", 
-            f"Y={self.params['Y']:,.0f}",
-            polyeq('q', [0, self.params['alpha'], -0.5*self.params['beta']]),
-            "M",
-            polyeq('q', [self.params['gamma'], self.params['delta'], 0.5*self.params['eta']])
-        )
+        params = self.params
+        N, Y, alpha, beta, gamma, delta, eta = params['N'], params['Y'], params['alpha'], params['beta'], params['gamma'], params['delta'], params['eta']
+        return fr"""
+A commodity \(q\) is traded at price \(p\) in a competitive market with price-taking consumers and firms. \\
+        
+There are \({N:,g}\) identical consumers each with income \(Y={Y:,g}\). Each consumer has a utility function over numeraire consumption \(c\) and commodity \(q\) given by:
+
+$$u(c,q) = c + {polyeq('q',[alpha,-0.5*beta],[1,2])} $$
+
+There are \(M\) identical firms each with cost function given by:
+
+$$c(q) = {polyeq('q',[gamma,delta,0.5*eta],[0,1,2])} $$
+
+The number of firms is fixed in the short run, but in the long run firms can freely enter or exit the market. Thus, the number of firms is flexible in the long run.
+"""
 
 
     
