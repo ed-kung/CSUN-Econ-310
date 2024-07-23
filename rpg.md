@@ -18,6 +18,7 @@ Please wait while the application loads...
     <option value="wk02">2. Supply and Demand Curves</option>
     <option value="wk03">3. Short Run Equlibrium and Taxation</option>
     <option value="wk04">4. Long Run Equilibrium</option>
+    <option value="wk05">5. Multivariate Optimization</option>
 </select>
 
 <button id="button" pys-onClick="generate_problem">Generate</button>
