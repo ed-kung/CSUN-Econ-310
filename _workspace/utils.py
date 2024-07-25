@@ -108,13 +108,13 @@ def term(c,x,p,asfrac=True,rmplus=False):
         t = t[1:]
     return t
     
-def polyeq(var='x', coefs=[1,1,1], powers=[0,1,2]):
+def polyeq(var='x', coefs=[1,1,1], powers=[0,1,2], rmplus=True):
     t = ''
     for i in range(len(coefs)):
         c = coefs[i]
         p = powers[i]
         t+=term(c,var,p,asfrac=True,rmplus=False)
-    if t[0]=='+':
+    if rmplus and t[0]=='+':
         return t[1:]
     return t
 
@@ -892,56 +892,64 @@ $$ y = \frac{I - p_x x}{p_y } $$
 class CobbDouglasConsumer:
     def __init__(self, params=None):
         if not params:
-            params = {'numer_a':1,'denom_a':2,'numer_b':1,'denom_b':2,'I':100,'px':1,'py':1}
-
-        params = {k:params[k] for k in ['numer_a','denom_a','numer_b','denom_b','I','px','py']}
-
-        a = params['numer_a']/params['denom_a']
-        b = params['numer_b']/params['denom_b']
-        I = params['I']
-        px = params['px']
-        py = params['py']
-
+            params = {'nx':1,'dx':2,'ny':1,'dy':2,'I':100,'px':1,'py':1}
+        params = {k:params[k] for k in ['nx','dx','ny','dy','I','px','py']}
+        nx, dx, ny, dy, I, px, py = params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py']
+        a = nx/dx
+        b = ny/dy
         x = I/(px*(1+b/a))
         y = I/(py*(1+a/b))
         U = x**a * y**b
-
         sol = {}
         sol['x'] = x
         sol['y'] = y
         sol['U'] = U
-        sol['xmax'] = params['I']/params['px']
-        sol['ymax'] = params['I']/params['py']
-
+        sol['xmax'] = I/px
+        sol['ymax'] = I/py
         self.params = params
         self.sol = sol
-        
     def check_solution(self):
         sol = self.sol
         return (
             (sol['x']>0) and
             (sol['y']>0) and
-            (np.abs(sol['x']%1)<0.001) and
-            (np.abs(sol['y']%1)<0.001) and
-            (np.abs(sol['xmax']%1)<0.001) and
-            (np.abs(sol['ymax']%1)<0.001)
+            is_divisible(sol['x'],1) and 
+            is_divisible(sol['y'],1) and 
+            is_divisible(sol['xmax'],1) and 
+            is_divisible(sol['ymax'],1)         
         )
-        
     def general_setup(self):
-        return CB_SETUP.format(
-            'I', 'a', 'b', 'p_x', 'p_y'
-        ) 
-    def general_solution(self):
-        return CB_SOLUTION
+        return fr"""
+A consumer with income \(I\) has a utility function over two goods, \(x\) and \(y\):
 
+$$ u(x,y) = x^a y^b $$
+
+The price of good \(x\) is \(p_x\) and the price of good \(y\) is \(p_y\).
+
+The general solutions are:
+
+$$ x = \frac{{I}}{{p_x(1+b/a)}} $$
+
+$$ y = \frac{{I}}{{p_y(1+a/b)}} $$
+
+The indifference curves are:
+
+$$ y = \left( \frac{{U}}{{x^a}} \right)^{{ 1/b }} $$
+
+The budget constraint is:
+
+$$ y = \frac{{I - p_x x}}{{p_y }} $$
+"""
     def setup(self):
-        return CB_SETUP.format(
-            f"I = {self.params['I']:.0f}", 
-            f"\\tfrac{{ {self.params['numer_a']:.0f} }}{{ {self.params['denom_a']:.0f} }}",
-            f"\\tfrac{{ {self.params['numer_b']:.0f} }}{{ {self.params['denom_b']:.0f} }}",
-            f"p_x = {self.params['px']:.0f}", 
-            f"p_y = {self.params['py']:.0f}"
-        )
+        params = self.params
+        nx, dx, ny, dy, I, px, py = params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py']
+        return fr"""
+A consumer with income \(I={I:g}\) has a utility function over two goods, \(x\) and \(y\):
+
+$$ u(x,y) = {cbeq(1,'x',Number(nx,dx),'y',Number(ny,dy))} $$
+
+The price of good \(x\) is \(p_x = {px:g} \) and the price of good \(y\) is \(p_y = {py:g} \).
+"""
 
 
 CBD_SETUP = r"""

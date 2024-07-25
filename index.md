@@ -50,7 +50,7 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
     
 - **Homework Assignments (20%)**
 
-    Weekly homework assignments will generally consist of a problem set, to be submitted on paper. Students can elect to work in groups of up to 3 on homework assignments. If you work in a group, your group only has to make one submission for the whole group.  For each homework, a randomly selected set of questions will be graded.
+    Weekly homework assignments will generally consist of a problem set, to be submitted in a greenbook or on stapled sheets of paper. Students can elect to work in groups of up to 3 on homework assignments. If you work in a group, your group only has to make one submission for the whole group.  For each problem set, only a randomly selected set of questions will be graded.
     
 - **Exams (70%)**
 
