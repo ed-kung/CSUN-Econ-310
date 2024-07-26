@@ -1,5 +1,26 @@
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
+
+SMALL_SIZE = 14
+MEDIUM_SIZE = 16
+LARGE_SIZE = 18
+HUGE_SIZE = 20
+
+plt.rcdefaults()
+plt.rcParams['text.usetex'] = True
+plt.rcParams['font.family'] = 'Helvetica'
+plt.rcParams['font.size'] = MEDIUM_SIZE
+plt.rcParams['axes.titlesize'] = LARGE_SIZE
+plt.rcParams['axes.labelsize'] = MEDIUM_SIZE
+plt.rcParams['xtick.labelsize'] = MEDIUM_SIZE
+plt.rcParams['ytick.labelsize'] = MEDIUM_SIZE
+plt.rcParams['legend.fontsize'] = MEDIUM_SIZE
+plt.rcParams['figure.titlesize'] = LARGE_SIZE
+plt.rcParams['figure.figsize'] = [7.2, 7.2]
+plt.rcParams['figure.dpi'] = 60
+plt.rcParams['figure.facecolor'] = (1.0, 1.0, 1.0, 0.0)
+
 
 def is_divisible(a,b):
     return (np.abs(a/b - np.round(a/b))<0.0001)
@@ -867,34 +888,15 @@ The number of firms is fixed in the short run, but in the long run firms can fre
 
 
     
-CB_SETUP = r"""
-A consumer with income ${}$ has a utility function over two goods, $x$ and $y$, given by:
-
-$$ u(x,y) = x^{} y^{} $$
-
-The price of good $x$ is ${}$ and the price of good $y$ is ${}$.
 """
-CB_SOLUTION = r"""
-The general solutions are:
-
-$$ x = \frac{I}{p_x(1+b/a)} $$
-
-$$ y = \frac{I}{p_y(1+a/b)} $$
-
-The indifference curves are:
-
-$$ y = \left( \frac{U}{x^a} \right)^{\frac{1}{b}} $$
-
-The budget constraint is:
-
-$$ y = \frac{I - p_x x}{p_y } $$
+Cobb Douglas Consumer
 """
 class CobbDouglasConsumer:
     def __init__(self, params=None):
         if not params:
-            params = {'nx':1,'dx':2,'ny':1,'dy':2,'I':100,'px':1,'py':1}
-        params = {k:params[k] for k in ['nx','dx','ny','dy','I','px','py']}
-        nx, dx, ny, dy, I, px, py = params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py']
+            params = {'nx':1,'dx':2,'ny':1,'dy':2,'I':120,'px':1,'py':1,'gmax':120}
+        params = {k:params[k] for k in ['nx','dx','ny','dy','I','px','py','gmax']}
+        nx, dx, ny, dy, I, px, py, gmax = params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py'], params['gmax']
         a = nx/dx
         b = ny/dy
         x = I/(px*(1+b/a))
@@ -909,14 +911,21 @@ class CobbDouglasConsumer:
         self.params = params
         self.sol = sol
     def check_solution(self):
+        params = self.params
+        nx, dx, ny, dy, I, px, py, gmax = params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py'], params['gmax']
         sol = self.sol
+        x, y, xmax, ymax = sol['x'], sol['y'], sol['xmax'], sol['ymax']
         return (
-            (sol['x']>0) and
-            (sol['y']>0) and
-            is_divisible(sol['x'],1) and 
-            is_divisible(sol['y'],1) and 
-            is_divisible(sol['xmax'],1) and 
-            is_divisible(sol['ymax'],1)         
+            (x>0) and (y>0) and 
+            is_divisible(px,1) and
+            is_divisible(py,1) and
+            is_divisible(I,px) and
+            is_divisible(I,py) and
+            is_divisible(gmax,12) and
+            is_divisible(xmax, gmax/12) and
+            is_divisible(ymax, gmax/12) and
+            is_divisible(x, gmax/12) and
+            is_divisible(y, gmax/12)
         )
     def general_setup(self):
         return fr"""
@@ -942,7 +951,7 @@ $$ y = \frac{{I - p_x x}}{{p_y }} $$
 """
     def setup(self):
         params = self.params
-        nx, dx, ny, dy, I, px, py = params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py']
+        nx, dx, ny, dy, I, px, py, gmax = params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py'], params['gmax']
         return fr"""
 A consumer with income \(I={I:g}\) has a utility function over two goods, \(x\) and \(y\):
 
@@ -950,6 +959,68 @@ $$ u(x,y) = {cbeq(1,'x',Number(nx,dx),'y',Number(ny,dy))} $$
 
 The price of good \(x\) is \(p_x = {px:g} \) and the price of good \(y\) is \(p_y = {py:g} \).
 """
+    def graph_schematic(self, saveas=None, show=False):
+        params = self.params
+        nx, dx, ny, dy, I, px, py, gmax = params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py'], params['gmax']
+        a = nx/dx
+        b = ny/dy
+        sol = self.sol
+        x, y, xmax, ymax, U = sol['x'], sol['y'], sol['xmax'], sol['ymax'], sol['U']
+        mymax = max(xmax, ymax)
+        fig, ax = plt.subplots()
+        xg = np.arange(0, gmax + 2*gmax/12, 0.1)
+        budget_constraint = (I - px*xg)/py
+        indifference_curve = (U/(xg[1:]**a))**(1/b)
+        ax.plot(xg, budget_constraint, color='black',linewidth=2)
+        ax.plot(xg[1:], indifference_curve, color='blue')
+        ax.plot(x,y,'o',color='black',markersize=12)
+        ax.set_ylabel(r'$y$')
+        ax.set_xlabel(r'$x$')
+        ax.set_xticks(np.arange(0, mymax+gmax/12, gmax/12))
+        ax.set_yticks(np.arange(0, mymax+gmax/12, gmax/12))
+        ax.set_xlim([0, mymax+gmax/12])
+        ax.set_ylim([0, mymax+gmax/12])
+        ax.set_axisbelow(True)
+        plt.grid(alpha=0.2)
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        if show:
+            plt.show()
+        plt.close()
+        return True
+    def graph_with_IC(self, with_solution=False, saveas=None, show=False):
+        params = self.params
+        nx, dx, ny, dy, I, px, py, gmax = params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py'], params['gmax']
+        a = nx/dx
+        b = ny/dy
+        sol = self.sol
+        x, y, xmax, ymax, U = sol['x'], sol['y'], sol['xmax'], sol['ymax'], sol['U']
+        fig, ax = plt.subplots()
+        xg = np.arange(0, gmax + 2*gmax/12, 0.1)
+        for xug in np.arange(gmax/12, gmax+gmax/12, gmax/12):
+            yug = y/x*xug
+            myU = xug**a * yug**b
+            indifference_curve = (myU /(xg[1:]**a))**(1/b)
+            ax.plot(xg[1:], indifference_curve, color='green', alpha=0.3)
+        if with_solution:
+            budget_constraint = (I - px*xg)/py
+            ax.plot(xg, budget_constraint, color='black',linewidth=2)
+            ax.plot(x,y,'o',color='black',markersize=12)
+        ax.set_ylabel(r'$y$')
+        ax.set_xlabel(r'$x$')
+        ax.set_xticks(np.arange(0, gmax+gmax/12, gmax/12))
+        ax.set_yticks(np.arange(0, gmax+gmax/12, gmax/12))
+        ax.set_xlim([0, gmax+gmax/12])
+        ax.set_ylim([0, gmax+gmax/12])
+        ax.set_axisbelow(True)
+        plt.grid(alpha=0.2)
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        if show:
+            plt.show()
+        plt.close()
+        return True
+        
 
 
 CBD_SETUP = r"""
