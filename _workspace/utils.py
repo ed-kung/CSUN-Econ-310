@@ -997,9 +997,14 @@ The price of good \(x\) is \(p_x = {px:g} \) and the price of good \(y\) is \(p_
         x, y, xmax, ymax, U = sol['x'], sol['y'], sol['xmax'], sol['ymax'], sol['U']
         fig, ax = plt.subplots()
         xg = np.arange(0, gmax + 2*gmax/12, 0.1)
-        for xug in np.arange(gmax/12, gmax+gmax/12, gmax/12):
-            yug = y/x*xug
-            myU = xug**a * yug**b
+
+        maxU = gmax**a * gmax**b
+        myx = 0
+        myU = 0
+        while myU < maxU:
+            myx += gmax/12
+            myy = y/x*myx
+            myU = myx**a * myy**b
             indifference_curve = (myU /(xg[1:]**a))**(1/b)
             ax.plot(xg[1:], indifference_curve, color='green', alpha=0.3)
         if with_solution:
@@ -1022,7 +1027,219 @@ The price of good \(x\) is \(p_x = {px:g} \) and the price of good \(y\) is \(p_
         return True
         
 
+"""
+Perfect Substitutes
+"""
+class PerfectSubstitutes:
+    def __init__(self, params=None):
+        if not params:
+            params = {'I':100,'a':1,'b':1,'px':1,'py':2,'gmax':120}
+        params = {k:params[k] for k in ['I','a','b','px','py','gmax']}
+        I,a,b,px,py,gmax = params['I'], params['a'], params['b'], params['px'], params['py'], params['gmax']
+        xmax = I/px
+        ymax = I/py
+        if (a*py - b*px)>0:
+            x = xmax
+            y = 0
+        elif (a*py - b*px)<0:
+            x = 0
+            y = ymax
+        else:
+            x = 0.5*I/px
+            y = 0.5*I/py
+        U = a*x + b*y
+        sol = {'x':x, 'y':y, 'xmax':xmax, 'ymax':ymax, 'U':U}
+        self.params = params
+        self.sol = sol
+    def check_solution(self):
+        params = self.params
+        sol = self.sol
+        I,a,b,px,py,gmax = params['I'], params['a'], params['b'], params['px'], params['py'], params['gmax']
+        x,y,xmax,ymax,U = sol['x'], sol['y'], sol['xmax'], sol['ymax'], sol['U']
+        return (
+            (x>=0) and (y>=0) and (a*py - b*px!=0) and
+            is_divisible(px,1) and
+            is_divisible(py,1) and
+            is_divisible(I,px) and
+            is_divisible(I,py) and
+            is_divisible(gmax,12) and
+            is_divisible(xmax, gmax/12) and
+            is_divisible(ymax, gmax/12) and
+            is_divisible(x, gmax/12) and
+            is_divisible(y, gmax/12)
+        )
+    def general_setup(self):
+        return fr"""
+A consumer with income \(I\) has a utility function over two goods, \(x\) and \(y\):
 
+$$ u(x,y) = ax + by $$
+
+The price of good \(x\) is \(p_x\) and the price of good \(y\) is \(p_y\).
+
+The general solutions are:\\
+
+If \(ap_y - bp_x > 0\) then \(x = I/p_x\) and \(y=0\). \\
+
+If \(ap_y - bp_y < 0\) then \(x=0\) and \(y = I/p_y\). \\
+
+Otherwise, \(x\) and \(y\) could be anything.
+"""
+    def setup(self):
+        params = self.params
+        I,a,b,px,py,gmax = params['I'], params['a'], params['b'], params['px'], params['py'], params['gmax']
+        return fr"""
+A consumer with income \(I={I:g}\) has a utility function over two goods, \(x\) and \(y\):
+
+$$ u(x,y) = {term(a,'x',1,rmplus=True)} {term(b,'y',1,rmplus=False)}  $$
+
+The price of good \(x\) is \(p_x={px:g}\) and the price of good \(y\) is \(p_y={py:g}\).
+"""
+    def graph_with_IC(self, with_solution=False, saveas=None, show=False):
+        params = self.params
+        sol = self.sol
+        I,a,b,px,py,gmax = params['I'], params['a'], params['b'], params['px'], params['py'], params['gmax']
+        x,y,xmax,ymax,U = sol['x'], sol['y'], sol['xmax'], sol['ymax'], sol['U']
+        fig, ax = plt.subplots()
+        xg = np.arange(0, gmax + 2*gmax/12, 0.1)
+
+        maxU = a*gmax + b*gmax
+        myx = 0
+        myy = 0
+        myU = 0
+        if x==0:
+            dx = 0
+            dy = gmax/12
+        else:
+            dy = 0
+            dx = gmax/12
+        while myU < maxU:
+            myx += dx
+            myy += dy
+            myU = a*myx + b*myy
+            indifference_curve = (myU - a*xg)/b
+            ax.plot(xg, indifference_curve, color='green', alpha=0.3)
+        if with_solution:
+            budget_constraint = (I - px*xg)/py
+            ax.plot(xg, budget_constraint, color='black',linewidth=2)
+            ax.plot(x,y,'o',color='black',markersize=12)
+        ax.set_ylabel(r'$y$')
+        ax.set_xlabel(r'$x$')
+        ax.set_xticks(np.arange(0, gmax+gmax/12, gmax/12))
+        ax.set_yticks(np.arange(0, gmax+gmax/12, gmax/12))
+        ax.set_xlim([0, gmax+gmax/12])
+        ax.set_ylim([0, gmax+gmax/12])
+        ax.set_axisbelow(True)
+        plt.grid(alpha=0.2)
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        if show:
+            plt.show()
+        plt.close()
+        return True
+    
+    
+"""
+Leontieff
+"""
+class Leontieff:
+    def __init__(self, params=None):
+        if not params:
+            params = {'I':100,'px':1,'py':1,'gmax':120}
+        params = {k:params[k] for k in ['I','px','py','gmax']}
+        I,px,py,gmax = params['I'], params['px'], params['py'], params['gmax']
+        xmax = I/px
+        ymax = I/py
+        x = I/(px+py)
+        y = I/(px+py)
+        U = x
+        sol = {'x':x, 'y':y, 'xmax':xmax, 'ymax':ymax, 'U':U}
+        self.params = params
+        self.sol = sol
+    def check_solution(self):
+        params = self.params
+        I,px,py,gmax = params['I'], params['px'], params['py'], params['gmax']
+        sol = self.sol
+        x,y,xmax,ymax,U = sol['x'], sol['y'], sol['xmax'], sol['ymax'], sol['U']
+        return (
+            (x>0) and (y>0) and 
+            is_divisible(px,1) and
+            is_divisible(py,1) and
+            is_divisible(I,px) and
+            is_divisible(I,py) and
+            is_divisible(gmax,12) and
+            is_divisible(xmax, gmax/12) and
+            is_divisible(ymax, gmax/12) and
+            is_divisible(x, gmax/12) and
+            is_divisible(y, gmax/12)
+        )
+    def general_setup(self):
+        return fr"""
+A consumer with income \(I\) has a utility function over two goods, \(x\) and \(y\):
+
+$$ u(x,y) = \min (x, y) $$
+
+The price of good \(x\) is \(p_x\) and the price of good \(y\) is \(p_y\).
+
+The general solutions are:\\
+
+$$ x = y = \frac{{I}}{{p_x + p_y}} $$
+"""
+    def setup(self):
+        params = self.params
+        I,px,py,gmax = params['I'], params['px'], params['py'], params['gmax']
+        return fr"""
+A consumer with income \(I={I:g}\) has a utility function over two goods, \(x\) and \(y\):
+
+$$ u(x,y) = \min (x, y) $$
+
+The price of good \(x\) is \(p_x={px:g}\) and the price of good \(y\) is \(p_y={py:g}\).
+"""
+    def graph_with_IC(self, with_solution=False, saveas=None, show=False):
+        params = self.params
+        I,px,py,gmax = params['I'], params['px'], params['py'], params['gmax']
+        sol = self.sol
+        x,y,xmax,ymax,U = sol['x'], sol['y'], sol['xmax'], sol['ymax'], sol['U']
+        fig, ax = plt.subplots()
+        xg = np.arange(0, gmax + 2*gmax/12, 0.1)
+        
+        for myU in np.arange(gmax/12, gmax+gmax/12, gmax/12):
+            hline = np.arange(myU, gmax+2*gmax/12, 0.1)
+            vline = np.arange(myU, gmax+2*gmax/12, 0.1)
+            ax.plot(hline, myU*np.ones(hline.shape), color='green', alpha=0.3)
+            ax.plot(myU*np.ones(vline.shape), vline, color='green', alpha=0.3)
+        if with_solution:
+            budget_constraint = (I - px*xg)/py
+            ax.plot(xg, budget_constraint, color='black',linewidth=2)
+            ax.plot(x,y,'o',color='black',markersize=12)
+        ax.set_ylabel(r'$y$')
+        ax.set_xlabel(r'$x$')
+        ax.set_xticks(np.arange(0, gmax+gmax/12, gmax/12))
+        ax.set_yticks(np.arange(0, gmax+gmax/12, gmax/12))
+        ax.set_xlim([0, gmax+gmax/12])
+        ax.set_ylim([0, gmax+gmax/12])
+        ax.set_axisbelow(True)
+        plt.grid(alpha=0.2)
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        if show:
+            plt.show()
+        plt.close()
+        return True
+    
+    
+        
+        
+        
+        
+        
+        
+
+        
+        
+        
+        
+        
+        
 CBD_SETUP = r"""
 A consumer has a utility function over two goods, $x$ and $y$, given by:
 
