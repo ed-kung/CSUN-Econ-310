@@ -997,14 +997,11 @@ The price of good \(x\) is \(p_x = {px:g} \) and the price of good \(y\) is \(p_
         x, y, xmax, ymax, U = sol['x'], sol['y'], sol['xmax'], sol['ymax'], sol['U']
         fig, ax = plt.subplots()
         xg = np.arange(0, gmax + 2*gmax/12, 0.1)
-
         maxU = gmax**a * gmax**b
-        myx = 0
-        myU = 0
-        while myU < maxU:
-            myx += gmax/12
-            myy = y/x*myx
-            myU = myx**a * myy**b
+        minU = (gmax/12)**a * (gmax/12)**b
+        dU = (maxU - minU)/12
+        minU = U - np.floor((U - minU)/dU)*dU
+        for myU in np.arange(minU, maxU+dU, dU):
             indifference_curve = (myU /(xg[1:]**a))**(1/b)
             ax.plot(xg[1:], indifference_curve, color='green', alpha=0.3)
         if with_solution:
@@ -1227,70 +1224,144 @@ The price of good \(x\) is \(p_x={px:g}\) and the price of good \(y\) is \(p_y={
         return True
     
     
-        
-        
-        
-        
-        
-        
-
-        
-        
-        
-        
-        
-        
-CBD_SETUP = r"""
-A consumer has a utility function over two goods, $x$ and $y$, given by:
-
-$$ u(x,y) = x^{} y^{} $$
-
-In the base period, the consumer has income ${}$, the price of $x$ is ${}$, and the price of $y$ is ${}$.
-
-In the comparison period, the price of $x$ changes to ${}$ and the price of $y$ changes to ${}$.
 """
-CBD_SOLUTION = r"""
-The general solutions are:
-
-$$ \text{CPI} = \frac{1}{1+b/a} \left(\frac{p_x^\prime}{p_x}\right) + \frac{1}{1+a/b}\left(\frac{p_y^\prime}{p_y}\right) $$
-
-$$ \text{Constant Utility Deflator} = \left(\frac{p_x^\prime}{p_x}\right)^{\frac{a}{a+b}} \left(\frac{p_y^\prime}{p_y}\right)^{\frac{b}{a+b}} $$
+Quasilinear CE 
 """
+class QuasilinearCE:
+    def __init__(self, params=None):
+        if not params:
+            params = {'I':60,'a':10,'n':1,'d':2,'px':1,'py':1,'gmax':60,'numeraire':'x'}
+        params = {k:params[k] for k in ['I','a','n','d','px','py','gmax','numeraire']}
+        I,a,n,d,px,py,gmax,numeraire = params['I'], params['a'], params['n'], params['d'], params['px'], params['py'], params['gmax'], params['numeraire']
+        if numeraire=='x':
+            y = ((d*py)/(a*n*px))**(d/(n-d))
+            x = (I - py*y)/px
+            U = x + a*y**(n/d)
+        elif numeraire=='y':
+            x = ((d*px)/(a*n*py))**(d/(n-d))
+            y = (I - px*x)/py
+            U = a*x**(n/d) + y
+        xmax = I/px
+        ymax = I/py
+        sol = {'x':x, 'y':y, 'xmax':xmax, 'ymax':ymax, 'U':U}
+        self.params = params
+        self.sol = sol
+    def check_solution(self):
+        params = self.params
+        I,a,n,d,px,py,gmax,numeraire = params['I'], params['a'], params['n'], params['d'], params['px'], params['py'], params['gmax'], params['numeraire']
+        sol = self.sol
+        x,y,xmax,ymax,U = sol['x'], sol['y'], sol['xmax'], sol['ymax'], sol['U']
+        return (
+            (x>0) and (y>0) and 
+            is_divisible(px,1) and
+            is_divisible(py,1) and
+            is_divisible(I,px) and
+            is_divisible(I,py) and
+            is_divisible(gmax,12) and
+            is_divisible(xmax, gmax/12) and
+            is_divisible(ymax, gmax/12) and
+            is_divisible(x, gmax/12) and
+            is_divisible(y, gmax/12)
+        )
+    def general_setup(self):
+        return fr"""
+A consumer with income \(I\) has a utility function over two goods, \(x\) and \(y\):
+
+$$ u(x,y) = x + ay^{{n/d}} $$
+
+or
+
+$$ u(x,y) = ax^{{n/d}} + y $$
+
+The price of good \(x\) is \(p_x\) and the price of good \(y\) is \(p_y\).
+
+The general solutions are:\\
+
+$$ y = \left( \frac{{ dp_y }}{{ anp_x }} \right)^{{ \frac{{d}}{{n-d}} }} $$
+
+or
+
+$$ x = \left( \frac{{ dp_x }}{{ anp_y }} \right)^{{ \frac{{d}}{{n-d}} }} $$
+"""
+    def setup(self):
+        params = self.params
+        I,a,n,d,px,py,gmax,numeraire = params['I'], params['a'], params['n'], params['d'], params['px'], params['py'], params['gmax'], params['numeraire']
+        if numeraire=='x':
+            myeq = fr"x + {term(a,'y',Number(n,d),rmplus=True)}"
+        elif numeraire=='y':
+            myeq = fr"{term(a,'x',Number(n,d),rmplus=True)} + y"
+        return fr"""
+A consumer with income \(I={I:g}\) has a utility function over two goods, \(x\) and \(y\):
+
+$$ u(x,y) = {myeq} $$
+
+The price of good \(x\) is \(p_x={px:g}\) and the price of good \(y\) is \(p_y={py:g}\).
+"""
+    def graph_with_IC(self, with_solution=False, saveas=None, show=False):
+        params = self.params
+        I,a,n,d,px,py,gmax,numeraire = params['I'], params['a'], params['n'], params['d'], params['px'], params['py'], params['gmax'], params['numeraire']
+        sol = self.sol
+        x,y,xmax,ymax,U = sol['x'], sol['y'], sol['xmax'], sol['ymax'], sol['U']
+        fig, ax = plt.subplots()
+        yg = np.arange(0, gmax+2*gmax/12, 0.1)
+        xg = np.arange(0, gmax+2*gmax/12, 0.1)
+        maxU = gmax + a*gmax**(n/d)
+        minU = (gmax/12) + a*(gmax/12)**(n/d)
+        dU = (maxU - minU)/12
+        minU = U - np.floor((U - minU)/dU)*dU
+        for myU in np.arange(minU, maxU+dU, dU):
+            if numeraire=='x':
+                indifference_curve = (myU - a*yg**(n/d))
+                ax.plot(indifference_curve, yg, color='green', alpha=0.3)
+            elif numeraire=='y':
+                indifference_curve = (myU - a*xg**(n/d))
+                ax.plot(xg, indifference_curve, color='green', alpha=0.3)
+        if with_solution:
+            budget_constraint = (I - px*xg)/py
+            ax.plot(xg, budget_constraint, color='black',linewidth=2)
+            ax.plot(x,y,'o',color='black',markersize=12)
+        ax.set_ylabel(r'$y$')
+        ax.set_xlabel(r'$x$')
+        ax.set_xticks(np.arange(0, gmax+gmax/12, gmax/12))
+        ax.set_yticks(np.arange(0, gmax+gmax/12, gmax/12))
+        ax.set_xlim([0, gmax+gmax/12])
+        ax.set_ylim([0, gmax+gmax/12])
+        ax.set_axisbelow(True)
+        plt.grid(alpha=0.2)
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        if show:
+            plt.show()
+        plt.close()
+        return True    
+    
+        
+        
+        
 class CobbDouglasDeflator:
     def __init__(self, params=None):
         if not params:
-            params = {'numer_a':1,'denom_a':2,'numer_b':1,'denom_b':2,'I':100,'px1':1,'py1':1,'px2':1,'py2':2}
-
-        params = {k:params[k] for k in ['numer_a','denom_a','numer_b','denom_b','I','px1','py1','px2','py2']}
-
-        a = params['numer_a']/params['denom_a']
-        b = params['numer_b']/params['denom_b']
-        px1 = params['px1']
-        px2 = params['px2']
-        py1 = params['py1']
-        py2 = params['py2']
-        I = params['I']
-
+            params = {'nx':1,'dx':2,'ny':1,'dy':2,'I':100,'px1':1,'py1':1,'px2':1,'py2':2,'gmax':120}
+        params = {k:params[k] for k in ['nx','dx','ny','dy','I','px1','py1','px2','py2','gmax']}
+        nx, dx, ny, dy, I, px1, py1, px2, py2, gmax = params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px1'], params['py1'], params['px2'], params['py2'], params['gmax']
+        a = nx/dx
+        b = ny/dy
         CPI = ((1/(1+b/a))*(px2/px1) + (1/(1+a/b))*(py2/py1)) * 100
         CONST_UTIL_DEFLATOR = ((px2/px1)**(a/(a+b))*(py2/py1)**(b/(a+b))) * 100
-
         # Base period
         params1 = params.copy()
-        params1['px'] = params['px1']
-        params1['py'] = params['py1']
+        params1['px'] = px1
+        params1['py'] = py1
         cb1 = CobbDouglasConsumer(params1)
-
         # Comparison period without COLA
         params2_no_cola = params.copy()
-        params2_no_cola['px'] = params['px2']
-        params2_no_cola['py'] = params['py2']
+        params2_no_cola['px'] = px2
+        params2_no_cola['py'] = py2
         cb2_no_cola = CobbDouglasConsumer(params2_no_cola)
-
         # Comparison period with CPI colas
         params2_cpi = params2_no_cola.copy()
         params2_cpi['I'] = params['I'] * CPI/100
         cb2_cpi = CobbDouglasConsumer(params2_cpi)
-
         # Comparison period with constant utility cola
         params2_cons = params2_no_cola.copy()
         params2_cons['I'] = params['I'] * CONST_UTIL_DEFLATOR/100
@@ -1304,33 +1375,44 @@ class CobbDouglasDeflator:
         self.cb2_no_colas = cb2_no_cola
         self.cb2_cpi = cb2_cpi
         self.cb2_cons = cb2_cons
-
         sol = {}
         sol['CPI'] = CPI
         sol['CONST_UTIL_DEFLATOR'] = CONST_UTIL_DEFLATOR
         self.sol = sol
-
     def check_solution(self):
         return (
             self.cb1.check_solution() and
-            (np.abs(self.cb1.sol['U']%1)<0.001)
+            self.cb2_no_colas.check_solution()
         )
-
     def general_setup(self):
-        return CBD_SETUP.format(
-            'a', 'b', 'I', 'p_x', 'p_y', 'p_x^\\prime', 'p_y^\\prime'
-        ) 
-    def general_solution(self):
-        return CBD_SOLUTION
+        return fr"""
+A consumer has a utility function over two goods, \(x\) and \(y\), given by:
 
+$$ u(x,y) = x^a y^b $$
+
+In the base period, the consumer has income \(I\), the price of \(x\) is \(p_x\), and the price of \(y\) is \(p_y\).
+
+In the comparison period, the price of \(x\) changes to \(p_x^\prime\), and the price of \(y\) changes to \(p_y^\prime\).
+
+The general solutions are:
+
+The general solutions are:
+
+$$ \text{{CPI}} = \frac{{1}}{{1+b/a}} \left(\frac{{p_x^\prime}}{{p_x}}\right) + \frac{{1}}{{1+a/b}}\left(\frac{{p_y^\prime}}{{p_y}}\right) $$
+
+$$ \text{{Constant Utility Deflator}} = \left(\frac{{p_x^\prime}}{{p_x}}\right)^{{\frac{{a}}{{a+b}} }} \left(\frac{{p_y^\prime}}{{p_y}}\right)^{{ \frac{{b}}{{a+b}} }} $$
+"""
     def setup(self):
-        return CBD_SETUP.format(
-            f"\\tfrac{{ {self.params['numer_a']:.0f} }}{{ {self.params['denom_a']:.0f} }}",
-            f"\\tfrac{{ {self.params['numer_b']:.0f} }}{{ {self.params['denom_b']:.0f} }}",
-            f"I = {self.params['I']:.0f}", 
-            f"p_x = {self.params['px1']:.0f}", 
-            f"p_y = {self.params['py1']:.0f}",
-            f"p_x^\\prime = {self.params['px2']:.0f}", 
-            f"p_y^\\prime = {self.params['py2']:.0f}",
-        )
+        params = self.params
+        nx, dx, ny, dy, I, px1, py1, px2, py2, gmax = params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px1'], params['py1'], params['px2'], params['py2'], params['gmax']
+        return fr"""
+A consumer has a utility function over two goods, \(x\) and \(y\), given by:
+
+$$ u(x,y) = {cbeq(1,'x',Number(nx,dx),'y',Number(ny,dy))} $$
+
+In the base period, the consumer has income \(I={I:g}\), the price of \(x\) is \(p_x={px1:g}\), and the price of \(y\) is \(p_y={py1:g}\).
+
+In the comparison period, the price of \(x\) is \(p_x^\prime={px2:g}\), and the price of \(y\) is \(p_y^\prime={py2:g}\).
+"""
+    
         
