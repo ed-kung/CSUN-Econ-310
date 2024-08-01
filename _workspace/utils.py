@@ -1439,7 +1439,7 @@ class FoodStamps:
         x_tfr = cb_tfr.sol['x']
         y_tfr = cb_tfr.sol['y']
         U_corner = (val/px)**a * (I/px)**b
-        if x_tfr > val/px:
+        if x_tfr >= val/px:
             U_ink = U_tfr
             x_ink = x_tfr
             y_ink = y_tfr
@@ -1491,20 +1491,20 @@ class FoodStamps:
             budget_constraint = (I - px*xg)/py
             ax.plot(xg, budget_constraint, color='black',linewidth=2)
             ax.plot(x_base,y_base,'o',color='black',markersize=12, label='_nolegend_')
-            ax.text(x_base+0.2*gmax/12, y_base+0.2*gmax/12, 'A', color='black')
+            ax.text(x_base-0.2*gmax/12, y_base-0.2*gmax/12, 'A', color='black', horizontalalignment='right', verticalalignment='top')
             legend.append('No transfers')
         if inkind:
             budget_constraint = (I+val - px*xg)/py
             budget_constraint = np.minimum(budget_constraint, I/py)
             ax.plot(xg, budget_constraint, color='blue', linewidth=2)
             ax.plot(x_ink, y_ink, 'o', color='blue', markersize=12, label='_nolegend_')
-            ax.text(x_ink+0.2*gmax/12, y_ink+0.2*gmax/12, 'B', color='blue')
+            ax.text(x_ink+0.0*gmax/12, y_ink+0.4*gmax/12, 'B', color='blue')
             legend.append('Food stamps')
         if tfr:
             budget_constraint = (I+val - px*xg)/py
             ax.plot(xg, budget_constraint, color='red',linewidth=2,linestyle='dashed')
             ax.plot(x_tfr,y_tfr,'o',color='red',markersize=12, label='_nolegend_')
-            ax.text(x_tfr+0.2*gmax/12, y_tfr+0.2*gmax/12, 'C', color='red')
+            ax.text(x_tfr+0.4*gmax/12, y_tfr+0.0*gmax/12, 'C', color='red')
             legend.append('Monetary transfers')
         if len(legend)>0:
             plt.legend(legend, loc='upper right')
@@ -1524,7 +1524,125 @@ class FoodStamps:
         return True
         
     
-        
-        
+"""
+Public School
+"""
+class PublicSchool:
+    def __init__(self, params=None):
+        if not params:
+            params = {'val':20,'nx':1,'dx':2,'ny':1,'dy':2,'I':100,'px':1,'py':1,'gmax':120}
+        params = {k:params[k] for k in ['val','nx','dx','ny','dy','I','px','py','gmax']}
+        val, nx, dx, ny, dy, I, px, py, gmax = params['val'], params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py'], params['gmax']
+        a = nx/dx
+        b = ny/dy
+        cb_base = CobbDouglasConsumer(params)
+        params_tfr = params.copy()
+        params_tfr['I'] = I + val
+        cb_tfr = CobbDouglasConsumer(params_tfr)
+        U_base = cb_base.sol['U']
+        x_base = cb_base.sol['x']
+        y_base = cb_base.sol['y']
+        U_tfr = cb_tfr.sol['U']
+        x_tfr = cb_tfr.sol['x']
+        y_tfr = cb_tfr.sol['y']
+        U_corner = (val/px)**a * (I/px)**b
+        if x_tfr >= val/px:
+            U_voucher = U_tfr
+            x_voucher = x_tfr
+            y_voucher = y_tfr
+            corner = False
+        else:
+            U_voucher = U_corner
+            x_voucher = val/px
+            y_voucher = I/py
+            corner = True
+        U_public = U_corner
+        if U_corner >= U_base:
+            U_public = U_corner
+            x_public = val/px
+            y_public = I/py
+            public = True
+        else:
+            U_public = U_base
+            x_public = x_base
+            y_public = y_base
+            public = False
+        sol = {'U_base':U_base, 'U_public':U_public, 'U_voucher':U_voucher, 'corner':corner, 'public':public,
+               'x_voucher':x_voucher, 'y_voucher':y_voucher, 'x_public':x_public, 'y_public':y_public}
+        self.params = params
+        self.sol = sol
+        self.cb_base = cb_base
+        self.cb_tfr = cb_tfr
+    def check_solution(self):
+        return (
+            self.cb_base.check_solution() and
+            self.cb_tfr.check_solution() 
+        )
+    def graph_with_IC(self, base=False, public=False, voucher=False, saveas=None, show=False):
+        params = self.params
+        val, nx, dx, ny, dy, I, px, py, gmax = params['val'], params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py'], params['gmax']
+        a = nx/dx
+        b = ny/dy
+        xmax = I/px
+        ymax = I/py
+        x_base = self.cb_base.sol['x']
+        y_base = self.cb_base.sol['y']
+        U_base = self.cb_base.sol['U']
+        x_tfr = self.cb_tfr.sol['x']
+        y_tfr = self.cb_tfr.sol['y']
+        U_tfr = self.cb_tfr.sol['U']
+        x_public = self.sol['x_public']
+        y_public = self.sol['y_public']
+        chose_public = self.sol['public']
+        x_voucher = self.sol['x_voucher']
+        y_voucher = self.sol['y_voucher']
+        corner = self.sol['corner']
+        fig, ax = plt.subplots()
+        xg = np.arange(0, gmax + 2*gmax/12, 0.1)
+        maxU = gmax**a * gmax**b
+        minU = (gmax/12)**a * (gmax/12)**b
+        dU_target = (maxU - minU)/12
+        dU_n = np.ceil((U_tfr - U_base)/dU_target)
+        dU = (U_tfr - U_base)/dU_n
+        minU = U_base - np.floor((U_base - minU)/dU)*dU
+        for myU in np.arange(minU, maxU+dU, dU):
+            indifference_curve = (myU /(xg[1:]**a))**(1/b)
+            ax.plot(xg[1:], indifference_curve, color='green', alpha=0.3, label='_nolegend_')
+        legend = []
+        if base:
+            budget_constraint = (I - px*xg)/py
+            ax.plot(xg, budget_constraint, color='black',linewidth=2)
+            ax.plot(x_base,y_base,'o',color='black',markersize=12, label='_nolegend_')
+            ax.text(x_base-0.2*gmax/12, y_base-0.2*gmax/12, 'A', color='black', horizontalalignment='right', verticalalignment='top')
+            legend.append('No public education')
+        if public:
+            ax.plot(val/px,I/py,'s',color='blue',markersize=14)
+            legend.append('Public school')
+            ax.plot(x_public, y_public, 'o', color='blue', markersize=12, label='_nolegend_')
+            ax.text(x_public+0.0*gmax/12, y_public+0.4*gmax/12, 'B', color='blue')
+        if voucher:
+            budget_constraint = (I+val - px*xg)/py
+            budget_constraint = np.minimum(budget_constraint, I/py)
+            ax.plot(xg, budget_constraint, color='red', linewidth=2)
+            legend.append('School vouchers')
+            ax.plot(x_voucher, y_voucher, 'o', color='red', markersize=12, label='_nolegend_')
+            ax.text(x_voucher+0.4*gmax/12, y_voucher+0.0*gmax/12, 'C', color='red')
+        if len(legend)>0:
+            plt.legend(legend, loc='upper right')
+        ax.set_ylabel('Other Consumption')
+        ax.set_xlabel('Education Consumption')
+        ax.set_xticks(np.arange(0, gmax+gmax/12, gmax/12))
+        ax.set_yticks(np.arange(0, gmax+gmax/12, gmax/12))
+        ax.set_xlim([0, gmax+gmax/12])
+        ax.set_ylim([0, gmax+gmax/12])
+        ax.set_axisbelow(True)
+        plt.grid(alpha=0.2)
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        if show:
+            plt.show()
+        plt.close()
+        return True        
+    
         
         
