@@ -1337,7 +1337,9 @@ The price of good \(x\) is \(p_x={px:g}\) and the price of good \(y\) is \(p_y={
     
         
         
-        
+"""
+CPI and Deflators
+"""
 class CobbDouglasDeflator:
     def __init__(self, params=None):
         if not params:
@@ -1415,4 +1417,114 @@ In the base period, the consumer has income \(I={I:g}\), the price of \(x\) is \
 In the comparison period, the price of \(x\) is \(p_x^\prime={px2:g}\), and the price of \(y\) is \(p_y^\prime={py2:g}\).
 """
     
+        
+
+"""
+Food Stamps
+"""
+class FoodStamps:
+    def __init__(self, params=None):
+        if not params:
+            params = {'val':20,'nx':1,'dx':2,'ny':1,'dy':2,'I':100,'px':1,'py':1,'gmax':120}
+        params = {k:params[k] for k in ['val','nx','dx','ny','dy','I','px','py','gmax']}
+        val, nx, dx, ny, dy, I, px, py, gmax = params['val'], params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py'], params['gmax']
+        a = nx/dx
+        b = ny/dy
+        cb_base = CobbDouglasConsumer(params)
+        params_tfr = params.copy()
+        params_tfr['I'] = I + val
+        cb_tfr = CobbDouglasConsumer(params_tfr)
+        U_base = cb_base.sol['U']
+        U_tfr = cb_tfr.sol['U']
+        x_tfr = cb_tfr.sol['x']
+        y_tfr = cb_tfr.sol['y']
+        U_corner = (val/px)**a * (I/px)**b
+        if x_tfr > val/px:
+            U_ink = U_tfr
+            x_ink = x_tfr
+            y_ink = y_tfr
+            corner = False
+        else:
+            U_ink = U_corner
+            x_ink = val/px
+            y_ink = I/py
+            corner = True
+        sol = {'U_base':U_base, 'U_tfr':U_tfr, 'U_corner':U_corner, 'corner':corner, 'U_ink':U_ink, 'x_ink':x_ink, 'y_ink':y_ink}
+        self.params = params
+        self.sol = sol
+        self.cb_base = cb_base
+        self.cb_tfr = cb_tfr
+    def check_solution(self):
+        return (
+            self.cb_base.check_solution() and
+            self.cb_tfr.check_solution() 
+        )
+    def graph_with_IC(self, base=False, inkind=False, tfr=False, saveas=None, show=False):
+        params = self.params
+        val, nx, dx, ny, dy, I, px, py, gmax = params['val'], params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py'], params['gmax']
+        a = nx/dx
+        b = ny/dy
+        xmax = I/px
+        ymax = I/py
+        x_base = self.cb_base.sol['x']
+        y_base = self.cb_base.sol['y']
+        U_base = self.cb_base.sol['U']
+        x_tfr = self.cb_tfr.sol['x']
+        y_tfr = self.cb_tfr.sol['y']
+        U_tfr = self.cb_tfr.sol['U']
+        x_ink = self.sol['x_ink']
+        y_ink = self.sol['y_ink']
+        corner = self.sol['corner']
+        fig, ax = plt.subplots()
+        xg = np.arange(0, gmax + 2*gmax/12, 0.1)
+        maxU = gmax**a * gmax**b
+        minU = (gmax/12)**a * (gmax/12)**b
+        dU_target = (maxU - minU)/12
+        dU_n = np.ceil((U_tfr - U_base)/dU_target)
+        dU = (U_tfr - U_base)/dU_n
+        minU = U_base - np.floor((U_base - minU)/dU)*dU
+        for myU in np.arange(minU, maxU+dU, dU):
+            indifference_curve = (myU /(xg[1:]**a))**(1/b)
+            ax.plot(xg[1:], indifference_curve, color='green', alpha=0.3, label='_nolegend_')
+        legend = []
+        if base:
+            budget_constraint = (I - px*xg)/py
+            ax.plot(xg, budget_constraint, color='black',linewidth=2)
+            ax.plot(x_base,y_base,'o',color='black',markersize=12, label='_nolegend_')
+            ax.text(x_base+0.2*gmax/12, y_base+0.2*gmax/12, 'A', color='black')
+            legend.append('No transfers')
+        if inkind:
+            budget_constraint = (I+val - px*xg)/py
+            budget_constraint = np.minimum(budget_constraint, I/py)
+            ax.plot(xg, budget_constraint, color='blue', linewidth=2)
+            ax.plot(x_ink, y_ink, 'o', color='blue', markersize=12, label='_nolegend_')
+            ax.text(x_ink+0.2*gmax/12, y_ink+0.2*gmax/12, 'B', color='blue')
+            legend.append('Food stamps')
+        if tfr:
+            budget_constraint = (I+val - px*xg)/py
+            ax.plot(xg, budget_constraint, color='red',linewidth=2,linestyle='dashed')
+            ax.plot(x_tfr,y_tfr,'o',color='red',markersize=12, label='_nolegend_')
+            ax.text(x_tfr+0.2*gmax/12, y_tfr+0.2*gmax/12, 'C', color='red')
+            legend.append('Monetary transfers')
+        if len(legend)>0:
+            plt.legend(legend, loc='upper right')
+        ax.set_ylabel('Other Consumption')
+        ax.set_xlabel('Food Consumption')
+        ax.set_xticks(np.arange(0, gmax+gmax/12, gmax/12))
+        ax.set_yticks(np.arange(0, gmax+gmax/12, gmax/12))
+        ax.set_xlim([0, gmax+gmax/12])
+        ax.set_ylim([0, gmax+gmax/12])
+        ax.set_axisbelow(True)
+        plt.grid(alpha=0.2)
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        if show:
+            plt.show()
+        plt.close()
+        return True
+        
+    
+        
+        
+        
         
