@@ -21,6 +21,7 @@ Please wait while the application loads...
     <option value="wk06">6. Multivariate Optimization</option>
     <option value="wk07">7. Consumer Theory</option>
     <option value="wk08">8. Consumer Theory Applications</option>
+    <option value="wk09">9. Labor-Leisure Choice</option>
 </select>
 
 <button id="button" pys-onClick="generate_problem">Generate</button>
