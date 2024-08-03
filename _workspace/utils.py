@@ -1811,9 +1811,9 @@ class WageChangeCB:
     
         
 """
-LeisurePoly
+LeisureExpPos
 """
-class LeisurePoly:
+class LeisureExpPos:
     def __init__(self, params=None):
         if not params:
             params = {'a':270,'kn':1,'kd':2,'w':30,'cmax':1800}
