@@ -1977,4 +1977,168 @@ class WageChangeExp:
         plt.close()
         return True
         
+"""
+LeisureSate
+"""
+class LeisureSate:
+    def __init__(self, params=None):
+        if not params:
+            params = {'a':60*30,'b':20*900,'w':30,'cmax':1800}
+        a, b, w, cmax = params['a'], params['b'], params['w'], params['cmax']
+        c = a - b/w
+        h = c/w
+        l = 60 - h
+        U = a*c - 0.5*c**2 + b*l
+        sol = {'c':c,'l':l,'h':h,'U':U}
+        self.params = params
+        self.sol = sol
+    def check_solution(self):
+        params = self.params
+        a, b, w, cmax = params['a'], params['b'], params['w'], params['cmax']
+        sol = self.sol
+        c, l, h, U = sol['c'], sol['l'], sol['h'], sol['U']
+        return (
+            (c>cmax/12) and (c<cmax*11/12) and (l>5) and (l<55) and
+            is_divisible(cmax, 12) and
+            is_divisible(60*w, cmax/12) 
+        )
+    def general_setup(self):
+        return fr"""
+An individual can work for up to 60 hours a week at an hourly wage of \(w\). The person has utility over weekly consumption \(c\) and weekly leisure hours \(\ell\) given by:
+
+$$ u(c, \ell) = ac - \frac{{1}}{{2}}c^2 + b \ell $$
+
+The general solution is:
+
+$$ c = a - b/w $$
+
+Hours worked decreases with wage when \(w > 2b/a\)
+"""
+    def setup(self):
+        params = self.params
+        a, b, w, cmax = params['a'], params['b'], params['w'], params['cmax']
+        ell = r'\ell'
+        return fr"""
+An individual can work for up to 60 hours a week at an hourly wage of \(w={w:g}\). The person has utility over weekly consumption \(c\) and weekly leisure hours \(\ell\) given by:
+
+$$ u(c, \ell) = {term(a,'c',1,rmplus=True)} - {term(0.5,'c',2,rmplus=True)} + {term(b,ell,1,rmplus=True)} $$
+"""
+    def graph_with_IC(self, with_solution=False, saveas=None, show=False):
+        params = self.params
+        a, b, w, cmax = params['a'], params['b'], params['w'], params['cmax']
+        sol = self.sol
+        c, l, h, U = sol['c'], sol['l'], sol['h'], sol['U']
+        fig, ax = plt.subplots()
+        lg = np.arange(0, 65.1, 0.1)
+        cg = np.arange(0, cmax+cmax/12+0.1, 0.1)
+        maxU = a*a - 0.5*a**2 + b*60
+        minU = min(a*(cmax/12) - 0.5*(cmax/12)**2 + b*5, a*cmax - 0.5*cmax**2 + b*5)
+        dU = (maxU - minU)/12
+        minU = U - np.floor((U - minU)/dU)*dU
+        for myU in np.arange(minU, maxU+dU, dU):
+            indifference_curve = (myU - a*cg + 0.5*cg**2)/b
+            ax.plot(indifference_curve, cg, color='green', alpha=0.3, label='_nolegend_')
+        if with_solution:
+            budget_constraint = (60*w - w*lg)
+            ax.plot(lg, budget_constraint, color='black',linewidth=2)
+            ax.plot(l,c,'o',color='black',markersize=12)
+        ax.set_ylabel(r'Weekly Consumption')
+        ax.set_xlabel(r'Weekly Leisure Hours')
+        ax.set_xticks(np.arange(0, 65, 5))
+        ax.set_yticks(np.arange(0, cmax+cmax/12, cmax/12))
+        ax.set_xlim([0, 65])
+        ax.set_ylim([0, cmax+cmax/12])
+        ax.set_axisbelow(True)
+        plt.grid(alpha=0.2)
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        if show:
+            plt.show()
+        plt.close()
+        return True
+        
+"""
+WageChangeSate
+"""
+class WageChangeSate:
+    def __init__(self, params=None):
+        if not params:
+            params = {'a':60*30,'b':20*900,'w1':20,'w2':30,'cmax':1800}
+        a, b, w1, w2, cmax = params['a'], params['b'], params['w1'], params['w2'], params['cmax']
+        params1 = params.copy()
+        params1['w'] = params['w1']
+        prob1 = LeisureSate(params1)
+        params2 = params.copy()
+        params2['w'] = params['w2']
+        prob2 = LeisureSate(params2)
+        c1, l1 = prob1.sol['c'], prob1.sol['l']
+        c2, l2 = prob2.sol['c'], prob2.sol['l']
+        sol = {'c1':c1, 'l1':l1, 'c2':c2, 'l2':l2}
+        self.params = params
+        self.prob1 = prob1
+        self.prob2 = prob2
+        self.sol = sol
+    def check_solution(self):
+        params = self.params
+        a, b, w1, w2, cmax = params['a'], params['b'], params['w1'], params['w2'], params['cmax']
+        sol = self.sol
+        c1, l1, c2, l2 = sol['c1'], sol['l1'], sol['c2'], sol['l2']
+        return (
+            is_divisible(cmax,12) and
+            is_divisible(60*w1, cmax/12) and
+            is_divisible(60*w2, cmax/12) and
+            (l1>5) and (l2>5) and (l1<55) and (l2<55) and
+            (np.abs(l1 - l2)>=5)
+        )
+    def setup(self):
+        return self.prob1.setup()
+    def graph_with_IC(self, period1=False, period2=False, saveas=None, show=False):
+        params = self.params
+        a, b, w1, w2, cmax = params['a'], params['b'], params['w1'], params['w2'], params['cmax']
+        c1 = self.prob1.sol['c']
+        c2 = self.prob2.sol['c']
+        l1 = self.prob1.sol['l']
+        l2 = self.prob2.sol['l']
+        U1 = self.prob1.sol['U']
+        U2 = self.prob2.sol['U']
+        fig, ax = plt.subplots()
+        lg = np.arange(0, 65.1, 0.1)
+        cg = np.arange(0, cmax+cmax/12+0.1, 0.1)
+        maxU = a*a - 0.5*a**2 + b*60
+        minU = min(a*(cmax/12) - 0.5*(cmax/12)**2 + b*5, a*cmax - 0.5*cmax**2 + b*5)
+        dU_target = (maxU - minU)/12
+        dU_n = np.ceil(np.abs(U2-U1)/dU_target)
+        dU = np.abs(U2-U1)/dU_n
+        minU = min(U1,U2) - np.floor((min(U1,U2)-minU)/dU)*dU
+        for myU in np.arange(minU, maxU+dU, dU):
+            indifference_curve = (myU - a*cg + 0.5*cg**2)/b
+            ax.plot(indifference_curve, cg, color='green', alpha=0.3, label='_nolegend_')
+        legend = []
+        if period1:
+            budget_constraint = (60*w1 - w1*lg)
+            ax.plot(lg, budget_constraint, color='black',linewidth=2)
+            ax.plot(l1,c1,'o',color='black',markersize=12,label='_nolegend_')
+            ax.text(l1+1,c1+0.2*cmax/12,'A',color='black')
+            legend.append(f'Wage Rate = {w1:g}')
+        if period2:
+            budget_constraint = (60*w2 - w2*lg)
+            ax.plot(lg, budget_constraint, color='red',linewidth=2)
+            ax.plot(l2,c2,'o',color='red',markersize=12,label='_nolegend_')
+            ax.text(l2+1,c2+0.2*cmax/12,'B',color='red')
+            legend.append(f'Wage Rate = {w2:g}')
+        ax.set_ylabel(r'Weekly Consumption')
+        ax.set_xlabel(r'Weekly Leisure Hours')
+        ax.set_xticks(np.arange(0, 65, 5))
+        ax.set_yticks(np.arange(0, cmax+cmax/12, cmax/12))
+        ax.set_xlim([0, 65])
+        ax.set_ylim([0, cmax+cmax/12])
+        ax.set_axisbelow(True)
+        plt.grid(alpha=0.2)
+        plt.legend(legend, loc='upper right')
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        if show:
+            plt.show()
+        plt.close()
+        return True
         
