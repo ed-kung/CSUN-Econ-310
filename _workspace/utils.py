@@ -1810,5 +1810,85 @@ class WageChangeCB:
         return True
     
         
+"""
+LeisurePoly
+"""
+class LeisurePoly:
+    def __init__(self, params=None):
+        if not params:
+            params = {'a':270,'kn':1,'kd':2,'w':30,'cmax':1800}
+        a, kn, kd, w, cmax = params['a'], params['kn'], params['kd'], params['w'], params['cmax']
+        k = kn/kd
+        l = (w/(a*k))**(1/(k-1))
+        h = 60 - l
+        c = w*h
+        U = c + a*l**k
+        sol = {'c':c,'l':l,'h':h,'U':U}
+        self.params = params
+        self.sol = sol
+    def check_solution(self):
+        params = self.params
+        a, kn, kd, w, cmax = params['a'], params['kn'], params['kd'], params['w'], params['cmax']
+        sol = self.sol
+        c, l, h, U = sol['c'], sol['l'], sol['h'], sol['U']
+        return (
+            (c>0) and (l>0) and
+            is_divisible(cmax, 12) and
+            is_divisible(60*w, cmax/12) and
+            is_divisible(c, cmax/12) and
+            is_divisible(h, 60/12)
+        )
+    def general_setup(self):
+        return fr"""
+An individual can work for up to 60 hours a week at an hourly wage of \(w\). The person has utility over weekly consumption \(c\) and weekly leisure hours \(\ell\) given by:
+
+$$ u(c, \ell) = c + a \ell^k $$
+
+The general solution is:
+
+$$ \ell = \left( \frac{{w}}{{ak}} \right)^{{\frac{{1}}{{k-1}} }} $$
+"""
+    def setup(self):
+        params = self.params
+        a, kn, kd, w, cmax = params['a'], params['kn'], params['kd'], params['w'], params['cmax']
+        ell = r'\ell'
+        return fr"""
+An individual can work for up to 60 hours a week at an hourly wage of \(w={w:g}\). The person has utility over weekly consumption \(c\) and weekly leisure hours \(\ell\) given by:
+
+$$ u(c, \ell) = c + {term(a,ell,Number(kn,kd),rmplus=True)} $$
+"""
+    def graph_with_IC(self, with_solution=False, saveas=None, show=False):
+        params = self.params
+        a, kn, kd, w, cmax = params['a'], params['kn'], params['kd'], params['w'], params['cmax']
+        sol = self.sol
+        c, l, h, U = sol['c'], sol['l'], sol['h'], sol['U']
+        k = kn/kd
+        fig, ax = plt.subplots()
+        lg = np.arange(0, 65.1, 0.1)
+        maxU = cmax + a*60**k 
+        minU = (cmax/12) + a*5**k
+        dU = (maxU - minU)/12
+        minU = U - np.floor((U - minU)/dU)*dU
+        for myU in np.arange(minU, maxU+dU, dU):
+            indifference_curve = myU - a*lg[1:]**k
+            ax.plot(lg[1:], indifference_curve, color='green', alpha=0.3, label='_nolegend_')
+        if with_solution:
+            budget_constraint = (60*w - w*lg)
+            ax.plot(lg, budget_constraint, color='black',linewidth=2)
+            ax.plot(l,c,'o',color='black',markersize=12)
+        ax.set_ylabel(r'Weekly Consumption')
+        ax.set_xlabel(r'Weekly Leisure Hours')
+        ax.set_xticks(np.arange(0, 65, 5))
+        ax.set_yticks(np.arange(0, cmax+cmax/12, cmax/12))
+        ax.set_xlim([0, 65])
+        ax.set_ylim([0, cmax+cmax/12])
+        ax.set_axisbelow(True)
+        plt.grid(alpha=0.2)
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        if show:
+            plt.show()
+        plt.close()
+        return True
 
         
