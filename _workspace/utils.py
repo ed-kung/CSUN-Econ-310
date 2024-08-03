@@ -1891,4 +1891,89 @@ $$ u(c, \ell) = c + {term(a,ell,Number(kn,kd),rmplus=True)} $$
         plt.close()
         return True
 
+
+"""
+WageChangeExpPos
+"""
+class WageChangeExpPos:
+    def __init__(self, params=None):
+        if not params:
+            params = {'a':270,'kn':1,'kd':2,'w1':30,'w2':35,'cmax':3600}
+        a, kn, kd, w1, w2, cmax = params['a'], params['kn'], params['kd'], params['w1'], params['w2'], params['cmax']
+        params1 = params.copy()
+        params1['w'] = params['w1']
+        prob1 = LeisureExpPos(params1)
+        params2 = params.copy()
+        params2['w'] = params['w2']
+        prob2 = LeisureExpPos(params2)
+        c1, l1 = prob1.sol['c'], prob1.sol['l']
+        c2, l2 = prob2.sol['c'], prob2.sol['l']
+        sol = {'c1':c1, 'l1':l1, 'c2':c2, 'l2':l2}
+        self.params = params
+        self.prob1 = prob1
+        self.prob2 = prob2
+        self.sol = sol
+    def check_solution(self):
+        params = self.params
+        a, kn, kd, w1, w2, cmax = params['a'], params['kn'], params['kd'], params['w1'], params['w2'], params['cmax']
+        sol = self.sol
+        c1, l1, c2, l2 = sol['c1'], sol['l1'], sol['c2'], sol['l2']
+        return (
+            is_divisible(cmax,12) and
+            is_divisible(60*w1, cmax/12) and
+            is_divisible(60*w2, cmax/12) and
+            (l1>5) and (l2>5) and (l1<55) and (l2<55) and
+            (np.abs(l1 - l2)>=5)
+        )
+    def setup(self):
+        return self.prob1.setup()
+    def graph_with_IC(self, period1=False, period2=False, saveas=None, show=False):
+        params = self.params
+        a, kn, kd, w1, w2, cmax = params['a'], params['kn'], params['kd'], params['w1'], params['w2'], params['cmax']
+        k = kn/kd
+        c1 = self.prob1.sol['c']
+        c2 = self.prob2.sol['c']
+        l1 = self.prob1.sol['l']
+        l2 = self.prob2.sol['l']
+        U1 = self.prob1.sol['U']
+        U2 = self.prob2.sol['U']
+        fig, ax = plt.subplots()
+        lg = np.arange(0, 65.1, 0.1)
+        maxU = cmax + a*60**k
+        minU = (cmax/12) + a*5**k
+        dU_target = (maxU - minU)/12
+        dU_n = np.ceil(np.abs(U2-U1)/dU_target)
+        dU = np.abs(U2-U1)/dU_n
+        minU = min(U1,U2) - np.floor((min(U1,U2)-minU)/dU)*dU
+        for myU in np.arange(minU, maxU+dU, dU):
+            indifference_curve = myU - a*lg[1:]**k
+            ax.plot(lg[1:], indifference_curve, color='green', alpha=0.3, label='_nolegend_')
+        legend = []
+        if period1:
+            budget_constraint = (60*w1 - w1*lg)
+            ax.plot(lg, budget_constraint, color='black',linewidth=2)
+            ax.plot(l1,c1,'o',color='black',markersize=12,label='_nolegend_')
+            ax.text(l1+1,c1+0.2*cmax/12,'A',color='black')
+            legend.append(f'Wage Rate = {w1:g}')
+        if period2:
+            budget_constraint = (60*w2 - w2*lg)
+            ax.plot(lg, budget_constraint, color='red',linewidth=2)
+            ax.plot(l2,c2,'o',color='red',markersize=12,label='_nolegend_')
+            ax.text(l2+1,c2+0.2*cmax/12,'B',color='red')
+            legend.append(f'Wage Rate = {w2:g}')
+        ax.set_ylabel(r'Weekly Consumption')
+        ax.set_xlabel(r'Weekly Leisure Hours')
+        ax.set_xticks(np.arange(0, 65, 5))
+        ax.set_yticks(np.arange(0, cmax+cmax/12, cmax/12))
+        ax.set_xlim([0, 65])
+        ax.set_ylim([0, cmax+cmax/12])
+        ax.set_axisbelow(True)
+        plt.grid(alpha=0.2)
+        plt.legend(legend, loc='upper right')
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        if show:
+            plt.show()
+        plt.close()
+        return True
         
