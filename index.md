@@ -126,11 +126,11 @@ Placeholder text
 
 ## Course Materials
 
-**Textbook (Recommended but not required)**
+**Textbook (Optional)**
 
 <img src="assets/images/textbook.jpg" width="100">
 
-This course is primarily based on my own materials. However, *Intermediate Microeconomics and its Applications* by Nicholson and Snyder can serve as a helpful reference. 
+This course is self contained based on my own materials. If you are interested in delving deeper into the subject matter, *Intermediate Microeconomics and its Applications* by Nicholson and Snyder can serve as a helpful reference.  However, I won't be assigning any readings or problems from the textbook. 
 
 
 **Calculator (Required)**
