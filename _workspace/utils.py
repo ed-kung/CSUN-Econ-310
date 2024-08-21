@@ -916,7 +916,7 @@ class CobbDouglasConsumer:
         sol = self.sol
         x, y, xmax, ymax = sol['x'], sol['y'], sol['xmax'], sol['ymax']
         return (
-            (x>0) and (y>0) and 
+            (x>0.1) and (y>0.1) and 
             is_divisible(px,1) and
             is_divisible(py,1) and
             is_divisible(I,px) and
