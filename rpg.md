@@ -8,7 +8,7 @@ python: pyscript
 # Random Problem Generator
 
 <dialog id="loading">
-Please wait while the application loads...
+<p><img src="/CSUN-Econ-310/assets/images/loading-wheel.gif" width="100"></p>
 </dialog>
 
 <label for="dropdown">Generate problem from week:</label>
