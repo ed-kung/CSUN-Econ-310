@@ -2158,6 +2158,7 @@ class Welfare:
         U_no_welfare = prob_no_welfare.sol['U']
         c_no_welfare = prob_no_welfare.sol['c']
         h_no_welfare = prob_no_welfare.sol['h']
+        l_no_welfare = prob_no_welfare.sol['l']
         U_welfare = minc**a * 60**b
         if U_welfare > U_no_welfare:
             U = U_welfare
@@ -2169,7 +2170,7 @@ class Welfare:
             c = prob_no_welfare.sol['c']
             h = prob_no_welfare.sol['h']
             l = prob_no_welfare.sol['l']
-        sol = {'c':c, 'l':l, 'h':h, 'U':U, 'c_no_welfare':c_no_welfare, 'h_no_welfare':h_no_welfare}
+        sol = {'c':c, 'l':l, 'h':h, 'U':U, 'c_no_welfare':c_no_welfare, 'h_no_welfare':h_no_welfare, 'l_no_welfare':l_no_welfare}
         self.params = params
         self.sol = sol
         self.prob_no_welfare = prob_no_welfare
@@ -2187,7 +2188,7 @@ class Welfare:
         params = self.params
         nx, dx, ny, dy, w, cmax, minc = params['nx'], params['dx'], params['ny'], params['dy'], params['w'], params['cmax'], params['minc']
         sol = self.sol
-        c, l, h, U = sol['c'], sol['l'], sol['h'], sol['U']
+        c, l, h, U, l_no_welfare, c_no_welfare = sol['c'], sol['l'], sol['h'], sol['U'], sol['l_no_welfare'], sol['c_no_welfare']
         U_no_welfare = self.prob_no_welfare.sol['U']
         a = nx/dx
         b = ny/dy
@@ -2209,7 +2210,10 @@ class Welfare:
             ax.plot(lg1, bc1, color='black',linewidth=2)
             ax.plot(lg2, bc2, color='black',linewidth=2)
             ax.plot(lg2, bc3, color='black', linestyle='dashed', linewidth=2)
-            ax.plot(l,c,'o',color='black',markersize=12)
+            ax.plot(l,c,'o',color='red',markersize=12)
+            ax.text(l+1,c+0.2*cmax/12,'B',color='red')
+            ax.plot(l_no_welfare, c_no_welfare, 'o', color='black', markersize=12)
+            ax.text(l_no_welfare-1, c_no_welfare-0.2*cmax/12,'A',color='black',horizontalalignment='right',verticalalignment='top')
         ax.set_ylabel(r'Weekly Consumption')
         ax.set_xlabel(r'Weekly Leisure Hours')
         ax.set_xticks(np.arange(0, 65, 5))
