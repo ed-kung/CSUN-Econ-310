@@ -2141,4 +2141,89 @@ class WageChangeSate:
             plt.show()
         plt.close()
         return True
+
+
+"""
+Welfare
+"""
+class Welfare:
+    def __init__(self, params=None):
+        if not params:
+            params = {'nx':2,'dx':3,'ny':1,'dy':3,'w':30,'cmax':1800,'minc':600}
+        nx, dx, ny, dy, w, cmax, minc = params['nx'], params['dx'], params['ny'], params['dy'], params['w'], params['cmax'], params['minc']
+        a = nx/dx
+        b = ny/dy
+        params1 = params.copy()
+        prob_no_welfare = LeisureCB(params1)
+        U_no_welfare = prob_no_welfare.sol['U']
+        c_no_welfare = prob_no_welfare.sol['c']
+        h_no_welfare = prob_no_welfare.sol['h']
+        U_welfare = minc**a * 60**b
+        if U_welfare > U_no_welfare:
+            U = U_welfare
+            c = minc
+            l = 60
+            h = 0
+        else:
+            U = U_no_welfare
+            c = prob_no_welfare.sol['c']
+            h = prob_no_welfare.sol['h']
+            l = prob_no_welfare.sol['l']
+        sol = {'c':c, 'l':l, 'h':h, 'U':U, 'c_no_welfare':c_no_welfare, 'h_no_welfare':h_no_welfare}
+        self.params = params
+        self.sol = sol
+        self.prob_no_welfare = prob_no_welfare
+    def check_solution(self):
+        params = self.params
+        nx, dx, ny, dy, w, cmax, minc = params['nx'], params['dx'], params['ny'], params['dy'], params['w'], params['cmax'], params['minc']
+        sol = self.sol
+        c, l, h, U = sol['c'], sol['l'], sol['h'], sol['U']
+        return (
+            self.prob_no_welfare.check_solution() and
+            is_divisible(minc, cmax/12) and
+            (minc < 60*w)
+        )
+    def graph_with_IC(self, with_solution=False, saveas=None, show=False):
+        params = self.params
+        nx, dx, ny, dy, w, cmax, minc = params['nx'], params['dx'], params['ny'], params['dy'], params['w'], params['cmax'], params['minc']
+        sol = self.sol
+        c, l, h, U = sol['c'], sol['l'], sol['h'], sol['U']
+        U_no_welfare = self.prob_no_welfare.sol['U']
+        a = nx/dx
+        b = ny/dy
+        fig, ax = plt.subplots()
+        lg = np.arange(0, 65.1, 0.1)
+        maxU = cmax**a * 60**b
+        minU = (cmax/12)**a * 5**b
+        dU = (maxU - minU)/12
+        minU = U_no_welfare - np.floor((U_no_welfare - minU)/dU)*dU
+        for myU in np.arange(minU, maxU+dU, dU):
+            indifference_curve = (myU /(lg[1:]**b))**(1/a)
+            ax.plot(lg[1:], indifference_curve, color='green', alpha=0.3)
+        if with_solution:
+            lg1 = np.arange(0, (60*w-minc)/w + 0.1, 0.1)
+            lg2 = np.arange((60*w-minc)/w, 60.1, 0.1)
+            bc1 = (60*w - w*lg1)
+            bc2 = minc*np.ones(lg2.shape)
+            bc3 = (60*w - w*lg2)
+            ax.plot(lg1, bc1, color='black',linewidth=2)
+            ax.plot(lg2, bc2, color='black',linewidth=2)
+            ax.plot(lg2, bc3, color='black', linestyle='dashed', linewidth=2)
+            ax.plot(l,c,'o',color='black',markersize=12)
+        ax.set_ylabel(r'Weekly Consumption')
+        ax.set_xlabel(r'Weekly Leisure Hours')
+        ax.set_xticks(np.arange(0, 65, 5))
+        ax.set_yticks(np.arange(0, cmax+cmax/12, cmax/12))
+        ax.set_xlim([0, 65])
+        ax.set_ylim([0, cmax+cmax/12])
+        ax.set_axisbelow(True)
+        plt.grid(alpha=0.2)
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        if show:
+            plt.show()
+        plt.close()
+        return True
+       
         
+    
