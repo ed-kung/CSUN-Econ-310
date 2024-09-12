@@ -60,7 +60,7 @@ $$ \max_{q} ~ Y - (1+t_c) pq + v(q) $$
 
 The first order condition is:
 
-$$ \text{(Eq.1)} ~ ~ ~ (1+t_c) pq_d = v^\prime(q_d) $$
+$$ \text{(Eq.1)} ~ ~ ~ (1+t_c) p = v^\prime(q_d) $$
 
 ### The producer's first order condition
 
@@ -70,7 +70,7 @@ $$ \max_{q} ~ (1 - t_p) pq - c(q) $$
 
 which leads to the first order condition:
 
-$$ \text{(Eq.2)} ~ ~ ~ (1 - t_p) pq_s = c^\prime(q_s) $$
+$$ \text{(Eq.2)} ~ ~ ~ (1 - t_p) p = c^\prime(q_s) $$
 
 ### Market equilibrium condition
 
