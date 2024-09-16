@@ -139,11 +139,11 @@ This course is self contained based on my own materials. If you are interested i
 
 You will need a calculator for this course.  Any calculator is fine.
 
-**Green Books (Required)**
+**Scantrons (Form 882, Required)**
 
-<img src="assets/images/greenbook.webp" width="100">
+<img src="assets/images/scantron.jpg" width="150">
 
-You will need these for exams.
+You will need these for exams.  You can use off brand, but they need to be compatible with Scantron Form 882.
 
 ---
 
