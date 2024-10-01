@@ -2229,5 +2229,83 @@ class Welfare:
         plt.close()
         return True
        
+
+"""
+Monopoly
+"""
+class Monopoly:
+    def __init__(self, params=None):
+        if not params:
+            params = {'Y':100,'alpha':12,'beta':1,'gamma':0,'delta':0,'eta':1}
+        params = {k:params[k] for k in ['Y','alpha','beta','gamma','delta','eta']}
+        self.params = params
+        Y, alpha, beta, gamma, delta, eta = params['Y'], params['alpha'], params['beta'], params['gamma'], params['delta'], params['eta']
+        Q = (alpha - delta)/(2*beta + eta)
+        p = alpha - beta * Q
+        c = 100 - p*Q
+        U = c + alpha*Q - 0.5*beta*Q**2
+        Profit = p*Q - gamma - delta*Q - 0.5*eta*Q**2
         
-    
+        Q_eff = (alpha - delta)/(beta + eta)
+        p_eff = alpha - beta*Q_eff
+        c_eff = 100 - p_eff*Q_eff
+        U_eff = c_eff + alpha*Q_eff - 0.5*beta*Q_eff**2
+        Profit_eff = p_eff*Q_eff - gamma - delta*Q_eff - 0.5*eta*Q_eff**2
+        
+        DWL = (U_eff + Profit_eff) - (U + Profit)
+        
+        sol = {
+            'Q':Q, 'p':p, 'U':U, 'Profit':Profit, 'c':c,
+            'Q_eff':Q_eff, 'p_eff':p_eff, 'U_eff':U_eff, 'Profit_eff':Profit_eff, 'c_eff':c_eff,
+            'DWL':DWL
+        }
+        self.sol = sol
+        
+    def general_setup(self):
+        return fr"""
+A commodity \(q\) is supplied by a monopolist with total cost function: 
+
+$$ c(q) = \gamma + \delta q + \frac{{1}}{{2}} \eta q^2 $$
+
+A representative consumer with income \(Y\) has a utility function over numeraire consumption \(c\) and commodity \(q\) given by:
+
+$$u(c,q) = c + \alpha q - \frac{{1}}{{2}} \beta q^2 $$
+
+The inverse demand curve is:
+
+$$ p = \alpha - \beta Q $$
+
+The profit maximizing quantity is:
+
+$$ Q = \frac{{\alpha - \delta}}{{ 2\beta + \eta }} $$
+
+The efficient quantity is:
+
+$$ Q = \frac{{\alpha - \delta}}{{ \beta + \eta}} $$
+"""
+    def setup(self):
+        params = self.params
+        Y, alpha, beta, gamma, delta, eta = params['Y'], params['alpha'], params['beta'], params['gamma'], params['delta'], params['eta']
+        return fr"""
+A commodity \(q\) is supplied by a monopolist with cost function: 
+
+$$c(q) = {polyeq('q',[gamma,delta,0.5*eta],[0,1,2])} $$
+
+A representative consumer with income \(Y={Y:g}\) has a utility function over numeraire consumption \(c\) and commodity \(q\) given by:
+
+$$u(c,q) = c + {polyeq('q',[alpha, -0.5*beta],[1,2])} $$
+"""
+    def check_solution(self):
+        sol = self.sol
+        return (
+            (sol['Q']>0) and 
+            (sol['Q_eff']>sol['Q']) and 
+            (sol['p']>0) and
+            (sol['p_eff']>0) and 
+            (sol['c']>0) and
+            (sol['c_eff']>0) and 
+            (is_divisible(sol['p'],1)) and 
+            (is_divisible(sol['Q'],1)) and
+            (is_divisible(sol['p_eff'],1)) and 
+            (is_divisible(sol['Q_eff'],1))
+        )
