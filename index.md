@@ -165,7 +165,9 @@ Requests for absences, extensions, or late submissions must be submitted by emai
 
 **AI Policy**
 
-You are allowed to use AI in homework assignments to help refine your writing and your thinking. You are not allowed to copy and paste text from an AI text generator. Penalties for AI usage will vary with the severity of the abuse. I reserve the right to give a zero to any assignment which violates the AI policy.
+You are allowed to use AI in homework assignments to help refine your writing and your thinking. You are not allowed to copy and paste text or code directly from an AI  generator.
+
+If I run your work through an AI detector and it returns a high likelihood for AI, you will receive a warning and you may be asked to redo the assignment. Further instances will result in a penalty. Penalties for AI usage will vary with the severity of the abuse. I reserve the right to give a zero to any assignment which violates the AI policy.
 
 **Academic Integrity**
 
