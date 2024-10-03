@@ -163,6 +163,10 @@ My preferred form of communication is in-person after class or at office hours, 
 
 Requests for absences, extensions, or late submissions must be submitted by email with accompanying documentation. Only unanticipated family and medical emergencies, or other extraordinary events, will be considered valid reasons. Events that could have reasonably been anticipated, such as heavy academic workload, busy work schedule, or friends' birthday parties, will not be accepted as valid reasons.
 
+**AI Policy**
+
+You are allowed to use AI in homework assignments to help refine your writing and your thinking. You are not allowed to copy and paste text from an AI text generator. Penalties for AI usage will vary with the severity of the abuse. I reserve the right to give a zero to any assignment which violates the AI policy.
+
 **Academic Integrity**
 
 By taking this course, you certify that all work is your own. Plagiarism is not allowed, and you are not allowed to have someone else do any course work in your place unless explicitly allowed by the syllabus. If it is discovered that you have violated academic integrity on any assignment, you will receive a grade of zero for that assignment. Repeated violations of academic integrity may result in a failing grade for the entire course.
