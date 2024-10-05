@@ -2309,3 +2309,120 @@ $$u(c,q) = c + {polyeq('q',[alpha, -0.5*beta],[1,2])} $$
             (is_divisible(sol['p_eff'],1)) and 
             (is_divisible(sol['Q_eff'],1))
         )
+
+"""
+Price Discrimination
+"""
+class PriceDiscrimination:
+    def __init__(self, params=None):
+        if not params:
+            params = {'Y1':500,'Y2':500,'alpha1':25,'alpha2':13,'beta1':1,'beta2':1,'gamma':0,'delta':1}
+        params = {k:params[k] for k in ['Y1','Y2','alpha1','alpha2','beta1','beta2','gamma','delta']}
+        self.params = params
+        Y1, Y2, alpha1, alpha2, beta1, beta2, gamma, delta = params['Y1'], params['Y2'], params['alpha1'], params['alpha2'], params['beta1'], params['beta2'], params['gamma'], params['delta']
+        q1 = (alpha1 - delta)/(2*beta1)
+        q2 = (alpha2 - delta)/(2*beta2)
+        p1 = alpha1 - beta1*q1
+        p2 = alpha2 - beta2*q2
+        profit = p1*q1 + p2*q2 - gamma - delta*(q1+q2)
+        c1 = Y1 - p1*q1
+        c2 = Y2 - p2*q2
+        
+        A = (alpha1*beta2 + alpha2*beta1)/(beta1 + beta2)
+        B = (beta1*beta2)/(beta1+beta2)
+        Q_npd = (A - delta)/(2*B)
+        p_npd = A - B*Q_npd
+        profit_npd = p_npd*Q_npd - gamma - delta*Q_npd
+        q1_npd = alpha1/beta1 - 1/beta1 * p_npd
+        q2_npd = alpha2/beta2 - 1/beta2 * p_npd
+        c1_npd = Y1 - p_npd * q1_npd
+        c2_npd = Y2 - p_npd * q2_npd
+        
+        corner = False
+        if alpha1>alpha2:
+            qcorner = q1
+            pcorner = alpha1 - beta1*qcorner
+            if pcorner>alpha2:
+                profit_corner = pcorner*qcorner - gamma - delta*qcorner
+                if profit_corner > profit_npd:
+                    corner = True
+        elif alpha2>alpha1:
+            qcorner = q2
+            pcorner = alpha2 - beta2*qcorner
+            if pcorner>alpha1:
+                profit_corner = pcorner*qcorner - gamma - delta*qcorner
+                if profit_corner > profit_npd:
+                    corner = True
+        
+        sol = {'q1':q1, 'q2':q2, 'p1':p1, 'p2':p2, 'c1':c1, 'c2':c2, 'profit':profit, 'A':A, 'B':B, 'Q_npd':Q_npd, 'p_npd':p_npd, 'profit_npd':profit_npd, 'q1_npd':q1_npd, 'q2_npd':q2_npd, 'c1_npd':c1_npd, 'c2_npd':c2_npd, 'corner':corner}
+        self.sol = sol
+    
+    def general_setup(self):
+        return fr"""
+A commodity \(q\) is supplied by a monopolist with total cost function:
+
+$$ c(q) = \gamma + \delta q $$
+
+There are two representative consumers.
+
+Representative consumer 1 has income \(Y\) and utility function over their numeraire consumption \(c\) and their commodity consumption \(q\) given by:
+
+$$ u(c,q) = c + \alpha q - \frac{{1}}{{2}} \beta_1 q^2 $$
+
+Representative consumer 2 has income \(Y\) and utility function over their numeraire consumption \(c\) and their commodity consumption \(q\) given by:
+
+$$ u(c,q) = c + \alpha q - \frac{{1}}{{2}} \beta_2 q^2 $$
+
+The consumers' inverse demand curves are:
+
+$$ p_1 = \alpha_1 - \beta_1 q_1 $$
+
+$$ p_2 = \alpha_2 - \beta_2 q_2 $$
+
+The market inverse demand curve is:
+
+$$ p = \left( \frac{{ \alpha_1 \beta_2 + \alpha_2 \beta_1 }}{{ \beta_1 + \beta_2 }}\right) - \left(\frac{{ \beta_1 \beta_2 }}{{ \beta_1 + \beta_2 }}\right) Q $$
+
+With price discrimination, the solutions are:
+
+$$ q_1 = \frac{{ \alpha_1 - \delta }}{{ 2 \beta_1 }} $$
+
+$$ q_2 = \frac{{ \alpha_2 - \delta }}{{ 2 \beta_2 }} $$
+
+Without price discrimination, the solutions are:
+
+$$ Q = \frac{{ \left( \frac{{ \alpha_1 \beta_2 + \alpha_2 \beta_1 }}{{ \beta_1 + \beta_2 }}\right) - \delta }}{{ 2 \left(\frac{{ \beta_1 \beta_2 }}{{ \beta_1 + \beta_2 }}\right) }} $$
+"""
+    def setup(self):
+        params = self.params
+        Y1, Y2, alpha1, alpha2, beta1, beta2, gamma, delta = params['Y1'], params['Y2'], params['alpha1'], params['alpha2'], params['beta1'], params['beta2'], params['gamma'], params['delta']
+        return fr"""
+A commodity \(q\) is supplied by a monopolist with total cost function:
+
+$$ c(Q) = {polyeq('Q',[gamma,delta],[0,1])} $$
+
+There are two representative consumers.
+
+Representative consumer 1 has income \(Y_1={Y1:g}\) and utility function over their numeraire consumption \(c_1\) and their commodity consumption \(q_1\) given by:
+
+$$ u_1(c_1,q_1) = c_1 + {polyeq('q_1',[alpha1,-0.5*beta1],[1,2])} $$
+
+Representative consumer 2 has income \(Y_2={Y2:g}\) and utility function over their numeraire consumption \(c_2\) and their commodity consumption \(q_2\) given by:
+
+$$ u_2(c_2,q_2) = c_2 + {polyeq('q_2',[alpha2,-0.5*beta2],[1,2])} $$
+"""        
+    def check_solutions(self):
+        sol = self.sol
+        return (
+            (sol['q1']>0) and (sol['q2']>0) and (sol['p1']>0) and (sol['p2']>0) and
+            (sol['c1']>0) and (sol['c2']>0) and 
+            (sol['Q_npd']>0) and (sol['p_npd']>0) and (sol['q1_npd']>0) and (sol['q2_npd']>0) and
+            (sol['c1_npd']>0) and (sol['c2_npd']>0) and
+            (is_divisible(sol['q1'],1)) and 
+            (is_divisible(sol['p1'],1)) and 
+            (is_divisible(sol['q2'],1)) and
+            (is_divisible(sol['p2'],1)) and
+            (is_divisible(sol['A'],1)) and
+            (sol['corner']==False)
+        )
+
