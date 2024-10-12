@@ -2426,3 +2426,138 @@ $$ u_2(c_2,q_2) = c_2 + {polyeq('q_2',[alpha2,-0.5*beta2],[1,2])} $$
             (sol['corner']==False)
         )
 
+
+"""
+Game Theory Normal Form
+"""
+class NormalForm:
+    def __init__(self, params=None):
+        if not params:
+            params = {
+                'players': ['Suspect 1', 'Suspect 2'],
+                'strategies': [["Snitch", "No Snitch"], ["Snitch","No Snitch"]],
+                'payoffs': [[[-4,-4],[0,-8]],
+                            [[-8,0],[-1,-1]]],
+                'gametype': "Prisoner's Dilemma"
+            }
+        players = params['players']
+        strategies = params['strategies']
+        _payoffs_ = params['payoffs']
+        assert len(players)==2
+        assert len(strategies)==2
+        assert len(strategies[0])==len(_payoffs_)
+        assert len(_payoffs_[0])==len(strategies[1])
+
+        # Initialize payoffs and best responses
+        payoffs = {}
+        payoffs[players[0]] = {}
+        payoffs[players[1]] = {}
+        br = {}
+        br[players[0]] = {}
+        br[players[1]] = {}
+        for s in strategies[1]:
+            payoffs[players[0]][s] = {}
+            br[players[0]][s] = {}
+        for s in strategies[0]:
+            payoffs[players[1]][s] = {}
+            br[players[1]][s] = {}
+
+        # Populate payoffs
+        for i in range(len(_payoffs_)):
+            for j in range(len(_payoffs_[0])):
+                strategy_1 = strategies[0][i]
+                strategy_2 = strategies[1][j]
+                payoffs[players[0]][strategy_2][strategy_1] = _payoffs_[i][j][0]
+                payoffs[players[1]][strategy_1][strategy_2] = _payoffs_[i][j][1]
+
+        # Find best responses
+        for player, opp_strategies in payoffs.items():
+            for opp_strategy, my_strategies in opp_strategies.items():
+                my_payoffs = np.array([v for (k,v) in my_strategies.items()])
+                #print(my_payoffs)
+                #print(my_payoffs.shape)
+                my_br = []
+                my_br_ids = np.argwhere(my_payoffs==np.amax(my_payoffs)).flatten()
+                #print(type(my_br_ids))
+                #print(my_br_ids)
+                #print(type(list(my_strategies.keys())))
+                #print(list(my_strategies.keys()))
+                for br_id in my_br_ids:
+                    my_br.append(list(my_strategies.keys())[br_id] )
+                br[player][opp_strategy] = my_br
+
+        # Find Nash equilibria
+        ne = []
+        for s1 in strategies[0]:
+            for s2 in strategies[1]:
+                if (s1 in br[players[0]][s2]) and (s2 in br[players[1]][s1]):
+                    ne.append((s1,s2))
+
+        self.params = params
+        self.players = players
+        self.strategies = strategies
+        self.payoffs = payoffs
+        self.br = br
+        self.ne = ne
+        self.sol = {'num_ne': len(self.ne)}
+
+    def table_as_html(self):
+        t = '<table border=1px align="center">\n'
+        N = len(self.strategies[0])
+        K = len(self.strategies[1])
+        players = self.players
+        strategies = self.strategies
+        payoffs = self.params['payoffs']
+        t+=  '  <tr>' + '\n'
+        t+=  '    <td></td>' + '\n'
+        t+=  '    <td></td>' + '\n'
+        t+= f'    <td colspan={K} align="center">{players[1]}</td>' + '\n'
+        t+=  '  </tr>' + '\n'
+        t+=  '  <tr>' + '\n'
+        t+=  '    <td></td>' + '\n'
+        t+=  '    <td></td>' + '\n'
+        for k in range(K):
+            t+= f'    <td align="center">{strategies[1][k]}</td>' + '\n'
+        for i in range(N):
+            t+=  '  <tr>' + '\n'
+            if i==0:
+                t+= f'    <td rowspan={N}>{players[0]}</td>' + '\n'
+            t+= f'    <td>{strategies[0][i]}</td>' + '\n'
+            for k in range(K):
+                t+= f'    <td align="center">{payoffs[i][k][0]}, {payoffs[i][k][1]}</td>' + '\n'
+            t+=  '  </tr>' + '\n'
+        t+=  '</table>' + '\n'
+        return t
+
+    def table_as_latex(self):
+        players = self.players
+        strategies = self.strategies
+        payoffs = self.params['payoffs']
+        N = len(strategies[0])
+        K = len(strategies[1])
+        t = fr"""
+\begin{{center}}
+\begin{{tabular}}{{|c|c|{'c|'*K}}} \hline
+ & & \multicolumn{{{K}}}{{c|}}{{ {players[1]} }} \\ \hline
+"""
+        t+= " & "
+        for k in range(K):
+            t+= fr" & {strategies[1][k]}"
+        t+= fr"\\ \hline" + '\n'
+        for i in range(N):
+            if i==0:
+                t+= fr"\multirow{{{N}}}{{*}}{{{players[0]}}} "
+            t+= fr" & {strategies[0][i]} "
+            for k in range(K):
+                t+= fr" & {payoffs[i][k][0]}, {payoffs[i][k][1]} "
+            if i==N-1:
+                t+= fr"\\ \hline" + '\n'
+            else:
+                t+= fr"\\ \cline{{2-{K+2}}}" + '\n'
+        t+=fr"""
+\end{{tabular}}
+\end{{center}}
+"""
+        return t
+
+
