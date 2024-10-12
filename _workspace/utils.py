@@ -2501,32 +2501,42 @@ class NormalForm:
         self.ne = ne
         self.sol = {'num_ne': len(self.ne)}
 
-    def table_as_html(self):
-        t = '<table border=1px align="center">\n'
+    def table_as_html(self, circle_br=False):
+        t = '<table border=1px align="center">'
         N = len(self.strategies[0])
         K = len(self.strategies[1])
         players = self.players
         strategies = self.strategies
         payoffs = self.params['payoffs']
-        t+=  '  <tr>' + '\n'
-        t+=  '    <td></td>' + '\n'
-        t+=  '    <td></td>' + '\n'
-        t+= f'    <td colspan={K} align="center">{players[1]}</td>' + '\n'
-        t+=  '  </tr>' + '\n'
-        t+=  '  <tr>' + '\n'
-        t+=  '    <td></td>' + '\n'
-        t+=  '    <td></td>' + '\n'
+        br = self.br
+        t+=  '<tr>'
+        t+=  '<td></td>'
+        t+=  '<td></td>'
+        t+= f'<td colspan={K} align="center">{players[1]}</td>'
+        t+=  '</tr>'
+        t+=  '<tr>'
+        t+=  '<td></td>'
+        t+=  '<td></td>'
         for k in range(K):
-            t+= f'    <td align="center">{strategies[1][k]}</td>' + '\n'
+            t+= f'<td align="center">{strategies[1][k]}</td>'
+        t+= '</tr>'
         for i in range(N):
-            t+=  '  <tr>' + '\n'
+            t+= '<tr>'
             if i==0:
-                t+= f'    <td rowspan={N}>{players[0]}</td>' + '\n'
-            t+= f'    <td>{strategies[0][i]}</td>' + '\n'
+                t+= f'<td rowspan={N}>{players[0]}</td>'
+            t+= f'<td>{strategies[0][i]}</td>'
             for k in range(K):
-                t+= f'    <td align="center">{payoffs[i][k][0]}, {payoffs[i][k][1]}</td>' + '\n'
-            t+=  '  </tr>' + '\n'
-        t+=  '</table>' + '\n'
+                if circle_br and (strategies[0][i] in br[players[0]][strategies[1][k]]):
+                    u1 = f'<span style="border-width:2px; border-style:solid; border-color:#FF0000;">{payoffs[i][k][0]}</span>'
+                else:
+                    u1 = f'{payoffs[i][k][0]}'
+                if circle_br and (strategies[1][k] in br[players[1]][strategies[0][i]]):
+                    u2 = f'<span style="border-width:2px; border-style:solid; border-color:#FF0000;">{payoffs[i][k][1]}</span>'
+                else:
+                    u2 = f'{payoffs[i][k][1]}'
+                t+= f'<td align="center">{u1}, {u2}</td>'
+            t+=  '</tr>'
+        t+=  '</table>'
         return t
 
     def table_as_latex(self):
