@@ -23,7 +23,7 @@ python: pyscript
     <option value="wk08">8. Consumer Theory Applications</option>
     <option value="wk09">9. Labor-Leisure Choice</option>
     <option value="wk11">11. Monopolies</option>
-	<option value="wk12">12. Game Theory</option>
+	<option value="wk12">12. Game Theory & Oligopolies</option>
 </select>
 
 <button id="button" pys-onClick="generate_problem">Generate</button>
