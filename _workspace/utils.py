@@ -2676,7 +2676,11 @@ $$ c_i(q_i) = cq_i $$
 
 The quantity produced by each firm in the Nash equilibrium is:
 
-$$ q_\ast = \frac{{ A - c}}{{(N+1)B}} $$
+$$ q^\ast = \frac{{ A - c}}{{(N+1)B}} $$
+
+The equilibrium price is:
+
+$$ p^\ast = \frac{{A}}{{N+1}} + \left( \frac{{N}}{{N+1}} \right) c $$
 """
     def setup(self):
         params = self.params
