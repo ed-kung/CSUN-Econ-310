@@ -2571,3 +2571,133 @@ class NormalForm:
         return t
 
 
+"""
+Cournot Model (2)
+"""
+class Cournot2:
+    def __init__(self, params=None):
+        if not params:
+            params = {'A':14, 'B':1, 'a1':2, 'b1':0, 'a2':2, 'b2':0}
+        params = {k:params[k] for k in ['A','B','a1','b1','a2','b2']}
+        self.params = params
+        A, B, a1, b1, a2, b2 = params['A'], params['B'], params['a1'], params['b1'], params['a2'], params['b2']
+        M = np.array([
+            [2*(B+b1),            B],
+            [       B,     2*(B+b2)]
+        ])
+        Y = np.array([[A-a1], [A-a2]])
+        q = np.linalg.solve(M, Y)
+        q1 = q[0,0]
+        q2 = q[1,0]
+        Q = q1 + q2
+        p = A - B*Q
+        profit1 = p*q1 - a1*q1 - b1*q1**2
+        profit2 = p*q2 - a2*q2 - b2*q2**2
+        sol = {'q1':q1, 'q2':q2, 'Q':Q, 'p':p, 'profit1':profit1, 'profit2':profit2}
+        self.sol = sol
+    
+    def general_setup(self):
+        return fr"""
+Consumers in a market for commodity \(q\) have an (inverse) demand curve given by:
+
+$$p = A - BQ$$
+
+The market is supplied by two firms. The cost function of firm 1 is:
+
+$$c_1(q_1) = a_1 q_1 + b_1 q_1^2 $$
+
+The cost function of firm 2 is:
+
+$$ c_2(q_2) = a_2 q_2 + b_2 q_2^2 $$
+
+The first order conditions result in:
+
+$$ 2(B+b_1)q_1 + Bq_2 = A-a_1 $$
+
+$$ Bq_1 + 2(B+b_2)q_2 = A-a_2 $$
+
+Which can be solved using linear algebra.
+"""
+    def setup(self):
+        params = self.params
+        A, B, a1, b1, a2, b2 = params['A'], params['B'], params['a1'], params['b1'], params['a2'], params['b2']
+        return fr"""
+Consumers in a market for commodity \(q\) have a demand curve given by:
+
+$$ Q_d = {polyeq('p',[Number(A,B), Number(-1,B)],[0,1])} $$
+
+The market is supplied by two firms. The cost function of firm 1 is:
+
+$$ c_1(q_1) = {polyeq('q_1', [a1, b1], [1,2])} $$
+
+The cost function of firm 2 is:
+
+$$ c_2(q_2) = {polyeq('q_2', [a2, b2], [1,2])} $$
+
+The firms engage in Cournot competition (i.e. they simultaneously decide how much quantity to produce; the market price is then determined by the total quantity produced by all firms).
+"""
+    def check_solutions(self):
+        sol = self.sol
+        q1, q2, p = sol['q1'], sol['q2'], sol['p']
+        return (
+            (sol['q1']>0) and (sol['q2']>0) and (sol['p']>0) and
+            (is_divisible(sol['q1'],1)) and 
+            (is_divisible(sol['q2'],1))
+        )
+
+
+"""
+Cournot Model (N)
+"""
+class CournotN:
+    def __init__(self, params=None):
+        if not params:
+            params = {'A':14, 'B':1, 'c':2, 'N':2}
+        params = {k:params[k] for k in ['A','B','c','N']}
+        self.params = params
+        A, B, c, N = params['A'], params['B'], params['c'], params['N']
+        q = (A - c)/((N+1)*B)
+        Q = N*q
+        p = A - B*Q
+        profit = p*q - c*q
+        total_profit = N*profit
+        sol = {'q':q, 'p':p, 'Q':Q, 'profit':profit, 'total_profit':total_profit}
+        self.sol = sol
+        
+    def general_setup(self):
+        return fr"""
+Consumers in a market for commodity \(q\) have an (inverse) demand curve given by:
+
+$$p = A - BQ$$
+
+The market is supplied by \(N\) firms. Each firm \(i\) has a cost function:
+
+$$ c_i(q_i) = cq_i $$
+
+The quantity produced by each firm in the Nash equilibrium is:
+
+$$ q_\ast = \frac{{ A - c}}{{(N+1)B}} $$
+"""
+    def setup(self):
+        params = self.params
+        A, B, c, N = params['A'], params['B'], params['c'], params['N']
+        return fr"""
+Consumers in a market for commodity \(q\) have a demand curve given by:
+
+$$ Q_d = {polyeq('p',[Number(A,B), Number(-1,B)],[0,1])} $$
+
+The market is supplied by {N:g} firms. The cost function of each firm \(i\) is:
+
+$$ c(q_i) = {polyeq('q_i', [c], [1])} $$
+
+The firms engage in Cournot competition (i.e. they simultaneously decide how much quantity to produce; the market price is then determined by the total quantity produced by all firms).
+"""
+    def check_solutions(self):
+        sol = self.sol
+        p, q = sol['q'], sol['p']
+        return (
+            (sol['q']>0) and (sol['p']>0) and
+            (is_divisible(sol['q'],1))
+        )
+        
+    
