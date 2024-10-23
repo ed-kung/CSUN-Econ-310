@@ -1459,7 +1459,7 @@ class FoodStamps:
             self.cb_base.check_solution() and
             self.cb_tfr.check_solution() 
         )
-    def graph_with_IC(self, base=False, inkind=False, tfr=False, saveas=None, show=False):
+    def graph_with_IC(self, base=False, inkind=False, tfr=False, saveas=None, show=False, xlabel='Food Consumption', ylabel='Other Consumption'):
         params = self.params
         val, nx, dx, ny, dy, I, px, py, gmax = params['val'], params['nx'], params['dx'], params['ny'], params['dy'], params['I'], params['px'], params['py'], params['gmax']
         a = nx/dx
@@ -1508,8 +1508,8 @@ class FoodStamps:
             legend.append('Monetary transfers')
         if len(legend)>0:
             plt.legend(legend, loc='upper right')
-        ax.set_ylabel('Other Consumption')
-        ax.set_xlabel('Food Consumption')
+        ax.set_ylabel(ylabel)
+        ax.set_xlabel(xlabel)
         ax.set_xticks(np.arange(0, gmax+gmax/12, gmax/12))
         ax.set_yticks(np.arange(0, gmax+gmax/12, gmax/12))
         ax.set_xlim([0, gmax+gmax/12])
