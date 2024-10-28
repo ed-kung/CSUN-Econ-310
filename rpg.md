@@ -24,6 +24,7 @@ python: pyscript
     <option value="wk09">9. Labor-Leisure Choice</option>
     <option value="wk11">11. Monopolies</option>
 	<option value="wk12">12. Game Theory & Oligopolies</option>
+	<option value="wk13">13. Consumption Smoothing</option>
 </select>
 
 <button id="button" pys-onClick="generate_problem">Generate</button>

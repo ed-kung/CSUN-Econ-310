@@ -211,6 +211,21 @@ In this example, $$X$$ can take one of two values: $$x_1$$ and $$x_2$$.  The poi
 Because of the concavity of the utility function, this straight line is always below the utility function. Thus, $$u(E[X])$$ will always be above $$E[u(X)]$$.
 
 
+{: .blue-callout-title }
+> Example
+>
+> Jack has an initial wealth of $$\$1,000$$. There is a $$5\%$$ chance he gets into a car accident, which would force him to pay $$\$200$$ in repairs. Let $$X$$ be a random variable representing Jack's wealth at the end of the day. Jack's utility function over wealth is $$u(X) = \sqrt{X}$$.
+>
+> Prove that Jack is risk averse by showing that his utility function is concave.
+>
+> *Answer.*
+>
+> $$\begin{align}
+u^\prime(x) &= \frac{1}{2} x^{-1/2} \\
+u^{\prime \prime}(x) &= -\frac{1}{4} x^{-3/2} < 0
+\end{align}$$
+>
+> The second derivative is negative for all $$x$$. Therefore Jack is risk averse.
 
 
 

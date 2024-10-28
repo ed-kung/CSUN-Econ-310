@@ -2703,5 +2703,66 @@ The firms engage in Cournot competition (i.e. they simultaneously decide how muc
             (sol['q']>0) and (sol['p']>0) and
             (is_divisible(sol['q'],1))
         )
+
+"""
+Insurance
+"""
+class Insurance:
+    def __init__(self, params=None):
+        if not params:
+            params = {'fun':'ln', 'W':2000, 'D':1000, 'p':0.5}
+        params = {k:params[k] for k in ['fun','W','D','p']}
+        self.params = params
+        fun, W, D, p = params['fun'], params['W'], params['D'], params['p']
+        if fun=='ln':
+            ufun = np.log
+            uinv = np.exp
+        elif fun=='sqrt':
+            ufun = np.sqrt
+            uinv = lambda x: x**2
+        else:
+            raise
+        EW = (1-p)*W + p*(W-D)
+        UEW = ufun(EW)
+        EU = (1-p)*ufun(W) + p*ufun(W-D)
+        CE = uinv(EU)
+        WTP = W - CE
+        FairCost = p*D
+        sol = {'EW':EW, 'UEW':UEW, 'EU':EU, 'CE':CE, 'WTP':WTP, 'FairCost':FairCost}
+        self.sol = sol
+    def general_setup(self):
+        return fr"""
+An individual has an initial wealth of \(W\). There is a \(p\) chance that the individual has a problem,
+which would force the individual to pay \(D\) to fix the problem. 
+
+The expected wealth is:
+
+$$E[W] = (1-p)W + p(W-D)$$
+
+The certainty equivalent is:
+
+$$ CE = u^{{-1}} \left( (1-p)u(W) + pu(W-D) \right) $$
+"""
+    def setup(self):
+        params = self.params
+        fun, W, D, p = params['fun'], params['W'], params['D'], params['p']
+        if fun=='ln':
+            myfunstr = fr'\ln X'
+        elif fun=='sqrt':
+            myfunstr = fr'\sqrt{{X}}'
+        return fr"""
+An individual has an inititial wealth of \({W:,g}\). There is a \({p*100:g}\%\) chance that the individual has a problem,
+which would force them to pay \({D:,g}\) to fix the problem.  Let \(X\) be a random variable representing the person's 
+wealth at the end of the day. The individual's utility function over wealth is:
+
+$$ u(X) = {myfunstr} $$
+"""
+    def check_solutions(self):
+        sol = self.sol
+        return (
+            (sol['EW']>0) and (sol['UEW']>sol['EU']) and (sol['EU']>0) and 
+            (sol['CE']>0) and (sol['WTP']>sol['FairCost']) and (sol['FairCost']>20)
+        )
         
+
     
