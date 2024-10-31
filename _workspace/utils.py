@@ -2766,3 +2766,70 @@ $$ u(X) = {myfunstr} $$
         
 
     
+"""
+Consumption Savings
+"""
+class Savings:
+    def __init__(self, params=None):
+        if not params:
+            params = {'fun':'ln', 'Y':1000, 'p':0.95, 'beta':0.95}
+        params = {k:params[k] for k in ['fun','Y','p','beta']}
+        self.params = params
+        fun, Y, p, beta = params['fun'], params['Y'], params['p'], params['beta']
+        if fun=='ln':
+            c2 = beta*Y/(p*(1+beta))
+        elif fun=='sqrt':
+            c2 = beta**2 * Y/(p*(p+beta**2))
+        else:
+            raise
+        c1 = Y - p*c2
+        sol = {'c1':c1, 'c2':c2}
+        self.sol = sol
+    def general_setup(self):
+        return fr"""
+An individual lives for two periods. In period 1, he earns an income of \(Y\) and may buy bonds at a price of \(p\) per bond. After buying bonds, he consumes the rest of his income. In period 2, the individual does not earn an income, so his entire consumption must come from his bond purchases. Each bond purchased in period 1 pays \(\$1\) in period 2.
+
+Relative to period 1, the individual discounts period 2 utility using a discount factor of \(\beta\). Thus, the individual's presented discounted utility from period 1 consumption \(c_1\) and period 2 consumption \(c_2\) is:
+
+$$ u(c_1) + \beta u(c_2) $$
+
+The optimization problem is:
+
+$$ \max_{{c_1, c_2}} u(c_1) + \beta u(c_2) ~ \text{{ s.t. }} ~ c_1 + pc_2 = Y $$
+
+If \(u(c) = \ln c\), then:
+
+$$c_2 = \frac{{\beta Y}}{{p(1+\beta)}} $$
+
+If \(u(c) = \sqrt{{c}} \), then:
+
+$$c_2 = \frac{{\beta^2 Y}}{{ p \left( p + \beta^2 \right) }} $$
+"""
+    def setup(self):
+        params = self.params
+        fun, Y, p, beta = params['fun'], params['Y'], params['p'], params['beta']
+        if fun=='ln':
+            myfun = fr"\ln c"
+            myfunc1 = fr"\ln c_1"
+            myfunc2 = fr"\ln c_2"
+        elif fun=='sqrt':
+            myfun = fr"\sqrt{{c}}"
+            myfunc1 = fr"\sqrt{{c_1}}"
+            myfunc2 = fr"\sqrt{{c_2}}"
+        return fr"""
+An individual lives for two periods. In period 1, he earns an income of \(Y={Y:,g}\) and may buy bonds at a price of \(p={p:g}\) per bond. After buying bonds, he consumes the rest of his income in period 1. In period 2, the individual does not earn an income, so his entire consumption must come from his bond purchases. Each bond purchased in period 1 pays \(\$1\) in period 2.
+
+The utility the person gets in each period from consuming \(c\) in that period is:
+
+$$u(c) = {myfun}$$.
+
+Relative to period 1, the individual discounts period 2 utility using a discount factor of \(\beta={beta:g}\). Thus, the individual's presented discounted utility from period 1 consumption \(c_1\) and period 2 consumption \(c_2\) is:
+
+$$ {myfunc1} + {beta:g}{myfunc2} $$
+"""
+    def check_solutions(self):
+        sol = self.sol
+        return (
+            (sol['c1']>0) and (sol['c2']>0)
+        )
+        
