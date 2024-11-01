@@ -2783,7 +2783,8 @@ class Savings:
         else:
             raise
         c1 = Y - p*c2
-        sol = {'c1':c1, 'c2':c2}
+        r = 1/p - 1
+        sol = {'c1':c1, 'c2':c2, 'r':r}
         self.sol = sol
     def general_setup(self):
         return fr"""
@@ -2809,23 +2810,23 @@ $$c_2 = \frac{{\beta^2 Y}}{{ p \left( p + \beta^2 \right) }} $$
         params = self.params
         fun, Y, p, beta = params['fun'], params['Y'], params['p'], params['beta']
         if fun=='ln':
-            myfun = fr"\ln c"
+            myfun = fr"\ln c_t"
             myfunc1 = fr"\ln c_1"
             myfunc2 = fr"\ln c_2"
         elif fun=='sqrt':
-            myfun = fr"\sqrt{{c}}"
+            myfun = fr"\sqrt{{c_t}}"
             myfunc1 = fr"\sqrt{{c_1}}"
             myfunc2 = fr"\sqrt{{c_2}}"
         return fr"""
-An individual lives for two periods. In period 1, he earns an income of \(Y={Y:,g}\) and may buy bonds at a price of \(p={p:g}\) per bond. After buying bonds, he consumes the rest of his income in period 1. In period 2, the individual does not earn an income, so his entire consumption must come from his bond purchases. Each bond purchased in period 1 pays \(\$1\) in period 2.
+An individual lives for two periods. In period 1, he earns an income of \(Y={Y:,g}\). In period 2, he earns no income. In order to consume in period 2, the person must buy bonds in period 1. A bond promises to pay \(\$1\) per bond in period 2, and the price of a bond in period 1 is \(p={p:g}\).
 
-The utility the person gets in each period from consuming \(c\) in that period is:
+The individual gets utility from consuming in each period. If he consumes a dollar amount \(c_t\) in period \(t\), the utility he gets is \(u(c_t) = {myfun}\).
 
-$$u(c) = {myfun}$$.
+The individual's objective is to maximize his present value of time-discounted utility:
 
-Relative to period 1, the individual discounts period 2 utility using a discount factor of \(\beta={beta:g}\). Thus, the individual's presented discounted utility from period 1 consumption \(c_1\) and period 2 consumption \(c_2\) is:
+$$ {myfunc1} + \beta {myfunc2} $$
 
-$$ {myfunc1} + {beta:g}{myfunc2} $$
+where \(\beta = {beta:g}\).
 """
     def check_solutions(self):
         sol = self.sol
@@ -2833,3 +2834,5 @@ $$ {myfunc1} + {beta:g}{myfunc2} $$
             (sol['c1']>0) and (sol['c2']>0)
         )
         
+
+
