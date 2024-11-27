@@ -45,7 +45,7 @@ We call the worth of a promise, valued in terms of today, the **present value** 
 >
 > An individual has a discount factor of $$\beta=0.95$$ per year. What is the present value of $100 to be received in ten years' time?
 >
-> *Answer.* $$\beta^10 \times 100 = (0.95)^{10} \times 100 = 59.87$$
+> *Answer.* $$\beta^{10} \times 100 = (0.95)^{10} \times 100 = 59.87$$
 
 ### Relationship between discount factor and interest rates
 
@@ -92,8 +92,8 @@ $$ PV = \left( \frac{1-\beta^{T+1}}{1-\beta} - 1 \right) x$$
 > *Answer.*
 >
 > $$\begin{align}
-PV &= \left( \frac{1-(0.9)^{20}}{0.1} - 1 \right) 100 \\
-&= 778.42
+PV &= \left( \frac{1-(0.9)^{21}}{0.1} - 1 \right) 100 \\
+&= 790.581
 \end{align}$$
 
 
@@ -125,6 +125,19 @@ PV &= \beta x + \beta^2 x + \beta^3 x + \ldots \\
 &= \beta x + \beta PV \\
 (1-\beta) PV &= \beta x  \\
 PV &= \frac{\beta}{1-\beta} x
+\end{align}$$
+
+{: .blue-callout-title }
+> Example
+>
+> A person's discount factor is $$\beta = 0.95$$ per annum. Calculate the present value of receiving $100 starting from 1 year from now and every year thereafter, forever.
+>
+> *Answer.*
+>
+> $$\begin{align}
+PV &= \frac{\beta}{1-\beta} x \\
+&= \frac{0.95}{0.05} 100 \\
+&= 1900
 \end{align}$$
 
 
