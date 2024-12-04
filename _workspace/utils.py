@@ -154,6 +154,73 @@ def get_random_prob(ProbClass, CsvFile):
     params = dict(df.sample(1).reset_index(drop=True).loc[0])
     return ProbClass(params)
 
+"""
+Linear Demand Curve
+"""
+# p = a - bq
+class LinearDemand:
+    def __init__(self, a=12, b=1):
+        self.a = a
+        self.b = b
+    def eval_at_price(self, p):
+        a, b = self.a, self.b
+        return (a/b - 1/b*p)
+    def eval_at_quantity(self, q):
+        a, b = self.a, self.b
+        return (a - b*q)
+    def print_demand_curve(self, x='p'):
+        a, b = self.a, self.b
+        return fr"{polyeq(x,[a/b,-1/b],[0,1])}"
+    def print_inverse_demand_curve(self, x='q'):
+        a, b = self.a, self.b
+        return fr"{polyeq(x,[a,-b],[0,1])}"
+"""
+Polynomial Representative Consumer
+"""
+# u(q) = aq - 0.5*bq^2 - pq
+class PolynomialConsumer:
+    def __init__(self, a=12, b=1):
+        self.a = a
+        self.b = b
+        self.demand = LinearDemand(a=a,b=b)
+    def print_utility(self, x='q'):
+        a, b = self.a, self.b
+        return fr"{polyeq(x,[a,-0.5*b],[1,2])}"
+    def print_demand_curve(self, x='p'):
+        return self.demand.print_demand_curve(x)
+    def print_inverse_demand_curve(self, x='q'):
+        return self.demand.print_inverse_demand_curve(x)
+    def eval_at_price(self, p):
+        a, b = self.a, self.b
+        q = self.demand.eval_at_price(p)
+        U = a*q - 0.5*b*q**2 - p*q
+        return {'p':p, 'q':q, 'U':U}
+"""
+Linear Supply Curve
+"""
+# p = a + bq
+class LinearSupply:
+    def __init__(self, a=0, b=1):
+        self.a = a
+        self.b = b
+    def eval_at_price(self, p):
+        a, b = self.a, self.b
+        return (1/b*p - a/b)
+    def eval_at_quantity(self, q):
+        a, b = self.a, self.b
+        return a + b*q
+    def print_supply_curve(self, x='p'):
+        a, b = self.a, self.b
+        return fr"{polyeq(x,[1/b,-a/b],[1,0])}"
+    def print_inverse_supply_curve(self, x='q'):
+        a, b = self.a, self.b
+        return fr"{polyeq(x,[a,b],[0,1])}"
+    
+
+
+
+
+
 
 """
 Linear Supply and Demand
