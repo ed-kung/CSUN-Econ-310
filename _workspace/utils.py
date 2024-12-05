@@ -190,6 +190,13 @@ class PolynomialConsumer:
         return self.demand.print_demand_curve(x)
     def print_inverse_demand_curve(self, x='q'):
         return self.demand.print_inverse_demand_curve(x)
+    def setup(self, x='q'):
+        return fr"""
+A representative, price-taking consumer decides how many units, \(q\), of a commodity to purchase at unit price \(p\). The utility
+they receive for purchasing \(q\) units at price \(p\) is:
+
+$$ u({x}) = {self.print_utility(x)} - p{x}$$
+"""
     def eval_at_price(self, p):
         a, b = self.a, self.b
         q = self.demand.eval_at_price(p)
@@ -215,9 +222,76 @@ class LinearSupply:
     def print_inverse_supply_curve(self, x='q'):
         a, b = self.a, self.b
         return fr"{polyeq(x,[a,b],[0,1])}"
-    
+"""
+Polynomial Representative Firm
+"""
+# c(q) = aq + 0.5bq^2 + c
+class PolynomialFirm:
+    def __init__(self, a=0, b=1, c=0):
+        self.a = a
+        self.b = b
+        self.c = c
+        self.supply = LinearSupply(a=a,b=b)
+    def print_cost_function(self, x='q'):
+        a, b, c = self.a, self.b, self.c
+        return fr"{polyeq(x,[a,0.5*b,c],[1,2,0])}"
+    def print_supply_curve(self, x='p'):
+        return self.supply.print_supply_curve(x)
+    def print_inverse_supply_curve(self, x='q'):
+        return self.demand.print_inverse_supply_curve(x)
+    def setup(self, x='q'):
+        return fr"""
+A representative, price-taking firm decides how many units, \(q\), of a commodity to produce and sell at unit price \(p\). 
+The firm's total cost function for producint \(q\) units of the commodity is:
 
+$$ c({x}) = {self.print_cost_function(x)} $$
+"""
+    def eval_at_price(self, p):
+        a, b, c = self.a, self.b, self.c
+        q = self.supply.eval_at_price(p)
+        revenue = p*q
+        cost = a*q + 0.5*b*q**2 + c
+        profit = revenue - cost
+        return {'p':p, 'q':q, 'revenue':revenue, 'cost':cost, 'profit':profit}
+"""
+Linear Supply and Demand
+"""
+class LinearSupplyDemand:
+    def __init__(self, demand=LinearDemand(), supply=LinearSupply()):
+        self.demand = demand
+        self.supply = supply
+    def setup(self, qd='q_d', qs='q_s', p='p'):
+        return fr"""
+Supply and demand in a commodity market are given by the following equations:
 
+\begin{{align*}}
+{qd} &= {self.demand.print_demand_curve(p)} \\
+{qs} &= {self.supply.print_supply_curve(p)}
+\end{{align*}}
+"""
+    def equilibrium(self):
+        q = (self.demand.a - self.supply.a)/(self.demand.b + self.supply.b)
+        p1 = (self.demand.a - self.demand.b*q)
+        p2 = (self.supply.a + self.supply.b*q)
+        assert p1==p2
+        p = p1
+        CS = 0.5*(self.demand.a - p)*q
+        PS = 0.5*(p - self.supply.a)*q
+        TS = CS+PS
+        return {'q':q, 'p':p, 'CS':CS, 'PS':PS, 'TS':TS}
+"""
+Commodity Market
+"""
+class CommodityMarket:
+    def __init__(self, consumer=PolynomialConsumer(), firm=PolynomialFirm()):
+        self.consumer = consumer
+        self.firm = firm
+    def setup(self, q='q'):
+        return fr"""
+{self.consumer.setup(q)}
+
+{self.firm.setup(q)}
+"""
 
 
 
