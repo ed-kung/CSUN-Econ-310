@@ -29,6 +29,10 @@ def sign(x):
     if x>0: return '+'
     else: return '-'
 
+def is_divisible(p,q):
+    d = nsimplify(p/q).q
+    return (d==1)
+
 def asfrac(x, inline=False, maxdenom=5, rmplus=True, rmneg=False):
     d = nsimplify(x).q
     assert d<=maxdenom
@@ -82,7 +86,51 @@ class PolyEq:
         return out
     def __repr__(self):
         return self.print()
-        
+
+class Axis:
+    def __init__(self, xn=13, yn=13, xunit=1, yunit=1):
+        self.xn = xn
+        self.yn = yn
+        self.xunit = xunit
+        self.yunit = yunit
+        self.xmax = xn*xunit
+        self.ymax = yn*yunit
+        self.objects = []
+    def add(self, *args):
+        for obj in args:
+            self.objects.append(obj)
+    def get_figax(self, xlab=r'$x$', ylab=r'$y$', alpha=0.4, legend=None):
+        fig, ax = plt.subplots()
+        for obj in self.objects:
+            if type(obj)==Line:
+                xg = np.arange(0, self.xmax, self.xunit/10)
+                obj.plot(ax, xg)
+        ax.set_xticks(np.arange(0, self.xmax, self.xunit))
+        ax.set_yticks(np.arange(0, self.ymax, self.yunit))
+        ax.set_xlim([0, self.xmax])
+        ax.set_ylim([0, self.ymax])
+        ax.set_xlabel(xlab)
+        ax.set_ylabel(ylab)
+        ax.set_axisbelow(True)
+        ax.grid(alpha=alpha)
+        if legend:
+            ax.legend()
+        return fig, ax
+    def on_grid(self,x,y):
+        x_on_grid = is_divisible(x,self.xunit) and (x<self.xmax)
+        y_on_grid = is_divisible(y,self.yunit) and (y<self.ymax)
+        return x_on_grid and y_on_grid
+
+class Line:
+    # y = mx + b
+    def __init__(self, m, b, linewidth=1, color='black', label='_nolegend_'):
+        self.m, self.b = m, b
+        self.linewidth = linewidth
+        self.color = color
+        self.label = label
+    def plot(self, ax, xg, color='black', linewidth=2):
+        return ax.plot(xg, self.m*xg + self.b, color=self.color, linewidth=self.linewidth, label=self.label)
+    
 class LinearDemand:
     # p = a - bq
     # q = (a/b) - (1/b)*p
@@ -91,6 +139,7 @@ class LinearDemand:
         assert b>0
         self.a = a
         self.b = b
+        self.line = Line(-b,a)
     def print(self, x='p', maxdenom=5):
         return PolyEq(c=[self.a/self.b, -1/self.b], x=x, p=[0,1]).print(maxdenom=maxdenom, rmplus=True)
     def print_inverse(self, x='q', maxdenom=5):
@@ -129,6 +178,7 @@ class LinearSupply:
         assert b>0
         self.a = a
         self.b = b
+        self.line = Line(b,a)
     def print(self, x='p', maxdenom=5):
         return PolyEq(c=[1/self.b, -self.a/self.b], x=x, p=[1,0]).print(maxdenom=maxdenom, rmplus=True)
     def print_inverse(self, x='q', maxdenom=5):
@@ -189,28 +239,43 @@ class ExponentialMarket:
         assert p>0
         self.eq = {'q':q, 'p':p}
 
-
 class GenericProblem:
-    def __init__(self, params, default_params, rng=rng):
+    def __init__(self, params, default_params, rng=rng, name="generic_problem"):
+        self.name = name
         if not params:
             params = default_params.copy()
         self.params = {}
         for k in default_params.keys():
-            self.params[k] = params[k]
+            if k in params.keys():
+                self.params[k] = params[k]
+            else:
+                self.params[k] = default_params[k]
+    def show_setups(self):
+        i=0
+        for s in self.setup_list:
+            print(f'{i}: ', end='')
+            print(s)
+            i+=1
     def show_questions(self):
         i=0
         for q in self.question_list:
-            print(f'{i}: {q[0]} ... {q[1]}')
+            print(f'{i}: ', end='')
+            print(q)
             i+=1
 
 class LinearMarketProblem(GenericProblem):
     def __init__(self, params=None, rng=rng):
-        default_params = {'ad':12,'bd':1,'as':0,'bs':1}
+        default_params = {'ad':12,'bd':1,'as':0,'bs':1,'xunit':1,'yunit':1,'xn':13,'yn':13}
         GenericProblem.__init__(self, params, default_params, rng)
         params = self.params
         demand = LinearDemand(a=params['ad'], b=params['bd'])
         supply = LinearSupply(a=params['as'], b=params['bs'])
         market = LinearMarket(demand, supply)
+        axis = Axis(xn=params['xn'],yn=params['yn'],xunit=params['xunit'],yunit=params['yunit'])
+        demand.line.color = 'blue'
+        supply.line.color = 'red'
+        axis.add(demand.line, supply.line)
+        setup_list = []
         setup = fr"""
 Supply and demand in a market are defined by the following equations:
 \begin{{align*}}
@@ -218,26 +283,38 @@ q_d &= {demand.print()} \\
 q_s &= {supply.print()} 
 \end{{align*}}
 """
+        online_setup = fr"""
+Supply and demand in a market are defined by the following equations:
+$$\begin{{align}}
+q_d &= {demand.print()} \\
+q_s &= {supply.print()}
+\end{{align*}}$$
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
         question_list = []
         question = "Calculate the equilibrium price."
         ans = market.eq['p']
         answers = generate_distractors(ans,rng=rng)
-        question_list.append((
-            question,
-            ans,
-            MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
-        ))
+        question_list.append({
+            "question": question,
+            "answer": ans,
+            "online_answer": fr"$$p = {ans:g}$$",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
         question = "Calculate the equilibrium quantity."
         ans = market.eq['q']
         answers = generate_distractors(ans,rng=rng)
-        question_list.append((
-            question,
-            ans,
-            MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
-        ))
-        self.setup = setup
+        question_list.append({
+            "question": question,
+            "answer": ans,
+            "online_answer": fr"$$q = {ans:g}$$",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
         self.question_list = question_list
-
 
 class ExponentialMarketProblem(GenericProblem):
     def __init__(self, params=None, rng=rng):
@@ -247,6 +324,7 @@ class ExponentialMarketProblem(GenericProblem):
         demand = ExponentialDemand(a=params['ad'], k=params['kd'])
         supply = ExponentialSupply(a=params['as'], k=params['ks'])
         market = ExponentialMarket(demand, supply)
+        setup_list = []
         setup = fr"""
 Supply and demand in a market are defined by the following equations:
 \begin{{align*}}
@@ -254,24 +332,37 @@ q_d &= {demand.print()} \\
 q_s &= {supply.print()} 
 \end{{align*}}
 """
+        online_setup = fr"""
+Supply and demand in a market are defined by the following equations:
+$$\begin{{align}}
+q_d &= {demand.print()} \\
+q_s &= {supply.print()}
+\end{{align*}}$$
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
         question_list = []
         question = "Calculate the equilibrium price."
         ans = market.eq['p']
         answers = generate_distractors(ans,rng=rng)
-        question_list.append((
-            question,
-            ans,
-            MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
-        ))
+        question_list.append({
+            "question": question,
+            "answer": ans,
+            "online_answer": fr"$$p = {ans:g}$$",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
         question = "Calculate the equilibrium quantity."
         ans = market.eq['q']
         answers = generate_distractors(ans,rng=rng)
-        question_list.append((
-            question,
-            ans,
-            MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
-        ))
-        self.setup = setup
+        question_list.append({
+            "question": question,
+            "answer": ans,
+            "online_answer": fr"$$q = {ans:g}$$",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
         self.question_list = question_list
 
 
