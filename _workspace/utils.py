@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from simpy import nsimplify
 from matplotlib import pyplot as plt
 
 SMALL_SIZE = 14
@@ -155,6 +156,17 @@ def get_random_prob(ProbClass, CsvFile):
     return ProbClass(params)
 
 """
+PolynomialObjective
+"""
+class PolynomialObjective:
+    def __init__(self, coefs, powers, x='x'):
+        self.coefs = coefs
+        self.powers = powers
+    
+
+
+
+"""
 Linear Demand Curve
 """
 # p = a - bq
@@ -174,6 +186,8 @@ class LinearDemand:
     def print_inverse_demand_curve(self, x='q'):
         a, b = self.a, self.b
         return fr"{polyeq(x,[a,-b],[0,1])}"
+
+
 """
 Polynomial Representative Consumer
 """
@@ -202,6 +216,36 @@ $$ u({x}) = {self.print_utility(x)} - p{x}$$
         q = self.demand.eval_at_price(p)
         U = a*q - 0.5*b*q**2 - p*q
         return {'p':p, 'q':q, 'U':U}
+"""
+Log Representative Consumer
+"""
+# u(q) = aq - 0.5*bq^2 - pq
+class LogConsumer:
+    def __init__(self, a=1):
+        self.a = a
+        self.b = b
+        self.demand = LinearDemand(a=a,b=b)
+    def print_utility(self, x='q'):
+        a, b = self.a, self.b
+        return fr"{polyeq(x,[a,-0.5*b],[1,2])}"
+    def print_demand_curve(self, x='p'):
+        return self.demand.print_demand_curve(x)
+    def print_inverse_demand_curve(self, x='q'):
+        return self.demand.print_inverse_demand_curve(x)
+    def setup(self, x='q'):
+        return fr"""
+A representative, price-taking consumer decides how many units, \(q\), of a commodity to purchase at unit price \(p\). The utility
+they receive for purchasing \(q\) units at price \(p\) is:
+
+$$ u({x}) = {self.print_utility(x)} - p{x}$$
+"""
+    def eval_at_price(self, p):
+        a, b = self.a, self.b
+        q = self.demand.eval_at_price(p)
+        U = a*q - 0.5*b*q**2 - p*q
+        return {'p':p, 'q':q, 'U':U}
+
+
 """
 Linear Supply Curve
 """
