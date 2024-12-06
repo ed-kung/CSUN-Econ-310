@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import sympy
 from sympy import nsimplify
 from matplotlib import pyplot as plt
 from econtools.documents import MCQ, generate_distractors
@@ -25,6 +26,9 @@ plt.rcParams['figure.figsize'] = [7.2, 7.2]
 plt.rcParams['figure.dpi'] = 60
 plt.rcParams['figure.facecolor'] = (1.0, 1.0, 1.0, 0.0)
 
+###################################################################
+# MATH UTILITIES
+###################################################################
 def sign(x):
     if x>0: return '+'
     else: return '-'
@@ -33,9 +37,15 @@ def is_divisible(p,q):
     d = nsimplify(p/q).q
     return (d==1)
 
+def equals(x,y,tol=1e-4):
+    return np.abs(x-y)<tol
+
 def asfrac(x, inline=False, maxdenom=5, rmplus=True, rmneg=False):
+    if type(nsimplify(x))!=sympy.core.numbers.Rational:
+        return f'{x:g}'
     d = nsimplify(x).q
-    assert d<=maxdenom
+    if d>=maxdenom:
+        return f'{x:,g}'
     n = np.abs(nsimplify(x).p)
     out = sign(x)
     if d==1: out+=f'{n}'
@@ -99,12 +109,8 @@ class Axis:
     def add(self, *args):
         for obj in args:
             self.objects.append(obj)
-    def get_figax(self, xlab=r'$x$', ylab=r'$y$', alpha=0.4, legend=None):
+    def get_figax(self, xlab=r'$x$', ylab=r'$y$', alpha=0.4, saveas=None):
         fig, ax = plt.subplots()
-        for obj in self.objects:
-            if type(obj)==Line:
-                xg = np.arange(0, self.xmax, self.xunit/10)
-                obj.plot(ax, xg)
         ax.set_xticks(np.arange(0, self.xmax, self.xunit))
         ax.set_yticks(np.arange(0, self.ymax, self.yunit))
         ax.set_xlim([0, self.xmax])
@@ -113,8 +119,19 @@ class Axis:
         ax.set_ylabel(ylab)
         ax.set_axisbelow(True)
         ax.grid(alpha=alpha)
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
+        return fig, ax
+    def draw(self, xlab=r'$x$', ylab=r'$y$', alpha=0.4, legend=None, saveas=None):
+        fig, ax = self.get_figax(xlab=xlab, ylab=ylab, alpha=alpha)
+        for obj in self.objects:
+            if type(obj)==Line:
+                xg = np.arange(0, self.xmax, self.xunit/10)
+                obj.plot(ax, xg)
         if legend:
             ax.legend()
+        if saveas is not None:
+            plt.savefig(saveas, bbox_inches='tight')
         return fig, ax
     def on_grid(self,x,y):
         x_on_grid = is_divisible(x,self.xunit) and (x<self.xmax)
@@ -131,6 +148,10 @@ class Line:
     def plot(self, ax, xg, color='black', linewidth=2):
         return ax.plot(xg, self.m*xg + self.b, color=self.color, linewidth=self.linewidth, label=self.label)
     
+###################################################################
+# ECONOMIC MODELS
+###################################################################
+
 class LinearDemand:
     # p = a - bq
     # q = (a/b) - (1/b)*p
@@ -219,9 +240,11 @@ class LinearMarket:
         q = (demand.a - supply.a)/(demand.b + supply.b)
         p1 = demand.a - demand.b*q
         p2 = supply.a + supply.b*q
-        assert p1==p2
+        assert equals(p1,p2)
         p = p1
-        self.eq = {'q':q, 'p':p}
+        CS = 0.5*(demand.a - p)*q
+        PS = 0.5*(p - supply.a)*q
+        self.eq = {'q':q, 'p':p, 'CS': CS, 'PS': PS, 'TS':CS+PS}
 
 class ExponentialMarket:
     # p = ad * q^ kd
@@ -234,10 +257,31 @@ class ExponentialMarket:
         assert q>0
         p1 = demand.a * q**demand.k
         p2 = supply.a * q**supply.k
-        assert np.abs(p1-p2)<0.001*np.abs(p1)
+        assert equals(p1,p2)
         p = p1
         assert p>0
         self.eq = {'q':q, 'p':p}
+
+###################################################################
+# PROBLEM GENERATION UTILITIES
+###################################################################
+
+def get_online_format(problem, setup_id=None, question_ids=None):
+    if setup_id is None or question_ids is None:
+        print("Please select a setup_id and a list of question_ids:\n")
+        print("Setups:")
+        problem.show_setups()
+        print("\nQuestions:")
+        problem.show_questions()
+        return None
+    setup = '<p>'+problem.setup_list[setup_id]['online_setup']+'</p>\n'
+    solution = ''
+    i=1
+    for qid in question_ids:
+        setup+=f'<p>{i}. ' + problem.question_list[qid]['online_question'] + '</p>\n'
+        solution+=f'<p>{i}. ' + problem.question_list[qid]['online_answer'] + '</p>\n'
+        i+=1
+    return {'setup': setup, 'solution': solution}
 
 class GenericProblem:
     def __init__(self, params, default_params, rng=rng, name="generic_problem"):
@@ -264,9 +308,9 @@ class GenericProblem:
             i+=1
 
 class LinearMarketProblem(GenericProblem):
-    def __init__(self, params=None, rng=rng):
+    def __init__(self, params=None, rng=rng, name='linear_market_problem'):
         default_params = {'ad':12,'bd':1,'as':0,'bs':1,'xunit':1,'yunit':1,'xn':13,'yn':13}
-        GenericProblem.__init__(self, params, default_params, rng)
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
         params = self.params
         demand = LinearDemand(a=params['ad'], b=params['bd'])
         supply = LinearSupply(a=params['as'], b=params['bs'])
@@ -288,7 +332,7 @@ Supply and demand in a market are defined by the following equations:
 $$\begin{{align}}
 q_d &= {demand.print()} \\
 q_s &= {supply.print()}
-\end{{align*}}$$
+\end{{align}}$$
 """
         setup_list.append({
             "setup": setup,
@@ -300,8 +344,9 @@ q_s &= {supply.print()}
         answers = generate_distractors(ans,rng=rng)
         question_list.append({
             "question": question,
+            "online_question": question,
             "answer": ans,
-            "online_answer": fr"$$p = {ans:g}$$",
+            "online_answer": fr"\(p = {ans:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
         question = "Calculate the equilibrium quantity."
@@ -309,17 +354,69 @@ q_s &= {supply.print()}
         answers = generate_distractors(ans,rng=rng)
         question_list.append({
             "question": question,
+            "online_question": question,
             "answer": ans,
-            "online_answer": fr"$$q = {ans:g}$$",
+            "online_answer": fr"\(q = {ans:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
+        question = fr"""
+Draw the supply and demand diagram using the provided grid:
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_blank.png}}
+\end{{center}}
+"""
+        online_question = f'Draw the supply and demand diagram using the provided grid:<p><img src="/CSUN-Econ-310/assets/images/graphs/{name}_blank.png"></p>'
+        answer = fr"""
+\begin{{center}}
+\includegraphics[width=3in]{{{name}.png}}
+\end{{center}}
+"""
+        online_answer = f'<img src="/CSUN-Econ-310/assets/images/graphs/{name}_sol.png">'
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": None
+        })
+        question = "Calculate the consumer surplus."
+        ans = market.eq['CS']
+        answers = generate_distractors(ans,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": ans,
+            "online_answer": fr"\(CS = {ans:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the producer surplus."
+        ans = market.eq['PS']
+        answers = generate_distractors(ans,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": ans,
+            "online_answer": fr"\(PS = {ans:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.demand = demand
+        self.supply = supply
+        self.market = market
+        self.sol = market.eq.copy()
+        self.axis = axis
         self.setup_list = setup_list
         self.question_list = question_list
+    def check_solution(self):
+        ok = True
+        ok = ok and self.axis.on_grid(self.market.eq['p'], self.market.eq['q'])
+        ok = ok and self.axis.on_grid(0, self.demand.a)
+        ok = ok and self.axis.on_grid(0, self.supply.a)
+        return ok
 
 class ExponentialMarketProblem(GenericProblem):
-    def __init__(self, params=None, rng=rng):
+    def __init__(self, params=None, rng=rng, name='exponential_market_problem'):
         default_params = {'ad':6,'kd':-0.5,'as':1,'ks':2}
-        GenericProblem.__init__(self, params, default_params, rng)
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
         params = self.params
         demand = ExponentialDemand(a=params['ad'], k=params['kd'])
         supply = ExponentialSupply(a=params['as'], k=params['ks'])
@@ -337,7 +434,25 @@ Supply and demand in a market are defined by the following equations:
 $$\begin{{align}}
 q_d &= {demand.print()} \\
 q_s &= {supply.print()}
-\end{{align*}}$$
+\end{{align}}$$
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        setup = fr"""
+A market's inverse demand curve and inverse supply curve are defined by the following equations:
+\begin{{align*}}
+p &= {demand.print_inverse(x='q_d')} \\
+p &= {supply.print_inverse(x='q_s')} 
+\end{{align*}}
+"""
+        online_setup = fr"""
+A market's inverse demand curve and inverse supply curve are defined by the following equations:
+$$\begin{{align}}
+p &= {demand.print_inverse(x='q_d')} \\
+p &= {supply.print_inverse(x='q_s')}
+\end{{align}}$$
 """
         setup_list.append({
             "setup": setup,
@@ -349,8 +464,9 @@ q_s &= {supply.print()}
         answers = generate_distractors(ans,rng=rng)
         question_list.append({
             "question": question,
+            "online_question": question,
             "answer": ans,
-            "online_answer": fr"$$p = {ans:g}$$",
+            "online_answer": fr"\(p = {ans:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
         question = "Calculate the equilibrium quantity."
@@ -358,15 +474,25 @@ q_s &= {supply.print()}
         answers = generate_distractors(ans,rng=rng)
         question_list.append({
             "question": question,
+            "online_question": question,
             "answer": ans,
-            "online_answer": fr"$$q = {ans:g}$$",
+            "online_answer": fr"\(q = {ans:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
+        self.demand = demand
+        self.supply = supply
+        self.market = market
+        self.sol = market.eq.copy()
         self.setup_list = setup_list
         self.question_list = question_list
 
+PROBLEM_TYPES = {
+    'LinearMarketProblem': LinearMarketProblem,
+    'ExponentialMarketProblem': ExponentialMarketProblem
+}
+def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
+    return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
 
-        
 
 
         

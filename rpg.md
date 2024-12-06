@@ -15,6 +15,7 @@ python: pyscript
 
 <select id="dropdown">
     <option value="lec01">1. Econ Review</option>
+	<option value="lec02">2. Math Review</option>
 </select>
 
 <button id="button" pys-onClick="generate_problem">Generate</button>
