@@ -40,12 +40,17 @@ def is_divisible(p,q):
 def equals(x,y,tol=1e-4):
     return np.abs(x-y)<tol
 
+def is_rational(x, maxdenom=5):
+    try:
+        d = nsimplify(x).q
+        return (d<=maxdenom)
+    except:
+        return False
+
 def asfrac(x, inline=False, maxdenom=5, rmplus=True, rmneg=False):
-    if type(nsimplify(x))!=sympy.core.numbers.Rational:
+    if not is_rational(x, maxdenom):
         return f'{x:g}'
     d = nsimplify(x).q
-    if d>=maxdenom:
-        return f'{x:,g}'
     n = np.abs(nsimplify(x).p)
     out = sign(x)
     if d==1: out+=f'{n}'
@@ -96,6 +101,35 @@ class PolyEq:
         return out
     def __repr__(self):
         return self.print()
+
+class CobbDouglas:
+    def __init__(self, A=1, x='x', a=1/2, y='y', b=1/2):
+        self.A, self.x, self.a, self.y, self.b = A, x, a, y, b
+    def print(self, maxdenom=10, rmplus=True, rmneg=False):
+        out = PTerm(self.A, self.x, self.a).print(maxdenom=maxdenom,rmplus=rmplus,rmneg=rmneg)
+        out+= PTerm(1, self.y, self.b).print(maxdenom=maxdenom,rmplus=True,rmneg=True)
+        return out
+    def __repr__(self):
+        return self.print()
+
+def simplifyCB(cbtop, cbbot):
+    assert cbtop.a!=0
+    assert cbtop.b!=0
+    assert equals( np.abs(cbtop.a)+np.abs(cbbot.a), 1)
+    assert equals( np.abs(cbtop.b)+np.abs(cbbot.b), 1)
+    assert sign(cbtop.a)!=sign(cbtop.b)
+    assert cbtop.x==cbbot.x
+    assert cbtop.y==cbbot.y
+    assert is_rational(cbtop.A/cbbot.A, maxdenom=cbbot.A)
+    x = cbtop.x
+    y = cbtop.y
+    a = cbtop.a
+    n = nsimplify(cbtop.A/cbbot.A).p
+    d = nsimplify(cbtop.A/cbbot.A).q
+    if a>0:
+        return fr"\(\frac{{{PTerm(n,x,1).print()}}}{{{PTerm(d,y,1).print()}}}\)"
+    else:
+        return fr"\(\frac{{{PTerm(n,y,1).print()}}}{{{PTerm(d,x,1).print()}}}\)"
 
 class Axis:
     def __init__(self, xn=13, yn=13, xunit=1, yunit=1):
@@ -274,7 +308,11 @@ def get_online_format(problem, setup_id=None, question_ids=None):
         print("\nQuestions:")
         problem.show_questions()
         return None
-    setup = '<p>'+problem.setup_list[setup_id]['online_setup']+'</p>\n'
+    setup = problem.setup_list[setup_id]['online_setup']
+    if len(setup)>0:
+        setup = '<p>'+setup+'</p>\n'
+    else:
+        setup = ''
     solution = ''
     i=1
     for qid in question_ids:
@@ -286,6 +324,7 @@ def get_online_format(problem, setup_id=None, question_ids=None):
 class GenericProblem:
     def __init__(self, params, default_params, rng=rng, name="generic_problem"):
         self.name = name
+        self.sol = {}
         if not params:
             params = default_params.copy()
         self.params = {}
@@ -306,6 +345,8 @@ class GenericProblem:
             print(f'{i}: ', end='')
             print(q)
             i+=1
+    def check_solution(self):
+        return True
 
 class LinearMarketProblem(GenericProblem):
     def __init__(self, params=None, rng=rng, name='linear_market_problem'):
@@ -485,7 +526,10 @@ p &= {supply.print_inverse(x='q_s')}
         self.sol = market.eq.copy()
         self.setup_list = setup_list
         self.question_list = question_list
-
+    def check_solution(self):
+        if not is_rational((1/self.demand.a)**(1/self.demand.k)): return False
+        if not is_rational((1/self.supply.a)**(1/self.supply.k)): return False
+        return True
 
 class ExponentialRewriteProblem(GenericProblem):
     def __init__(self, params=None, rng=rng, name='exponential_rewrite_problem'):
@@ -539,17 +583,124 @@ $$ y = {equation.print_inverse(x='x')} $$
         self.equation = equation
         self.setup_list = setup_list
         self.question_list = question_list
+        self.sol = {'x': equation.eval_at_p(params['y'])}
 
+class CobbDouglasSimplifyProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='cobbdouglas_simplify_problem'):
+        default_params = {'x':'x','y':'y','A':4,'B':12,'a':1/3,'b':-2/3}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        x, y, A, B, a, b = self.params['x'], self.params['y'], self.params['A'], self.params['B'], self.params['a'], self.params['b']
+        assert A!=B
+        assert a!=0
+        assert b!=0
+        assert sign(a)!=sign(b)
+        cbtop = CobbDouglas(A,x,a,y,b)
+        if (a>0):
+            cbbot = CobbDouglas(B,x,a-1,y,b+1)
+        else:
+            cbbot = CobbDouglas(B,x,a+1,y,b-1)
+        answer = simplifyCB(cbtop,cbbot)
+        distractor1 = simplifyCB(CobbDouglas(B,x,cbtop.a,y,cbtop.b),CobbDouglas(A,x,cbbot.a,y,cbbot.b))
+        distractor2 = simplifyCB(CobbDouglas(A,x,cbtop.b,y,cbtop.a),CobbDouglas(B,x,cbbot.b,y,cbbot.a))
+        distractor3 = fr"\(\frac{{{nsimplify(A/B).p}}}{{{nsimplify(A/B).q}}}xy\)"
+        setup_list = []
+        setup_list.append({
+            'setup':'',
+            'online_setup':''
+        })
+        question_list = []
+        question = fr"""
+Simplify:
+$$ \frac{{{cbtop.print()}}}{{{cbbot.print()}}} $$
+"""
+        online_question = question
+        answer = answer
+        online_answer = answer
+        answers = [
+            answer,
+            distractor1,
+            distractor2,
+            distractor3
+        ]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        self.cbtop = cbtop
+        self.cbbot = cbbot
+        self.setup_list = setup_list
+        self.question_list = question_list
+        
+class LogDifferencesProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='log_differences_problem'):
+        default_params = {'delta':0.05}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        delta = params['delta']
+        assert delta!=0
+        setup_list = []
+        setup = fr"$$\ln y - \ln x = {delta:g}$$"
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Is \(y\) larger or smaller than \(x\)?"
+        online_question = question
+        answers = ["larger", "smaller"]
+        if delta>0:
+            answer = "larger"
+            online_answer = "larger"
+            sol = 0
+        else:
+            answer = "smaller"
+            online_answer = "smaller"
+            sol = 1
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,shuffle=False,horz=True,rng=rng)
+        })
+        question = fr"By how much?"
+        online_question = question
+        answer = fr"\({np.abs(delta)*100:g}\%\)"
+        online_answer = answer
+        answers = [
+            answer,
+            fr"\({np.abs(delta):g}\%\)",
+            fr"\({np.abs(delta)*10:g}\%\)",
+            fr"\({np.abs(delta)*1000:g}\%\)"
+        ]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,horz=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+        self.delta = delta
+        
+    
 
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
     'ExponentialMarketProblem': ExponentialMarketProblem,
-    'ExponentialRewriteProblem': ExponentialRewriteProblem
+    'ExponentialRewriteProblem': ExponentialRewriteProblem,
+    'CobbDouglasSimplifyProblem': CobbDouglasSimplifyProblem,
+    'LogDifferencesProblem': LogDifferencesProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
-
-
+    
 
         
         

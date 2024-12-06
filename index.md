@@ -48,25 +48,25 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 
     Attendance in this class will be checked. Everyone starts with full credit (10 pts). You get to miss two classes for any reason, without penalty. Every subsequent absence will deduct 1 pt from your attendance score, to a minimum of zero.
 	
-- **Professionalism (5%)**
+- **Professionalism (10%)**
 
-	I am generally very lenient and flexible with students. However, if you want to be treated like a responsible adult you need to act like one. If you act unprofessionally, I will not hesitate to call you out on it. Examples of unprofessional behavior include: repeated tardiness, lazy effort on assignments, not paying attention in class, and leaving the class early without notifying me beforehand. Everyone starts with full credit for professionalism (5 pts), but points will be deducted for unprofessional behavior. 
+	I am generally very lenient and flexible with students who are showing effort. However, if you act unprofessionally, I will not hesitate to call you out on it. Examples of unprofessional behavior include: repeated tardiness, lazy effort on assignments, not paying attention in class, and leaving the class early without notifying me beforehand. Everyone starts with full credit for professionalism (5 pts), but points may be deducted for unprofessional behavior. 
     
-- **Homework Assignments (15%)**
+- **Homework Assignments (20%)**
 
-    Weekly homework assignments will generally consist of one or more Canvas quizzes related to the material covered that week. The homeworks will usually be due on Mondays at midnight. You have three attempts on each quiz. Late submissions will receive a maximum of 80% credit. (Note that late penalties must be applied manually, so your grade might show full credit at first and later get downgraded.)
+    Weekly homework assignments will generally consist of a problem set, to be submitted in a greenbook or on stapled sheets of paper. Students can elect to work in groups of up to 3 on homework assignments. If you work in a group, your group only has to make one submission for the whole group. For each problem set, only a randomly selected set of questions will be graded.
 	
 - **Writing Assignments (5%)**
 
-	There will occassionally be a writing assignment, usually consisting of a short essay of about 800 words. These assignments must be completed on Packback, an online platform for AI-assisted writing assignments.
+	There will occassionally be a writing assignment, usually consisting of a short essay of about 500-800 words. These assignments must be completed on Packback, an online platform for AI-assisted writing assignments.
 	
-- **Midterm Exams (40%)**
+- **Midterm Exams (35%)**
 
-	There will be two midterm exams, each worth 20% of your grade. These will be multiple choice, in-person exams.
+	There will be two midterm exams, together worth 35% of your grade. These will be multiple choice, in-person exams.
     
-- **Final Exam (25%)**
+- **Final Exam (20%)**
 
-    The final exam will be worth 25% of your grade. It will be a multiple choice, in-person exam.
+    The final exam will be worth 20% of your grade. It will be a multiple choice, in-person exam.
 
 - **Grading Scale**
 
@@ -74,7 +74,7 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
     | ------ | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ---- |
     | 100-93 | 92-90 | 89-87 | 86-83 | 82-80 | 79-77 | 76-73 | 72-70 | 69-60 | 59-0 |
 
-	Depending on the performance of the class, a curve may or may not be applied before assigning letter grades.
+	Your scores will be rounded up to the nearest integer. Depending on the performance of the class, a curve may or may not be applied before assigning letter grades.
 
 
 ---
@@ -83,12 +83,12 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 
 | Week | Dates         | Session 1                            | Session 2                                   |  
 | ---: | :------------ | :----------------------------------- | :------------------------------------------ | 
-|    1 | 1/20 - 1/24   | Introduction                         | Economics Review                            |   
+|    1 | 1/20 - 1/24   | Introduction                         | Microeconomics Review                       |   
 |    2 | 1/27 - 1/31   | Math Review                          | Single Variable Optimization                |
-|    3 | 2/3 - 2/7     | Commodity Markets                    | Labor Markets                               |
-|    4 | 2/10 - 2/14   | Application: Technological Shocks    | Application: Effects of Taxation            |
+|    3 | 2/3 - 2/7     | A Model of Commodity Markets         | A Model of Labor Markets                    |
+|    4 | 2/10 - 2/14   | A General Equilibrium Model          | Application: Productivity Shocks            |
 |    5 | 2/17 - 2/21   | Review                               | **Midterm 1**                               |  
-|    6 | 2/24 - 2/28   | The Role of Price and Profit         | The Role of Money                           |
+|    6 | 2/24 - 2/28   | Discussion: Economic Calculation     | Discussion: The Role of Money               |
 |    7 | 3/3 - 3/7     | Multivariate Optimization            | Constrained Multivariate Optimization       |
 |    8 | 3/10 - 3/14   | Theory of Consumer Choice            | Consumer Choice: Applications               | 
 |    9 | 3/17 - 3/21   | **NO CLASS - SPRING BREAK**          | **NO CLASS - SPRING BREAK**                 |
@@ -97,7 +97,7 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 |   12 | 4/7 - 4/11    | Game Theory                          | Game Theory: Applications                   |
 |   13 | 4/14 - 4/18   | Monopoly                             | Imperfect Competition                       |
 |   14 | 4/28 - 5/2    | Risk and Insurance                   | Saving and Borrowing                        |
-|   15 | 5/5 - 5/9     | Economic Modeling                    | Review                                      |
+|   15 | 5/5 - 5/9     | Discussion: Economic Modeling        | Review                                      |
 
 Final Exam: 
 
