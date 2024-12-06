@@ -165,9 +165,9 @@ class LinearDemand:
         return PolyEq(c=[self.a/self.b, -1/self.b], x=x, p=[0,1]).print(maxdenom=maxdenom, rmplus=True)
     def print_inverse(self, x='q', maxdenom=5):
         return PolyEq(c=[self.a, -self.b], x=x, p=[0,1]).print(maxdenom=maxdenom, rmplus=True)
-    def eval_at_p(p):
+    def eval_at_p(self, p):
         return self.a/self.b - (1/self.b)*p
-    def eval_at_q(q):
+    def eval_at_q(self, q):
         return self.a - self.b*q
         
 class ExponentialDemand:
@@ -186,9 +186,9 @@ class ExponentialDemand:
         c = self.a
         p = self.k
         return PTerm(c=c,x=x,p=p).print(rmplus=True,maxdenom=maxdenom)
-    def eval_at_p(p):
+    def eval_at_p(self, p):
         return (1/self.a)**(1/self.k) * p**(1/self.k)
-    def eval_at_q(q):
+    def eval_at_q(self, q):
         return self.a * q**self.k
     
 class LinearSupply:
@@ -204,9 +204,9 @@ class LinearSupply:
         return PolyEq(c=[1/self.b, -self.a/self.b], x=x, p=[1,0]).print(maxdenom=maxdenom, rmplus=True)
     def print_inverse(self, x='q', maxdenom=5):
         return PolyEq(c=[self.a, self.b], x=x, p=[0,1]).print(maxdenom=maxdenom, rmplus=True)
-    def eval_at_p(p):
+    def eval_at_p(self, p):
         return (1/self.b)*p - (self.a/self.b)
-    def eval_at_q(q):
+    def eval_at_q(self, q):
         return self.a + self.b*q
         
 class ExponentialSupply:
@@ -225,9 +225,9 @@ class ExponentialSupply:
         c = self.a
         p = self.k
         return PTerm(c=c,x=x,p=p).print(rmplus=True,maxdenom=maxdenom)
-    def eval_at_p(p):
+    def eval_at_p(self, p):
         return (1/self.a)**(1/self.k) * p**(1/self.k)
-    def eval_at_q(q):
+    def eval_at_q(self, q):
         return self.a * q**self.k
 
 class LinearMarket:
@@ -486,9 +486,65 @@ p &= {supply.print_inverse(x='q_s')}
         self.setup_list = setup_list
         self.question_list = question_list
 
+
+class ExponentialRewriteProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='exponential_rewrite_problem'):
+        default_params = {'a':2,'k':-0.5,'y':4}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        if params['k']<0:
+            myExponentialFunc = ExponentialDemand
+        elif params['k']>0:
+            myExponentialFunc = ExponentialSupply
+        equation = myExponentialFunc(a=params['a'], k=params['k'])
+        setup_list = []
+        setup = fr"""
+$$ y = {equation.print_inverse(x='x')} $$
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Write \(x\) as a function of \(y\)."
+        online_question = question
+        answer = fr"\(x = {equation.print(x='y')}\)"
+        online_answer = answer
+        answers = [
+            answer,
+            fr"\(x = {myExponentialFunc(a=equation.a, k=1/equation.k).print(x='y')}\)",
+            fr"\(x = {myExponentialFunc(a=1/equation.a, k=equation.k).print(x='y')}\)",
+            fr"\(x = {equation.print_inverse(x='y')}\)"
+        ]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = fr"Calculate \(x\) when \(y={params['y']:g}\)."
+        online_question = question
+        answer = equation.eval_at_p(params['y'])
+        online_answer = fr"\(x = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,horz=True,sort=True,numerical=True,rng=rng)
+        })
+        self.equation = equation
+        self.setup_list = setup_list
+        self.question_list = question_list
+
+
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
-    'ExponentialMarketProblem': ExponentialMarketProblem
+    'ExponentialMarketProblem': ExponentialMarketProblem,
+    'ExponentialRewriteProblem': ExponentialRewriteProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
