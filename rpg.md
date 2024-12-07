@@ -19,6 +19,7 @@ python: pyscript
 	<option value="lec03">3. Single Variable Optimization</option>
 	<option value="lec04">4. Commodity Market Models</option>
 	<option value="lec05">5. Labor Market Models</option>
+	<option value="lec06">6. General Equilibrium Models</option>
 </select>
 
 <button id="button" pys-onClick="generate_problem">Generate</button>

@@ -433,11 +433,11 @@ class GeneralEquilibrium:
         w = a*kf/L
         q = A*L**kf
         p = a/q
-        U_consumer = consumer.utility_at(p)
-        U_worker = worker.uility_at(w)
+        U_consumer = consumer.utility_at(p,q)
+        U_worker = worker.utility_at(w,L)
         profit = firm.profit_at(p, w, L)
-        assert equals(U_consumer.demand.eval_at_p(p), q)
-        assert equals(U_worker.supply.eval_at_p(w), L)
+        assert equals(consumer.demand.eval_at_p(p), q)
+        assert equals(worker.supply.eval_at_p(w), L)
         assert equals(q, A*L**kf)
         self.eq = {'L':L, 'w':w, 'p':p, 'q':q, 'U_consumer':U_consumer, 'U_worker':U_worker, 'profit':profit}
 
@@ -1678,7 +1678,143 @@ The current commodity price is \(p={p:g}\).
         return True
 
 class GeneralEquilibriumProblem(GenericProblem):
-    
+    # u(L) = wL - d*L^kw
+    # f(L) = A*L^kf
+    # u(q) = a*ln(q) - p*q
+    def __init__(self, params=None, rng=rng, name='exponential_labor_market_problem'):
+        default_params = {'A':2,'kf':1/2,'d':1/2,'kw':3/2,'a':12}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        A, kf, d, kw, a = params['A'], params['kf'], params['d'], params['kw'], params['a']
+        consumer = LogConsumer(a)
+        firm = ExponentialProductionFirm(A,kf)
+        worker = Worker(d,kw)
+        equilibrium = GeneralEquilibrium(consumer, firm, worker)
+        self.sol = equilibrium.eq.copy()
+        L = self.sol['L']
+        w = self.sol['w']
+        p = self.sol['p']
+        q = self.sol['q']
+        U_consumer = self.sol['U_consumer']
+        U_worker = self.sol['U_worker']
+        profit = self.sol['profit']
+        setup_list = []
+        setup = fr"""
+{consumer.setup()}
+
+{worker.setup()}
+
+{firm.setup()}
+"""
+        online_setup = fr"""
+<p>{consumer.setup()}</p>
+        
+<p>{worker.setup()}</p>
+
+<p>{firm.setup()}</p>
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Calculate the equilibrium quantity of labor supplied, \(L\)."
+        online_question = question
+        answer = L
+        online_answer = fr"\(L = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the equilibrium quantity of commodity produced, \(q\)."
+        online_question = question
+        answer = q
+        online_answer = fr"\(q = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the equilibrium wage rate \(w\)."
+        online_question = question
+        answer = w
+        online_answer = fr"\(w = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the equilibrium commodity price \(p\)."
+        online_question = question
+        answer = p
+        online_answer = fr"\(p = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the equilibrium utility of the consumer."
+        online_question = question
+        answer = U_consumer
+        online_answer = fr"\(U_c = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the equilibrium utility of the worker."
+        online_question = question
+        answer = U_worker
+        online_answer = fr"\(U_w = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the equilibrium profit of the firm."
+        online_question = question
+        answer = profit
+        online_answer = fr"\(\Pi = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if self.sol['p']<=1: return False
+        if self.sol['p']>50: return False
+        if self.sol['q']<=1: return False
+        if self.sol['q']>50: return False
+        if self.sol['w']<=1: return False
+        if self.sol['w']>50: return False
+        if self.sol['L']<=1: return False
+        if self.sol['L']>50: return False
+        if self.sol['U_consumer']<0: return False
+        return True
 
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
@@ -1695,7 +1831,8 @@ PROBLEM_TYPES = {
     'WorkerProblem': WorkerProblem,
     'ExponentialProductionFirmProblem': ExponentialProductionFirmProblem,
     'ExponentialLaborMarketProblem': ExponentialLaborMarketProblem,
-    'GeneralEquilibriumProblem': GeneralEquilibriumProblem
+    'GeneralEquilibriumProblem': GeneralEquilibriumProblem,
+    'ProductivityShockProblem': ProductivityShockProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
