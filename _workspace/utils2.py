@@ -190,7 +190,35 @@ class Line:
         return self.m*x + self.b
     def eval_at_y(self, y):
         return (y-self.b)/self.m
-    
+
+class Point:
+    def __init__(self, x, y, color='black',text=None, position=None):
+        self.x, self.y = x, y
+        self.color = color
+        self.text = text
+        self.position = position
+    def plot(self, ax, xg):
+        x, y = self.x, self.y
+        ax.plot(x,y,'o',color=self.color,markersize=12,label='_nolegend_')
+        if self.text is not None:
+            shift = xg[2]-xg[0]
+            text_x = x
+            text_y = y
+            horizontalalignment = 'center'
+            verticalalignment = 'center'
+            if self.position=='sw':
+                text_x = text_x - shift
+                text_y = text_y - shift
+                horizontalalignment = 'right'
+                verticalalignment = 'top'
+            elif self.position=='ne':
+                text_x = text_x + shift
+                text_y = text_y + shift
+                horizontalalignment = 'left'
+                verticalalignment = 'bottom'
+            ax.text(text_x, text_y, self.text, color=self.color, horizontalalignment=horizontalalignment, verticalalignment=verticalalignment)
+        return ax
+
 class LineContours:
     # ax + by = z
     # y = -(a/b)*x + (z/b)
@@ -230,22 +258,39 @@ class BudgetConstraint:
 class CobbDouglasContours:
     # A x^a y^b
     # y = (z/A)^(1/b) * x^(-a/b)
-    def __init__(self, cobb_douglas, passing, linewidth=1, color='green', alpha=0.5):
+    def __init__(self, cobb_douglas, levels, linewidth=1, color='green', alpha=0.5):
         assert type(cobb_douglas)==CobbDouglas
         self.linewidth = linewidth
         self.color = color
         self.alpha = alpha
-        self.passing = passing
+        self.levels = levels
         self.cobb_douglas = cobb_douglas
     def plot(self, ax, xg):
         A, a, b = self.cobb_douglas.A, self.cobb_douglas.a, self.cobb_douglas.b
-        for p in self.passing:
-            x = p[0]
-            y = p[1]
-            z = A*x**a*y**b
+        for z in self.levels:
             ax.plot(xg[1:], (z/A)**(1/b)*xg[1:]**(-a/b), color=self.color, linewidth=self.linewidth, alpha=self.alpha, label='_nolegend_')
         return ax
 
+def get_cb_levels(cobb_douglas, axis, U1=None, U2=None):
+    assert type(cobb_douglas)==CobbDouglas
+    assert type(axis)==Axis
+    xn = axis.xn
+    yn = axis.yn
+    xunit = axis.xunit
+    yunit = axis.xunit
+    umax = cobb_douglas.eval_at((xn-1)*xunit, (yn-1)*yunit)
+    umin = cobb_douglas.eval_at(xunit, yunit)
+    du_ideal = (umax - umin)/(xn-2)
+    if U1 is None:
+        return [umin+i*du_ideal for i in range(0,xn-1)]
+    if U2 is None:
+        U2 = umin
+    if equals(U2,U1):
+        U2 = umin
+    du = np.abs(U2-U1)/np.maximum(np.round(np.abs(U2-U1)/du_ideal),1)
+    levels = [U1+i*du for i in np.arange(-xn,xn) if U1+i*du>=umin and U1+i*du<=umax]
+    return levels
+                  
 ###################################################################
 # ECONOMIC MODELS
 ###################################################################
@@ -2148,6 +2193,197 @@ $$ f(x,y) = {CobbDouglas(A,'x',a,'y',b)} $$
         self.setup_list = setup_list
         self.question_list = question_list
 
+class CobbDouglasConsumerProblem(GenericProblem):
+    # u(x,y) = x^a y^b s.t. px x + py y = I
+    def __init__(self, params=None, rng=rng, name='cobb_douglas_consumer_problem'):
+        default_params = {'a':1/2,'b':1/2,'px':1,'py':1,'I':12,'xunit':1,'yunit':1,'xn':13,'yn':13}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        a, b, px, py, I, xunit, yunit, xn, yn = params['a'], params['b'], params['px'], params['py'], params['I'], params['xunit'], params['yunit'], params['xn'], params['yn']
+        cobb_douglas = CobbDouglas(A=1, a=a, b=b)
+        budget_constraint = BudgetConstraint(px=px, py=py, I=I)
+        consumer = CobbDouglasConsumer(cobb_douglas, budget_constraint)
+        setup_axis = Axis(xn=xn,yn=yn,xunit=xunit,yunit=yunit)
+        setup_axis2 = Axis(xn=xn,yn=yn,xunit=xunit,yunit=yunit)
+        solution_axis = Axis(xn=xn,yn=yn,xunit=xunit,yunit=yunit)
+        x = consumer.x
+        y = consumer.y
+        U = consumer.U
+        self.sol = {'x':x, 'y':y, 'U':U}
+        self.consumer = consumer
+        self.cobb_douglas = cobb_douglas
+        self.budget_constraint = budget_constraint
+        levels = get_cb_levels(cobb_douglas, setup_axis, U1=U)
+        self.levels = levels
+        contours = CobbDouglasContours(cobb_douglas, levels)
+        point = Point(x,y,text='A',position='sw')
+        setup_axis.add(contours)
+        setup_axis2.add(contours)
+        setup_axis2.add(budget_constraint)
+        solution_axis.add(contours)
+        solution_axis.add(budget_constraint)
+        solution_axis.add(point)
+        self.setup_axis = setup_axis
+        self.setup_axis2 = setup_axis2
+        self.solution_axis = solution_axis
+        setup_list = []
+        setup = fr"""
+A consumer with income \(I = {I:g}\) has a utility function over two goods, \(x\) and \(y\):
+
+$$ u(x,y) = {cobb_douglas} $$
+
+The price of good \(x\) is \(p_x = {px:g}\) and the price of good \(y\) is \(p_y = {py:g}\).
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        setup = fr"""
+Solve:
+
+$$ \max_{{x,y}} ~ {cobb_douglas} ~ \text{{s.t.}} ~ {PolyEq([px,py],['x','y'],[1,1])} = {I:g}$$
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        setup = fr"""
+A consumer with income \(I = {I:g}\) has a utility function over two goods, \(x\) and \(y\), represented
+by the indifference curves shown below.
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup.png}}
+\end{{center}}
+The price of good \(x\) is \(p_x = {px:g}\) and the price of good \(y\) is \(p_y = {py:g}\).
+"""
+        online_setup = fr"""
+A consumer with income \(I = {I:g}\) has a utility function over two goods, \(x\) and \(y\), represented
+by the indifference curves shown below.
+<p>
+<img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png">
+</p>
+The price of good \(x\) is \(p_x = {px:g}\) and the price of good \(y\) is \(p_y = {py:g}\).
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        setup = fr"""
+A consumer's indifference curves and budget constraint over two goods, \(x\) and \(y\), is shown below.
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup2.png}}
+\end{{center}}
+"""
+        online_setup = fr"""
+A consumer's indifference curves and budget constraint over two goods, \(x\) and \(y\), is shown below.
+<p>
+<img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup2.png">
+</p>
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Draw the consumer's budget constraint and label the optimal point A."
+        online_question = question
+        answer = fr"\begin{{center}}\includegraphics[width=3in]{{{name}_sol.png}}\end{{center}}"
+        online_answer = f'<img src = "/CSUN-Econ-310/assets/images/graphs/{name}_sol.png">'
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": None
+        })
+        question = fr"What is the consumer's optimal choice of \(x\)?"
+        online_question = question
+        answer = x
+        online_answer = fr"\(x = {answer:g}\)"
+        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the optimal value of \(x\)?"
+        online_question = question
+        answer = x
+        online_answer = fr"\(x = {answer:g}\)"
+        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the consumer's optimal choice of \(y\)?"
+        online_question = question
+        answer = y
+        online_answer = fr"\(y = {answer:g}\)"
+        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the optimal value of \(y\)?"
+        online_question = question
+        answer = y
+        online_answer = fr"\(y = {answer:g}\)"
+        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"Calcualte the consumer's utility at the optimal choice."
+        online_question = question
+        answer = U
+        online_answer = fr"\(U = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the maximum value of the function?"
+        online_question = question
+        answer = U
+        online_answer = fr"\(f(x,y) = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if len(self.levels)>=14: return False
+        if len(self.levels)<=6: return False
+        if not is_divisible(self.sol['x'], self.params['xunit']): return False
+        if not is_divisible(self.sol['y'], self.params['yunit']): return False
+        if not is_divisible(self.budget_constraint.xint, self.params['xunit']): return False
+        if not is_divisible(self.budget_constraint.yint, self.params['yunit']): return False
+        if self.sol['x'] >= self.setup_axis.xmax: return False
+        if self.sol['y'] >= self.setup_axis.ymax: return False
+        if self.budget_constraint.xint >= self.setup_axis.xmax: return False
+        if self.budget_constraint.yint >= self.setup_axis.ymax: return False
+        return True
+
 
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
@@ -2173,7 +2409,17 @@ PROBLEM_TYPES = {
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
     
-
+def show_menu(problem_str, params=None, name='generic_problem', rng=rng):
+    prob = load_problem(problem_str, params, name, rng=rng)
+    setup_list = prob.setup_list
+    question_list = prob.question_list
+    for i in range(len(setup_list)):
+        print(f"{i}: {setup_list[i]['setup']}".replace('\n',' '))
+        print("")
+    for i in range(len(question_list)):
+        print(f"{i}: {question_list[i]['question']}".replace('\n',' '))
+        print("")
+    
         
         
         
