@@ -1133,6 +1133,198 @@ $$f(x) = {PolyEq([a,-0.5*b,c],'x',[1,2,0])}$$
         self.setup_list = setup_list
         self.question_list = question_list
         
+class LinearCommodityMarketProblem(GenericProblem):
+    # u = ac*q - 0.5*bcq^2 - pq
+    # pi = p*q - af*q - 0.5*bf*q^2
+    def __init__(self, params=None, rng=rng, name='linear_commodity_market_problem'):
+        default_params = {'ac':12,'bc':1,'af':0,'bf':1}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        ac, bc, af, bf = params['ac'], params['bc'], params['af'], params['bf']
+        consumer = LinearConsumer(ac, bc)
+        producer = QuadraticCostFirm(af, bf)
+        market = LinearMarket(consumer.demand, producer.supply)
+        q = market.eq['q']
+        p = market.eq['p']
+        U = consumer.utility_at(p, q)
+        profit = producer.profit_at(p, q)
+        self.sol = {'q':q, 'p':p, 'U':U, 'profit':profit}
+        linear_consumer_problem = LinearConsumerProblem(params={'a':ac,'b':bc,'p':p}, rng=rng)
+        linear_producer_problem = QuadraticCostFirmProblem(params={'a':af,'b':bf,'p':p}, rng=rng)
+        setup_list = []
+        setup = fr"""
+{consumer.setup()}
+
+{producer.setup()}
+"""
+        online_setup = fr"""
+<p>{consumer.setup()}</p>
+
+<p>{producer.setup()}</p>
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question_list.append(linear_consumer_problem.question_list[1])
+        question_list.append(linear_producer_problem.question_list[2])
+        question = "Calculate the equilibrium price."
+        online_question = question
+        answer = p
+        online_answer = fr"\(p = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the equilibrium quantity."
+        online_question = question
+        answer = q
+        online_answer = fr"\(q = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the consumer surplus (i.e. utility) in equilibrium."
+        online_question = question
+        answer = U
+        online_answer = fr"\(CS = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the producer surplus (i.e. profit) in equilibrium."
+        online_question = question
+        answer = profit
+        online_answer = fr"\(PS = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.consumer = consumer
+        self.producer = producer
+        self.market = market
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if self.sol['q']<=0: return False
+        if self.sol['p']<=0: return False
+        return True
+        
+class ExponentialCommodityMarketProblem(GenericProblem):
+    # u = a*ln(q) - pq
+    # pi = p*q - 0.5*bf*q^2
+    def __init__(self, params=None, rng=rng, name='linear_commodity_market_problem'):
+        default_params = {'a':12,'b':1}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        a, b = self.params['a'], self.params['b']
+        consumer = LogConsumer(a)
+        producer = QuadraticCostFirm(0, b)
+        producer.supply = ExponentialSupply(b, 1)
+        market = ExponentialMarket(consumer.demand, producer.supply)
+        q = market.eq['q']
+        p = market.eq['p']
+        U = consumer.utility_at(p, q)
+        profit = producer.profit_at(p, q)
+        self.sol = {'q':q, 'p':p, 'U':U, 'profit':profit}
+        consumer_problem = LogConsumerProblem(params={'a':a,'p':p}, rng=rng)
+        producer_problem = QuadraticCostFirmProblem(params={'a':0,'b':b,'p':p}, rng=rng)
+        setup_list = []
+        setup = fr"""
+{consumer.setup()}
+
+{producer.setup()}
+"""
+        online_setup = fr"""
+<p>{consumer.setup()}</p>
+
+<p>{producer.setup()}</p>
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question_list.append(consumer_problem.question_list[1])
+        question_list.append(producer_problem.question_list[2])
+        question = "Calculate the equilibrium price."
+        online_question = question
+        answer = p
+        online_answer = fr"\(p = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the equilibrium quantity."
+        online_question = question
+        answer = q
+        online_answer = fr"\(q = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the consumer surplus (i.e. utility) in equilibrium."
+        online_question = question
+        answer = U
+        online_answer = fr"\(CS = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the producer surplus (i.e. profit) in equilibrium."
+        online_question = question
+        answer = profit
+        online_answer = fr"\(PS = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.consumer = consumer
+        self.producer = producer
+        self.market = market
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if self.sol['q']<=0: return False
+        if self.sol['p']<=0: return False
+        if self.sol['U']<0: return False
+        return True
+
+
+
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
     'ExponentialMarketProblem': ExponentialMarketProblem,
@@ -1142,7 +1334,9 @@ PROBLEM_TYPES = {
     'LinearConsumerProblem': LinearConsumerProblem,
     'LogConsumerProblem': LogConsumerProblem,
     'QuadraticCostFirmProblem': QuadraticCostFirmProblem,
-    'QuadraticOptimizationProblem': QuadraticOptimizationProblem
+    'QuadraticOptimizationProblem': QuadraticOptimizationProblem,
+    'LinearCommodityMarketProblem': LinearCommodityMarketProblem,
+    'ExponentialCommodityMarketProblem': ExponentialCommodityMarketProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
