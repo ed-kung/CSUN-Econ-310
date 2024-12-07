@@ -399,8 +399,11 @@ class ExponentialProductionFirm:
         return fr"""
 A representative, price-taking firm hires labor at a constant wage rate \(w\). If the firm employs \(L\) units of labor, it can produce \(f(L)\) units of commodity output, where:
 
-$$ f(L) = {self.print_production_func} $$
+$$ f(L) = {self.print_production_func()} $$
 """
+    def profit_at(self, w, L):
+        A, k = self.A, self.k
+        return A*L**k - w*L
         
 ###################################################################
 # PROBLEM GENERATION UTILITIES
@@ -1405,7 +1408,7 @@ class WorkerProblem(GenericProblem):
         question = fr"Calculate the choice of \(L\) that maximizes utility when the wage rate is \(w={w:g}\)."
         online_question = question
         answer = L
-        online_answer = fr"L = {answer:g}"
+        online_answer = fr"\(L = {answer:g}\)"
         answers = generate_distractors(answer, rng=rng)
         question_list.append({
             "question": question,
@@ -1417,7 +1420,7 @@ class WorkerProblem(GenericProblem):
         question = fr"What is the maximum utility attainable when the wage rate is \(w={w:g}\)?"
         online_question = question
         answer = U
-        online_answer = fr"U = {answer:g}"
+        online_answer = fr"\(U = {answer:g}\)"
         answers = generate_distractors(answer, rng=rng)
         question_list.append({
             "question": question,
@@ -1438,7 +1441,104 @@ class ExponentialProductionFirmProblem(GenericProblem):
         GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
         params = self.params
         A, k, w = params['A'], params['k'], params['w']
-        
+        firm = ExponentialProductionFirm(A,k)
+        L = firm.labor_demand.eval_at_p(w)
+        profit = firm.profit_at(w, L)
+        self.sol = {'L':L, 'profit':profit}
+
+        c_ = k*A
+        k_ = k-1
+        demand_curve = fr"\(w = {PolyEq([c_],'L_d',[k_])} \)"
+        c_ = A
+        k_ = k-1
+        demand_curve_distractor1 = fr"\(w = {PolyEq([c_],'L_d',[k_])} \)"
+        c_ = 1/(k*A)
+        k_ = 1-k
+        demand_curve_distractor2 = fr"\(w = {PolyEq([c_],'L_d',[k_])} \)"
+        c_ = k*A
+        k_ = 1/k
+        demand_curve_distractor3 = fr"\(w = {PolyEq([c_],'L_d',[k_])} \)"
+
+        c_ = asfrac(1/A, inline=False, maxdenom=A)
+        k_ = asfrac(1/k, inline=True)
+        if A==1:
+            cost_func = fr"\(c(q) = q^{{{k_}}}\)"
+        else:
+            cost_func = fr"\(c(q) = \left({c_}\right)^{{{k_}}} q^{{{k_}}}\)"
+        c_ = asfrac(A/k, inline=False, maxdenom=A)
+        k_ = asfrac(1/k, inline=True)
+        cost_func_distractor1 = fr"\(c(q) = {c_} q^{{{k_}}} \)"
+        c_ = asfrac(A/k, inline=False, maxdenom=A)
+        k_ = asfrac(1/k, inline=True)
+        cost_func_distractor2 = fr"\(c(q) = \left({c_}\right)^{{{k_}}} q^{{{k_}}} \)"
+        c_ = asfrac(1/A, inline=False, maxdenom=A)
+        k_ = asfrac(k, inline=True)
+        if A==1:
+            cost_func_distractor3 = fr"\(c(q) = q^{{{k_}}}\)"
+        else:
+            cost_func_distractor3 = fr"\(c(q) = \left({c_}\right)^{{{k_}}} q^{{{k_}}}\)"
+
+        setup_list = []
+        setup = firm.setup()
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = "Write down the inverse labor demand curve."
+        online_question = question
+        answer = demand_curve
+        online_answer = answer
+        answers = [answer, demand_curve_distractor1, demand_curve_distractor2, demand_curve_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = fr"Write down the firm's total cost function, \(c(q)\)."
+        online_question = question
+        answer = cost_func
+        online_answer = answer
+        answers = [answer, cost_func_distractor1, cost_func_distractor2, cost_func_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = fr"Calculate the choice of \(L\) that maximizes profit when the wage rate is \(w={w:g}\)."
+        online_question = question
+        answer = L
+        online_answer = fr"\(L = {answer:g}\)"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the maximum profit attainable when the wage rate is \(w={w:g}\)?"
+        online_question = question
+        answer = profit
+        online_answer = fr"\(\Pi = {answer:g}\)"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if self.sol['L']<1: return False
+        return True
         
 
 PROBLEM_TYPES = {
