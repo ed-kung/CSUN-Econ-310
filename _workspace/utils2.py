@@ -3,7 +3,7 @@ import pandas as pd
 import sympy
 from sympy import nsimplify
 from matplotlib import pyplot as plt
-from econtools.documents import MCQ, generate_distractors
+from econtools.documents import Multipart, MCQ, generate_distractors, RawLatex
 
 rng = np.random.default_rng()
 
@@ -33,21 +33,23 @@ def sign(x):
     if x>0: return '+'
     else: return '-'
 
-def is_divisible(p,q):
-    d = nsimplify(p/q).q
-    return (d==1)
-
 def equals(x,y,tol=1e-4):
     return np.abs(x-y)<tol
 
-def is_rational(x, maxdenom=5):
+def is_rational(x, maxdenom=8):
     try:
         d = nsimplify(x).q
         return (d<=maxdenom)
     except:
         return False
 
-def asfrac(x, inline=False, maxdenom=5, rmplus=True, rmneg=False):
+def is_divisible(p,q):
+    if not is_rational(p/q,30):
+        return False
+    d = nsimplify(p/q).q
+    return (d==1)
+
+def asfrac(x, inline=False, maxdenom=8, rmplus=True, rmneg=False):
     if not is_rational(x, maxdenom):
         return f'{x:g}'
     d = nsimplify(x).q
@@ -66,11 +68,11 @@ class PTerm:
         self.c = c
         self.x = x
         self.p = p
-    def print(self, maxdenom=5, rmplus=True, rmneg=False):
+    def print(self, maxdenom=8, rmplus=True, rmneg=False):
         c = asfrac(self.c, inline=False, maxdenom=maxdenom, rmplus=rmplus, rmneg=rmneg)
         p = asfrac(self.p, inline=True, maxdenom=maxdenom, rmplus=True, rmneg=False)
         if self.c==0: return ''
-        elif self.p==0: return c
+        if self.p==0: return c
         if self.p==1: xp = fr'{self.x}'
         else: xp = fr'{self.x}^{{{p}}}'
         if self.c==-1: out = fr'-{xp}'
@@ -91,7 +93,7 @@ class PolyEq:
         self.c = c
         self.x = x
         self.p = p
-    def print(self, maxdenom=5, rmplus=True, rmneg=False):
+    def print(self, maxdenom=8, rmplus=True, rmneg=False):
         out = ''
         for i in range(len(self.c)):
             pterm = PTerm(self.c[i], self.x[i], self.p[i])
@@ -105,7 +107,7 @@ class PolyEq:
 class CobbDouglas:
     def __init__(self, A=1, x='x', a=1/2, y='y', b=1/2):
         self.A, self.x, self.a, self.y, self.b = A, x, a, y, b
-    def print(self, maxdenom=10, rmplus=True, rmneg=False):
+    def print(self, maxdenom=8, rmplus=True, rmneg=False):
         out = PTerm(self.A, self.x, self.a).print(maxdenom=maxdenom,rmplus=rmplus,rmneg=rmneg)
         out+= PTerm(1, self.y, self.b).print(maxdenom=maxdenom,rmplus=True,rmneg=True)
         return out
@@ -195,9 +197,9 @@ class LinearDemand:
         self.a = a
         self.b = b
         self.line = Line(-b,a)
-    def print(self, x='p', maxdenom=5):
+    def print(self, x='p', maxdenom=8):
         return PolyEq(c=[self.a/self.b, -1/self.b], x=x, p=[0,1]).print(maxdenom=maxdenom, rmplus=True)
-    def print_inverse(self, x='q', maxdenom=5):
+    def print_inverse(self, x='q', maxdenom=8):
         return PolyEq(c=[self.a, -self.b], x=x, p=[0,1]).print(maxdenom=maxdenom, rmplus=True)
     def eval_at_p(self, p):
         return self.a/self.b - (1/self.b)*p
@@ -234,7 +236,7 @@ class LinearSupply:
         self.a = a
         self.b = b
         self.line = Line(b,a)
-    def print(self, x='p', maxdenom=5):
+    def print(self, x='p', maxdenom=8):
         return PolyEq(c=[1/self.b, -self.a/self.b], x=x, p=[1,0]).print(maxdenom=maxdenom, rmplus=True)
     def print_inverse(self, x='q', maxdenom=5):
         return PolyEq(c=[self.a, self.b], x=x, p=[0,1]).print(maxdenom=maxdenom, rmplus=True)
@@ -296,6 +298,78 @@ class ExponentialMarket:
         assert p>0
         self.eq = {'q':q, 'p':p}
 
+class LinearConsumer:
+    # u(q) = aq - 0.5bq^2 - pq
+    # inv.demand: p = a - bq
+    def __init__(self, a=12, b=1):
+        demand = LinearDemand(a=a,b=b)
+        self.a, self.b = a, b
+        self.demand = demand
+    def print_utility(self, q='q'):
+        a, b = self.a, self.b
+        return fr"{PolyEq([a,-0.5*b],q,[1,2])} - p{q}"
+    def setup(self):
+        return fr"""
+A representative, price-taking consumer decides how many units, \(q\), of a commodity to purchase at unit price \(p\). The utility
+they receive for purchasing \(q\) units at price \(p\) is:
+$$ u(q) = {self.print_utility()} $$
+"""
+    def utility_at(self, p,q):
+        a, b = self.a, self.b
+        return a*q - 0.5*b*q**2 - p*q
+
+class LogConsumer:
+    # u(q) = a ln(q) - pq
+    # inv.demand: p = a - bq
+    def __init__(self, a=1):
+        demand = ExponentialDemand(a=a,k=-1)
+        self.a = a
+        self.demand = demand
+    def print_utility(self, q='q'):
+        a = self.a
+        return fr"{PTerm(a,fr'\ln {q}',1)} - p{q}"
+    def setup(self):
+        return fr"""
+A representative, price-taking consumer decides how many units, \(q\), of a commodity to purchase at unit price \(p\). The utility
+they receive for purchasing \(q\) units at price \(p\) is:
+$$ u(q) = {self.print_utility()} $$
+"""
+    def utility_at(self, p,q):
+        a = self.a
+        return a*np.log(q) - p*q
+
+class QuadraticCostFirm:
+    # c(q) = aq + 0.5*bq^2
+    # inv.supply: p = a + bq
+    def __init__(self, a=0, b=1):
+        assert a>0 or b>0
+        supply = LinearSupply(a=a,b=b)
+        self.a, self.b = a, b
+        self.supply = supply
+    def print_cost_function(self, q='q'):
+        a, b = self.a, self.b
+        return fr"{PolyEq([a,0.5*b],q,[1,2])}"
+    def setup(self):
+        return fr"""
+A representative, price-taking firm decides how many units, \(q\), of a commodity to produce and sell at unit price \(p\). The
+firm's total cost function for producing \(q\) units is:
+$$ c(q) = {self.print_cost_function()} $$
+"""
+    def profit_at(self,p,q):
+        a, b = self.a, self.b
+        return p*q - a*q - 0.5*b*q**2
+
+class LinearCommodityMarket:
+    # u = aq - 0.5bq^2 - pq
+    # pi = pq - aq - 0.5*bq^2
+    def __init__(self, consumer, firm):
+        assert type(consumer)==LinearConsumer
+        assert type(firm)==QuadraticCostFirm
+        market = LinearMarket(consumer.demand, firm.supply)
+        self.consumer = consumer
+        self.firm = firm
+        self.market = market
+
 ###################################################################
 # PROBLEM GENERATION UTILITIES
 ###################################################################
@@ -320,6 +394,36 @@ def get_online_format(problem, setup_id=None, question_ids=None):
         solution+=f'<p>{i}. ' + problem.question_list[qid]['online_answer'] + '</p>\n'
         i+=1
     return {'setup': setup, 'solution': solution}
+
+def get_multipart(problem, setup_id=None, question_ids=None):
+    if setup_id is None or question_ids is None:
+        print("Please select a setup_id and a list of question_ids:\n")
+        print("Setups:")
+        problem.show_setups()
+        print("\nQuestions:")
+        problem.show_questions()
+        return None
+    multipart = Multipart()
+    setup = problem.setup_list[setup_id]['setup']
+    assert len(setup)>0
+    multipart.add(RawLatex(setup))
+    for qid in question_ids:
+        multipart.add(problem.question_list[qid]['MCQ'])
+    return multipart
+    
+def get_single(problem, setup_id=None, question_id=None):
+    if setup_id is None or question_id is None:
+        print("Please select a setup_id and a list of question_ids:\n")
+        print("Setups:")
+        problem.show_setups()
+        print("\nQuestions:")
+        problem.show_questions()
+        return None
+    setup = problem.setup_list[setup_id]['setup']
+    mcq = problem.question_list[question_id]['MCQ']
+    if len(setup)>0:
+        mcq.question = setup + "\n\n" + mcq.question
+    return mcq
 
 class GenericProblem:
     def __init__(self, params, default_params, rng=rng, name="generic_problem"):
@@ -536,14 +640,23 @@ class ExponentialRewriteProblem(GenericProblem):
         default_params = {'a':2,'k':-0.5,'y':4}
         GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
         params = self.params
-        if params['k']<0:
-            myExponentialFunc = ExponentialDemand
-        elif params['k']>0:
-            myExponentialFunc = ExponentialSupply
-        equation = myExponentialFunc(a=params['a'], k=params['k'])
+        a, k, y = params['a'], params['k'], params['y']
+        x = (1/a)**(1/k) * y**(1/k)
+        self.sol = {'x':x}
+        func = fr"y = {PolyEq([a],'x',[k])}"
+        c = asfrac(1/a, inline=False)
+        invk = asfrac(1/k, inline=True)
+        inv =             fr"\(x = \left({c}\right)^{{{invk}}} y^{{{invk}}}\)"
+        inv_distractor1 = fr"\(x = {c} y^{{{invk}}}\)"
+        c = asfrac(1/a, inline=False)
+        invk = asfrac(-1/k, inline=True)
+        inv_distractor2 = fr"\(x = \left({c}\right)^{{{invk}}} y^{{{invk}}}\)"
+        c = asfrac(a, inline=False)
+        invk = asfrac(1/k, inline=True)
+        inv_distractor3 = fr"\(x = \left({c}\right)^{{{invk}}} y^{{{invk}}}\)"
         setup_list = []
         setup = fr"""
-$$ y = {equation.print_inverse(x='x')} $$
+$$ {func} $$
 """
         online_setup = setup
         setup_list.append({
@@ -553,14 +666,9 @@ $$ y = {equation.print_inverse(x='x')} $$
         question_list = []
         question = fr"Write \(x\) as a function of \(y\)."
         online_question = question
-        answer = fr"\(x = {equation.print(x='y')}\)"
+        answer = inv
         online_answer = answer
-        answers = [
-            answer,
-            fr"\(x = {myExponentialFunc(a=equation.a, k=1/equation.k).print(x='y')}\)",
-            fr"\(x = {myExponentialFunc(a=1/equation.a, k=equation.k).print(x='y')}\)",
-            fr"\(x = {equation.print_inverse(x='y')}\)"
-        ]
+        answers = [inv, inv_distractor1, inv_distractor2, inv_distractor3]
         question_list.append({
             "question": question,
             "online_question": online_question,
@@ -570,7 +678,7 @@ $$ y = {equation.print_inverse(x='x')} $$
         })
         question = fr"Calculate \(x\) when \(y={params['y']:g}\)."
         online_question = question
-        answer = equation.eval_at_p(params['y'])
+        answer = x
         online_answer = fr"\(x = {answer:g}\)"
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
@@ -580,10 +688,11 @@ $$ y = {equation.print_inverse(x='x')} $$
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,0,shuffle=False,horz=True,sort=True,numerical=True,rng=rng)
         })
-        self.equation = equation
         self.setup_list = setup_list
         self.question_list = question_list
-        self.sol = {'x': equation.eval_at_p(params['y'])}
+    def check_solution(self):
+        if self.sol['x']<0.1: return False
+        return True
 
 class CobbDouglasSimplifyProblem(GenericProblem):
     def __init__(self, params=None, rng=rng, name='cobbdouglas_simplify_problem'):
@@ -603,7 +712,7 @@ class CobbDouglasSimplifyProblem(GenericProblem):
         answer = simplifyCB(cbtop,cbbot)
         distractor1 = simplifyCB(CobbDouglas(B,x,cbtop.a,y,cbtop.b),CobbDouglas(A,x,cbbot.a,y,cbbot.b))
         distractor2 = simplifyCB(CobbDouglas(A,x,cbtop.b,y,cbtop.a),CobbDouglas(B,x,cbbot.b,y,cbbot.a))
-        distractor3 = fr"\(\frac{{{nsimplify(A/B).p}}}{{{nsimplify(A/B).q}}}xy\)"
+        distractor3 = simplifyCB(CobbDouglas(B,x,cbtop.b,y,cbtop.a),CobbDouglas(A,x,cbbot.b,y,cbbot.a))
         setup_list = []
         setup_list.append({
             'setup':'',
@@ -628,7 +737,7 @@ $$ \frac{{{cbtop.print()}}}{{{cbbot.print()}}} $$
             "online_question": online_question,
             "answer": answer,
             "online_answer": online_answer,
-            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+            "MCQ": MCQ(question,answers,0,shuffle=True,horz=True,rng=rng)
         })
         self.cbtop = cbtop
         self.cbbot = cbbot
@@ -689,14 +798,351 @@ class LogDifferencesProblem(GenericProblem):
         self.question_list = question_list
         self.delta = delta
         
-    
+class LinearConsumerProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='linear_consumer_problem'):
+        default_params = {'a':12,'b':1,'p':6}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        a, b, p = params['a'], params['b'], params['p']
+        consumer = LinearConsumer(a,b)
+        q = consumer.demand.eval_at_p(p)
+        U = consumer.utility_at(p,q)
+        self.sol = {'q':q, 'U':U}
+        
+        foc =             fr"\( {PolyEq([a,-b],'q',[0,1]).print()} - p = 0 \)"
+        foc_distractor1 = fr"\( {PolyEq([a,-0.5*b],'q',[0,1]).print()} - p = 0 \)"
+        foc_distractor2 = fr"\( {PolyEq([a,-b],'q',[0,1]).print()} = 0 \)"
+        foc_distractor3 = fr"\( {PolyEq([a,b],'q',[0,1]).print()} - p = 0 \)"
+        
+        demand_curve =             fr"\( q_d = {PolyEq([a/b,-1/b],'p',[0,1])} \)"
+        demand_curve_distractor1 = fr"\( q_d = {PolyEq([a/b,1/b],'p',[0,1])} \)"
+        demand_curve_distractor2 = fr"\( q_d = {PolyEq([a],'p',[-1])}\)"
+        demand_curve_distractor3 = rng.choice([
+            fr"\(q_d = {PolyEq([2*a/b,-2/b],'p',[0,1])}\)",
+            fr"\(q_d = {PolyEq([0.5*a/b,-0.5/b],'p',[0,1])}\)"
+        ])
+        
+        setup_list = []
+        setup = consumer.setup()
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = "Write down the consumer's first order condition."
+        online_question = question
+        answer = foc
+        online_answer = answer
+        answers = [foc, foc_distractor1, foc_distractor2, foc_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = "Write down the consumer's demand curve."
+        online_question = question
+        answer = demand_curve
+        online_answer = answer
+        answers = [demand_curve, demand_curve_distractor1, demand_curve_distractor2, demand_curve_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = fr"Calculate the choice of \(q\) that maximizes utility when price is \(p={p:g}\)."
+        online_question = question
+        answer = q
+        online_answer = fr"\(q = {answer}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the maximum utility attained when price is \(p={p:g}\)."
+        online_question = question
+        answer = U
+        online_answer = fr"\(U = {answer}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.consumer = consumer
+        self.setup_list = setup_list
+        self.question_list = question_list
 
+class LogConsumerProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='log_consumer_problem'):
+        default_params = {'a':12,'p':2}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        a, p = params['a'], params['p']
+        consumer = LogConsumer(a)
+        q = consumer.demand.eval_at_p(p)
+        U = consumer.utility_at(p,q)
+        self.sol = {'q':q, 'U':U}
+        
+        foc =             fr"\({PolyEq([a,-1],['q','p'],[-1,1])} = 0 \)"
+        foc_distractor1 = fr"\({PolyEq([a,0],['q','p'],[-1,1])} = 0 \)"
+        foc_distractor2 = fr"\({PolyEq([a,-1],['q','p'],[1,1])} = 0 \)"
+        foc_distractor3 = fr"\({PolyEq([a,-1,-1],['q','q','p'],[0,1,1])} = 0 \)"
+
+        demand_curve =             fr"\(q_d = {PolyEq([a],'p',[-1])}) \)"
+        demand_curve_distractor1 = fr"\(q_d = {PolyEq([a,-1],'p',[0,1])} \)"
+        demand_curve_distractor2 = fr"\(q_d = {PolyEq([1/a],'p',[-1]).print(maxdenom=a)} \)"
+        demand_curve_distractor3 = fr"\(q_d = {PolyEq([a],'e^{-p}',[1])}\)"
+        
+        demand_curve = fr"\(q_d = {consumer.demand.print()}\)"
+        setup_list = []
+        setup = consumer.setup()
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = "Write down the consumer's first order condition."
+        online_question = question
+        answer = foc
+        online_answer = answer
+        answers = [foc, foc_distractor1, foc_distractor2, foc_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = "Write down the consumer's demand curve."
+        online_question = question
+        answer = demand_curve
+        online_answer = answer
+        answers = [demand_curve, demand_curve_distractor1, demand_curve_distractor2, demand_curve_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = fr"Calculate the choice of \(q\) that maximizes utility when price is \(p={p:g}\)."
+        online_question = question
+        answer = q
+        online_answer = fr"\(q = {answer}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the maximum utility attained when price is \(p={p:g}\)."
+        online_question = question
+        answer = U
+        online_answer = fr"\(U = {answer}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.consumer = consumer
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if self.sol['U']<=0: return False
+        return True
+
+class QuadraticCostFirmProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='quadratic_cost_firm_problem'):
+        default_params = {'a':0,'b':1,'p':6}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        a, b, p = params['a'], params['b'], params['p']
+        producer = QuadraticCostFirm(a,b)
+        q = producer.supply.eval_at_p(p)
+        profit = producer.profit_at(p,q)
+        self.sol = {'q':q, 'profit':profit}
+
+        obj =             fr"\(\Pi = {PolyEq([1,-a,-0.5*b],['pq','q','q'],[1,1,2])} \)"
+        obj_distractor1 = fr"\(\Pi = {PolyEq([1,-a,0.5*b],['pq','q','q'],[1,1,2])} \)"
+        obj_distractor2 = fr"\(\Pi = {PolyEq([1,-a,0.5*b],['p','q','q'],[1,1,2])} \)"
+        obj_distractor3 = fr"\(\Pi = {PolyEq([1,-a,-0.5*b],['p','q','q'],[1,1,2])} \)"
+        
+        foc =             fr"\({PolyEq([1,-a,-b],['p','','q'],[1,0,1])} = 0 \)"
+        foc_distractor1 = fr"\({PolyEq([1,-b],['p',''],[1,0])} = 0\)"
+        foc_distractor2 = fr"\({PolyEq([1,-a,b],['p','','q'],[1,0,1])} = 0\)"
+        foc_distractor3 = fr"\({PolyEq([1,-a,-b],['pq','','q'],[1,0,1])} = 0\)"
+
+        supply_curve =             fr"\(q_s = {PolyEq([1/b,-a/b],'p',[1,0])}\)"
+        supply_curve_distractor1 = fr"\(q_s = {PolyEq([a/b,-1/b],'p',[0,1])}\)"
+        supply_curve_distractor2 = fr"\(q_s = {PolyEq([1/b,-a/b],'p',[-1,0])}\)"
+        supply_curve_distractor3 = rng.choice([
+            fr"\(q_s = {PolyEq([2/b,-2*a/b],'p',[1,0])}\)",
+            fr"\(q_s = {PolyEq([0.5/b,-0.5*a/b],'p',[1,0])}\)"
+        ])
+        
+        setup_list = []
+        setup = producer.setup()
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = "Write down the firm's profit function."
+        online_question = question
+        answer = obj
+        online_answer = answer
+        answers = [obj, obj_distractor1, obj_distractor2, obj_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = "Write down the firm's first order condition."
+        online_question = question
+        answer = foc
+        online_answer = answer
+        answers = [foc, foc_distractor1, foc_distractor2, foc_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = "Write down the firm's supply curve."
+        online_question = question
+        answer = supply_curve
+        online_answer = answer
+        answers = [supply_curve, supply_curve_distractor1, supply_curve_distractor2, supply_curve_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = fr"Calculate the choice of \(q\) that maximizes profit when price is \(p={p:g}\)."
+        online_question = question
+        answer = q
+        online_answer = fr"\(q = {answer}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the maximum profit attained when price is \(p={p:g}\)."
+        online_question = question
+        answer = profit
+        online_answer = fr"\(U = {answer}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.producer = producer
+        self.setup_list = setup_list
+        self.question_list = question_list
+
+class QuadraticOptimizationProblem(GenericProblem):
+    # f(x) = ax - 0.5*bx^2 + c
+    def __init__(self, params=None, rng=rng, name='quadratic_optimization_problem'):
+        default_params = {'a':12,'b':1,'c':0}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        a, b, c = params['a'], params['b'], params['c']
+        x = a/b
+        f = a*x - 0.5*x**2 + c
+        self.sol = {'x':x, 'f':f}
+        
+        foc =             fr"\(f^\prime(x) = {PolyEq([a,    -b],'x',[0,1])} \)"
+        foc_distractor1 = fr"\(f^\prime(x) = {PolyEq([a,     b],'x',[0,1])} \)"
+        foc_distractor2 = fr"\(f^\prime(x) = {PolyEq([a+c,  -b],'x',[0,1])} \)"
+        foc_distractor3 = fr"\(f^\prime(x) = {PolyEq([a,-0.5*b],'x',[0,1])} \)"
+
+        setup_list = []
+        setup = fr"""
+$$f(x) = {PolyEq([a,-0.5*b,c],'x',[1,2,0])}$$
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"What is the first derivative of \(f(x)\)?"
+        online_question = question
+        answer = foc
+        online_answer = answer
+        answers = [foc, foc_distractor1, foc_distractor2, foc_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = fr"What is the value of \(x\) that maximizes \(f(x)\)?"
+        online_question = question
+        answer = x
+        online_answer = fr"\(x = {x:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the maximum value of \(f(x)\)?"
+        online_question = question
+        answer = f
+        online_answer = fr"\(f(x) = {f:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+        
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
     'ExponentialMarketProblem': ExponentialMarketProblem,
     'ExponentialRewriteProblem': ExponentialRewriteProblem,
     'CobbDouglasSimplifyProblem': CobbDouglasSimplifyProblem,
-    'LogDifferencesProblem': LogDifferencesProblem
+    'LogDifferencesProblem': LogDifferencesProblem,
+    'LinearConsumerProblem': LinearConsumerProblem,
+    'LogConsumerProblem': LogConsumerProblem,
+    'QuadraticCostFirmProblem': QuadraticCostFirmProblem,
+    'QuadraticOptimizationProblem': QuadraticOptimizationProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
