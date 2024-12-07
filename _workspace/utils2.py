@@ -359,17 +359,49 @@ $$ c(q) = {self.print_cost_function()} $$
         a, b = self.a, self.b
         return p*q - a*q - 0.5*b*q**2
 
-class LinearCommodityMarket:
-    # u = aq - 0.5bq^2 - pq
-    # pi = pq - aq - 0.5*bq^2
-    def __init__(self, consumer, firm):
-        assert type(consumer)==LinearConsumer
-        assert type(firm)==QuadraticCostFirm
-        market = LinearMarket(consumer.demand, firm.supply)
-        self.consumer = consumer
-        self.firm = firm
-        self.market = market
+class Worker:
+    # u(L) = wL - d*L^k
+    def __init__(self, d=0.5, k=2):
+        self.d, self.k = d, k
+        supply = ExponentialSupply(a=k*d, k=k-1)
+        self.supply = supply
+    def print_objective(self, w='w', L='L'):
+        d, k = self.d, self.k
+        wL = f'{w}{L}'
+        return fr"{PolyEq([1,-d],[wL,L],[1,k])}"
+    def setup(self):
+        return fr"""
+A representative, price-taking worker decides how many units, \(L\), of labor to supply (e.g. how many hours to work), at a unit wage \(w\).
+The worker's utility function over working \(L\) labor-units at wage \(w\) is:
 
+$$ u(L) = {self.print_objective()} $$
+"""
+    def utility_at(self, w, L):
+        d, k = self.d, self.k
+        return w*L - d*L**k
+
+class ExponentialProductionFirm:
+    # f(L) = AL^k 
+    # Pi = AL^k - wL
+    # c(q) = (1/A)^(1/k) q^(1/k)
+    # w = k*A*L^(k-1)
+    def __init__(self, A=1, k=1/2):
+        self.A, self.k = A, k
+        self.labor_demand = ExponentialDemand(a=k*A, k=k-1)
+        if k==1/2:
+            b = 2*(1/A)**(1/k)
+            self.quadratic_firm = QuadraticCostFirm(0, b)
+            self.commodity_supply = self.quadratic_firm.supply
+    def print_production_func(self, L='L'):
+        A, k = self.A, self.k
+        return fr"{PolyEq([A],L,[k])}"
+    def setup(self):
+        return fr"""
+A representative, price-taking firm hires labor at a constant wage rate \(w\). If the firm employs \(L\) units of labor, it can produce \(f(L)\) units of commodity output, where:
+
+$$ f(L) = {self.print_production_func} $$
+"""
+        
 ###################################################################
 # PROBLEM GENERATION UTILITIES
 ###################################################################
@@ -1323,7 +1355,91 @@ class ExponentialCommodityMarketProblem(GenericProblem):
         if self.sol['U']<0: return False
         return True
 
+class WorkerProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='worker_problem'):
+        default_params = {'d':0.5,'k':2,'w':2}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        d, k, w = params['d'], params['k'], params['w']
+        worker = Worker(d, k)
+        L = worker.supply.eval_at_p(w)
+        U = worker.utility_at(w, L)
+        self.sol = {'L':L, 'U':U}
 
+        c_ = k*d
+        k_ = k-1
+        supply_curve = fr"\(w = {PolyEq([c_],'L_s',[k_])} \)"
+        
+        c_ = d
+        k_ = k-1
+        supply_curve_distractor1 = fr"\(w = {PolyEq([c_],'L_s',[k_])} \)"
+
+        c_ = 1/(k*d)
+        k_ = 1-k
+        supply_curve_distractor2 = fr"\(w = {PolyEq([c_],'L_s',[k_])} \)"
+        
+        c_ = k*d
+        k_ = 1/k
+        supply_curve_distractor3 = fr"\(w = {PolyEq([c_],'L_s',[k_])} \)"
+
+        setup_list = []
+        setup = worker.setup()
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = "Write down the inverse labor supply curve."
+        online_question = question
+        answer = supply_curve
+        online_answer = answer
+        answers = [answer, supply_curve_distractor1, supply_curve_distractor2, supply_curve_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = fr"Calculate the choice of \(L\) that maximizes utility when the wage rate is \(w={w:g}\)."
+        online_question = question
+        answer = L
+        online_answer = fr"L = {answer:g}"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the maximum utility attainable when the wage rate is \(w={w:g}\)?"
+        online_question = question
+        answer = U
+        online_answer = fr"U = {answer:g}"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if self.sol['L']<1: return False
+        return True
+        
+class ExponentialProductionFirmProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='exponential_production_firm_problem'):
+        default_params = {'A':1,'k':1/2,'w':1}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        A, k, w = params['A'], params['k'], params['w']
+        
+        
 
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
@@ -1336,7 +1452,9 @@ PROBLEM_TYPES = {
     'QuadraticCostFirmProblem': QuadraticCostFirmProblem,
     'QuadraticOptimizationProblem': QuadraticOptimizationProblem,
     'LinearCommodityMarketProblem': LinearCommodityMarketProblem,
-    'ExponentialCommodityMarketProblem': ExponentialCommodityMarketProblem
+    'ExponentialCommodityMarketProblem': ExponentialCommodityMarketProblem,
+    'WorkerProblem': WorkerProblem,
+    'ExponentialProductionFirmProblem': ExponentialProductionFirmProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
