@@ -382,9 +382,9 @@ $$ u(L) = {self.print_objective()} $$
 
 class ExponentialProductionFirm:
     # f(L) = AL^k 
-    # Pi = AL^k - wL
-    # c(q) = (1/A)^(1/k) q^(1/k)
-    # w = k*A*L^(k-1)
+    # Pi = pAL^k - wL
+    # c(q) = (1/A)^(1/k) wq^(1/k)
+    # w = p*k*A*L^(k-1)
     def __init__(self, A=1, k=1/2):
         self.A, self.k = A, k
     def print_production_func(self, L='L'):
@@ -407,6 +407,40 @@ $$ f(L) = {self.print_production_func()} $$
         assert equals(k,1/2)
         b = 2*(1/A)**(1/k)
         return QuadraticCostFirm(0,b).supply
+
+class GeneralEquilibrium:
+    # f(L) = A*L^kf
+    # u(L) = w*L - d*L^kw
+    # u(q) = a*ln(q) - p*q
+    # Commodity Demand: p = a*q^-1
+    # Labor Demand: w = p*A*kf*L^(kf-1)
+    # Labor Supply: w = d*kw*L^(kw-1)
+    # Equilibrium Labor: L = (a*kf/d*kw)^(1/kw)
+    # Equilibrium Wage: a*kf*L^-1
+    def __init__(self, consumer, firm, worker):
+        assert type(consumer)==LogConsumer
+        assert type(firm)==ExponentialProductionFirm
+        assert type(worker)==Worker
+        self.consumer = consumer
+        self.firm = firm
+        self.worker = worker
+        A = firm.A
+        kf = firm.k
+        d = worker.d
+        kw = worker.k
+        a = consumer.a
+        L = (a*kf/(d*kw))**(1/kw)
+        w = a*kf/L
+        q = A*L**kf
+        p = a/q
+        U_consumer = consumer.utility_at(p)
+        U_worker = worker.uility_at(w)
+        profit = firm.profit_at(p, w, L)
+        assert equals(U_consumer.demand.eval_at_p(p), q)
+        assert equals(U_worker.supply.eval_at_p(w), L)
+        assert equals(q, A*L**kf)
+        self.eq = {'L':L, 'w':w, 'p':p, 'q':q, 'U_consumer':U_consumer, 'U_worker':U_worker, 'profit':profit}
+
         
 ###################################################################
 # PROBLEM GENERATION UTILITIES
@@ -1467,21 +1501,21 @@ class ExponentialProductionFirmProblem(GenericProblem):
         c_ = asfrac(1/A, inline=False, maxdenom=A)
         k_ = asfrac(1/k, inline=True)
         if A==1:
-            cost_func = fr"\(c(q) = q^{{{k_}}}\)"
+            cost_func = fr"\(c(q) = w q^{{{k_}}}\)"
         else:
-            cost_func = fr"\(c(q) = \left({c_}\right)^{{{k_}}} q^{{{k_}}}\)"
+            cost_func = fr"\(c(q) = \left({c_}\right)^{{{k_}}} w q^{{{k_}}}\)"
         c_ = asfrac(A/k, inline=False, maxdenom=A)
         k_ = asfrac(1/k, inline=True)
-        cost_func_distractor1 = fr"\(c(q) = {c_} q^{{{k_}}} \)"
+        cost_func_distractor1 = fr"\(c(q) = {c_} w q^{{{k_}}} \)"
         c_ = asfrac(A/k, inline=False, maxdenom=A)
         k_ = asfrac(1/k, inline=True)
-        cost_func_distractor2 = fr"\(c(q) = \left({c_}\right)^{{{k_}}} q^{{{k_}}} \)"
+        cost_func_distractor2 = fr"\(c(q) = \left({c_}\right)^{{{k_}}} w q^{{{k_}}} \)"
         c_ = asfrac(1/A, inline=False, maxdenom=A)
         k_ = asfrac(k, inline=True)
         if A==1:
-            cost_func_distractor3 = fr"\(c(q) = q^{{{k_}}}\)"
+            cost_func_distractor3 = fr"\(c(q) = w q^{{{k_}}}\)"
         else:
-            cost_func_distractor3 = fr"\(c(q) = \left({c_}\right)^{{{k_}}} q^{{{k_}}}\)"
+            cost_func_distractor3 = fr"\(c(q) = \left({c_}\right)^{{{k_}}} w q^{{{k_}}}\)"
 
         setup_list = []
         setup = firm.setup()
@@ -1491,7 +1525,7 @@ class ExponentialProductionFirmProblem(GenericProblem):
             "online_setup": online_setup
         })
         question_list = []
-        question = fr"Write down the inverse labor demand curve as a function of \(p\) and \(L\)."
+        question = fr"Write down the inverse labor demand curve in terms of \(p\) and \(L\)."
         online_question = question
         answer = demand_curve
         online_answer = answer
@@ -1503,7 +1537,7 @@ class ExponentialProductionFirmProblem(GenericProblem):
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
         })
-        question = fr"Write down the firm's total cost function, \(c(q)\)."
+        question = fr"Write down the firm's total cost function, \(c(q)\), in terms of \(w\) and \(q\)."
         online_question = question
         answer = cost_func
         online_answer = answer
@@ -1547,12 +1581,104 @@ class ExponentialProductionFirmProblem(GenericProblem):
         return True
         
 class ExponentialLaborMarketProblem(GenericProblem):
-    # u(L) = wL - d*L^2
-    # f(L) = A*L^k
+    # u(L) = wL - d*L^kw
+    # f(L) = A*L^kf
     def __init__(self, params=None, rng=rng, name='exponential_labor_market_problem'):
-        default_params = {'a':12,'b':1}
+        default_params = {'A':2,'kf':1/2,'d':1/2,'kw':3/2,'p':1}
         GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
         params = self.params
+        A, kf, d, kw, p = params['A'], params['kf'], params['d'], params['kw'], params['p']
+        assert kf<1
+        assert kw>1
+        firm = ExponentialProductionFirm(A,kf)
+        worker = Worker(d,kw)
+        labor_demand = ExponentialDemand(p*A*kf, kf-1)
+        labor_supply = ExponentialSupply(d*kw, kw-1)
+        labor_market = ExponentialMarket(labor_demand, labor_supply)
+        w = labor_market.eq['p']
+        L = labor_market.eq['q']
+        U = worker.utility_at(w, L)
+        profit = firm.profit_at(p,w,L)
+        self.sol = {'w':w, 'L':L, 'U':U, 'profit':profit}
+        setup_list = []
+        setup = fr"""
+{worker.setup()}
+
+{firm.setup()}
+
+The current commodity price is \(p={p:g}\).
+"""
+        online_setup = fr"""
+<p>{worker.setup()}</p>
+
+<p>{firm.setup()}</p>
+
+<p>The current commodity price is \(p={p:g}\).</p>
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Calculate the equilibrium wage rate \(w\)."
+        online_question = question
+        answer = w
+        online_answer = fr"\(w = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the equilibrium quantity of labor supplied, \(L\)."
+        online_question = question
+        answer = L
+        online_answer = fr"\(L = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the equilibrium utility of the worker."
+        online_question = question
+        answer = U
+        online_answer = fr"\(U = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the equilibrium profit of the firm."
+        online_question = question
+        answer = profit
+        online_answer = fr"\(\Pi = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if self.sol['L']<=1: return False
+        if self.sol['L']>50: return False
+        if self.sol['w']<=1: return False
+        if self.sol['w']>50: return False
+        return True
+
+class GeneralEquilibriumProblem(GenericProblem):
+    
 
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
@@ -1568,7 +1694,8 @@ PROBLEM_TYPES = {
     'ExponentialCommodityMarketProblem': ExponentialCommodityMarketProblem,
     'WorkerProblem': WorkerProblem,
     'ExponentialProductionFirmProblem': ExponentialProductionFirmProblem,
-    'ExponentialLaborMarketProblem': ExponentialLaborMarketProblem
+    'ExponentialLaborMarketProblem': ExponentialLaborMarketProblem,
+    'GeneralEquilibriumProblem': GeneralEquilibriumProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
