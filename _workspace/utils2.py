@@ -111,6 +111,9 @@ class CobbDouglas:
         out = PTerm(self.A, self.x, self.a).print(maxdenom=maxdenom,rmplus=rmplus,rmneg=rmneg)
         out+= PTerm(1, self.y, self.b).print(maxdenom=maxdenom,rmplus=True,rmneg=True)
         return out
+    def eval_at(self, x, y):
+        A, a, b = self.A, self.a, self.b
+        return A*(x**a)*(y**b)
     def __repr__(self):
         return self.print()
 
@@ -161,9 +164,8 @@ class Axis:
     def draw(self, xlab=r'$x$', ylab=r'$y$', alpha=0.4, legend=None, saveas=None):
         fig, ax = self.get_figax(xlab=xlab, ylab=ylab, alpha=alpha)
         for obj in self.objects:
-            if type(obj)==Line:
-                xg = np.arange(0, self.xmax, self.xunit/10)
-                obj.plot(ax, xg)
+            xg = np.arange(0, self.xmax, self.xunit/10)
+            obj.plot(ax, xg)
         if legend:
             ax.legend()
         if saveas is not None:
@@ -176,14 +178,74 @@ class Axis:
 
 class Line:
     # y = mx + b
+    # x = (y-b)/m
     def __init__(self, m, b, linewidth=1, color='black', label='_nolegend_'):
         self.m, self.b = m, b
         self.linewidth = linewidth
         self.color = color
         self.label = label
-    def plot(self, ax, xg, color='black', linewidth=2):
+    def plot(self, ax, xg):
         return ax.plot(xg, self.m*xg + self.b, color=self.color, linewidth=self.linewidth, label=self.label)
+    def eval_at_x(self, x):
+        return self.m*x + self.b
+    def eval_at_y(self, y):
+        return (y-self.b)/self.m
     
+class LineContours:
+    # ax + by = z
+    # y = -(a/b)*x + (z/b)
+    def __init__(self, a, b, passing, linewidth=1, color='green', alpha=0.5):
+        self.linewidth = linewidth
+        self.color = color
+        self.alpha = alpha
+        contours = []
+        for i in range(len(passing)):
+            x = passing[i][0]
+            y = passing[i][1]
+            z = a*x + b*y
+            contours.append(Line(-a/b, z/b))
+        self.contours = contours
+    def plot(self, ax, xg):
+        for contour in self.contours:
+            m = contour.m
+            b = contour.b
+            ax.plot(xg, m*xg+b, color=self.color, linewidth=self.linewidth, alpha=self.alpha, label='_nolegend_')
+        return ax
+    
+class BudgetConstraint:
+    def __init__(self, px, py, I, linewidth=2, color='black', alpha=1.0, label='_nolegend_'):
+        self.px, self.py, self.I = px, py, I
+        self.xint = I/px
+        self.yint = I/py
+        self.linewidth = linewidth
+        self.color = color
+        self.alpha = alpha
+        self.label = label
+    def plot(self, ax, xg):
+        m = -self.px / self.py
+        b = self.I / self.py
+        ax.plot(xg, m*xg+b, color=self.color, linewidth=self.linewidth, alpha=self.alpha, label=self.label)
+        return ax
+
+class CobbDouglasContours:
+    # A x^a y^b
+    # y = (z/A)^(1/b) * x^(-a/b)
+    def __init__(self, cobb_douglas, passing, linewidth=1, color='green', alpha=0.5):
+        assert type(cobb_douglas)==CobbDouglas
+        self.linewidth = linewidth
+        self.color = color
+        self.alpha = alpha
+        self.passing = passing
+        self.cobb_douglas = cobb_douglas
+    def plot(self, ax, xg):
+        A, a, b = self.cobb_douglas.A, self.cobb_douglas.a, self.cobb_douglas.b
+        for p in self.passing:
+            x = p[0]
+            y = p[1]
+            z = A*x**a*y**b
+            ax.plot(xg[1:], (z/A)**(1/b)*xg[1:]**(-a/b), color=self.color, linewidth=self.linewidth, alpha=self.alpha, label='_nolegend_')
+        return ax
+
 ###################################################################
 # ECONOMIC MODELS
 ###################################################################
@@ -441,7 +503,22 @@ class GeneralEquilibrium:
         assert equals(q, A*L**kf)
         self.eq = {'L':L, 'w':w, 'p':p, 'q':q, 'U_consumer':U_consumer, 'U_worker':U_worker, 'profit':profit}
 
-        
+class CobbDouglasConsumer:
+    # u(x,y) = x^a y^b
+    # px*x + py*y = I
+    def __init__(self, cobb_douglas, budget_constraint):
+        assert type(cobb_douglas)==CobbDouglas
+        assert type(budget_constraint)==BudgetConstraint
+        A, a, b = cobb_douglas.A, cobb_douglas.a, cobb_douglas.b 
+        px, py, I = budget_constraint.px, budget_constraint.py, budget_constraint.I
+        x = I/(px*(1+b/a))
+        y = I/(py*(1+a/b))
+        U = x**a * y**b
+        self.x = x
+        self.y = y
+        self.U = U
+
+
 ###################################################################
 # PROBLEM GENERATION UTILITIES
 ###################################################################
@@ -1926,6 +2003,151 @@ Suppose the labor productivity, \(A\), changes from {A1:g} to {A2:g}.
         if np.abs(self.sol['dU_consumer'])<0.1: return False
         return True
 
+class LinearContourProblem(GenericProblem):
+    # ax + by = z
+    # y = z/b - (a/b)x
+    def __init__(self, params=None, rng=rng, name='linear_contour_line_problem'):
+        default_params = {'a':1,'b':1,'z':5,'x':'x','y':'y','xunit':1,'yunit':1,'xn':13,'yn':13}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        a, b, z, x, y, xunit, yunit, xn, yn = params['a'], params['b'], params['z'], params['x'], params['y'], params['xunit'], params['yunit'], params['xn'], params['yn']
+        yint = z/b
+        xint = z/a
+        self.sol = {'yint':yint, 'xint':xint}
+        axis = Axis(xn=xn, yn=yn, xunit=xunit, yunit=yunit)
+        passing = [(i*xunit, i*yunit) for i in range(1,xn)]
+        contours = LineContours(a,b,passing)
+        axis.add(contours)
+        setup_list = []
+        setup = fr"$$ f({x},{y}) = {PolyEq([a,b],[x,y],[1,1])} $$"
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"What is the y-intercept of the contour line for \(f(x)={z:g}\)?"
+        online_question = question
+        answer = yint
+        online_answer = fr"{answer:g}"
+        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the x-intercept of the contour line for \(f(x)={z:g}\)?"
+        online_question = question
+        answer = xint
+        online_answer = fr"{answer:g}"
+        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"""
+Using the grid below, draw multiple contour lines for \(f(x)\).
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup.png}}
+\end{{center}}
+"""
+        online_question = fr"""
+Using the grid below, draw multiple contour lines for \(f(x)\).
+<p><img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png"></p>
+"""
+        answer = fr"""
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_sol.png}}
+\end{{center}}
+"""
+        online_answer = f'<img src="/CSUN-Econ-310/assets/images/graphs/{name}_sol.png">'
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": None
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+        self.axis = axis
+    def check_solution(self):
+        if not is_divisible(self.sol['yint'], self.params['yunit']): return False
+        if not is_divisible(self.sol['xint'], self.params['xunit']): return False
+        if self.sol['yint'] >= self.params['yunit']*self.params['yn']: return False
+        if self.sol['xint'] >= self.params['xunit']*self.params['xn']: return False
+        return True
+    
+class CBDerivativeProblem(GenericProblem):
+    # f(x,y) = Ax^a y^b
+    # f_x = a Ax^(a-1) y^b
+    # f_y = b Ax^a y^(b-1)
+    def __init__(self, params=None, rng=rng, name='cb_derivative_problem'):
+        default_params = {'A':1,'a':1/2,'b':1/2}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        A, a, b = params['A'], params['a'], params['b']
+
+        A_, a_, b_ = a*A, a-1, b
+        fx    = fr"\(f_x(x,y) = {CobbDouglas(A_,'x',a_,'y',b_)} \)"
+        A_, a_, b_ = A, a-1, b
+        fx_d1 = fr"\(f_x(x,y) = {CobbDouglas(A_,'x',a_,'y',b_)} \)"
+        A_, a_, b_ = a*b*A, a-1, b-1
+        fx_d2 = fr"\(f_x(x,y) = {CobbDouglas(A_,'x',a_,'y',b_)} \)"
+        A_, a_, b_ = b*A, a, b-1
+        fx_d3 = fr"\(f_x(x,y) = {CobbDouglas(A_,'x',a_,'y',b_)} \)"
+
+        A_, a_, b_ = b*A, a, b-1
+        fy    = fr"\(f_y(x,y) = {CobbDouglas(A_,'x',a_,'y',b_)} \)"
+        A_, a_, b_ = A, a, b-1
+        fy_d1 = fr"\(f_y(x,y) = {CobbDouglas(A_,'x',a_,'y',b_)} \)"
+        A_, a_, b_ = a*b*A, a-1, b-1
+        fy_d2 = fr"\(f_y(x,y) = {CobbDouglas(A_,'x',a_,'y',b_)} \)"
+        A_, a_, b_ = a*A, a-1, b
+        fy_d3 = fr"\(f_y(x,y) = {CobbDouglas(A_,'x',a_,'y',b_)} \)"
+
+        setup_list = []
+        setup = fr"""
+$$ f(x,y) = {CobbDouglas(A,'x',a,'y',b)} $$
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Write the partial derivative of \(f(x,y)\) with respect to \(x\)."
+        online_question = question
+        answer = fx
+        online_answer = answer
+        answers = [answer, fx_d1, fx_d2, fx_d3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = fr"Write the partial derivative of \(f(x,y)\) with respect to \(y\)."
+        online_question = question
+        answer = fy
+        online_answer = answer
+        answers = [answer, fy_d1, fy_d2, fy_d3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+
 
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
@@ -1944,7 +2166,9 @@ PROBLEM_TYPES = {
     'ExponentialLaborMarketProblem': ExponentialLaborMarketProblem,
     'GeneralEquilibriumProblem': GeneralEquilibriumProblem,
     'ProductivityShockProblem': ProductivityShockProblem,
-    'LinearContourLineProblem': LinearContourLineProblem
+    'LinearContourProblem': LinearContourProblem,
+    'CBDerivativeProblem': CBDerivativeProblem,
+    'CobbDouglasConsumerProblem': CobbDouglasConsumerProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)

@@ -21,6 +21,7 @@ python: pyscript
 	<option value="lec05">5. Labor Market Models</option>
 	<option value="lec06">6. General Equilibrium Models</option>
 	<option value="lec07">7. Productivity Growth</option>
+	<option value="lec08">8. Multivariate Optimization</option>
 </select>
 
 <button id="button" pys-onClick="generate_problem">Generate</button>
