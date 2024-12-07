@@ -387,23 +387,26 @@ class ExponentialProductionFirm:
     # w = k*A*L^(k-1)
     def __init__(self, A=1, k=1/2):
         self.A, self.k = A, k
-        self.labor_demand = ExponentialDemand(a=k*A, k=k-1)
-        if k==1/2:
-            b = 2*(1/A)**(1/k)
-            self.quadratic_firm = QuadraticCostFirm(0, b)
-            self.commodity_supply = self.quadratic_firm.supply
     def print_production_func(self, L='L'):
         A, k = self.A, self.k
         return fr"{PolyEq([A],L,[k])}"
     def setup(self):
         return fr"""
-A representative, price-taking firm hires labor at a constant wage rate \(w\). If the firm employs \(L\) units of labor, it can produce \(f(L)\) units of commodity output, where:
+A representative, price-taking firm uses labor to produce and sell a commodity at unit price \(p\). The firm hires labor at a constant wage rate \(w\). If the firm employs \(L\) units of labor, it can produce \(f(L)\) units of commodity output, where:
 
 $$ f(L) = {self.print_production_func()} $$
 """
-    def profit_at(self, w, L):
+    def profit_at(self, p, w, L):
         A, k = self.A, self.k
-        return A*L**k - w*L
+        return p*A*L**k - w*L
+    def get_labor_demand(self, p):
+        A, k = self.A, self.k
+        return ExponentialDemand(p*k*A, k-1)
+    def get_commodity_supply(self, p):
+        A, k = self.A, self.k
+        assert equals(k,1/2)
+        b = 2*(1/A)**(1/k)
+        return QuadraticCostFirm(0,b).supply
         
 ###################################################################
 # PROBLEM GENERATION UTILITIES
@@ -1433,31 +1436,33 @@ class WorkerProblem(GenericProblem):
         self.question_list = question_list
     def check_solution(self):
         if self.sol['L']<1: return False
+        if self.sol['L']>50: return False
         return True
         
 class ExponentialProductionFirmProblem(GenericProblem):
     def __init__(self, params=None, rng=rng, name='exponential_production_firm_problem'):
-        default_params = {'A':1,'k':1/2,'w':1}
+        default_params = {'A':1,'k':1/2,'w':1,'p':1}
         GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
         params = self.params
-        A, k, w = params['A'], params['k'], params['w']
+        A, k, w, p = params['A'], params['k'], params['w'], params['p']
         firm = ExponentialProductionFirm(A,k)
-        L = firm.labor_demand.eval_at_p(w)
-        profit = firm.profit_at(w, L)
+        labor_demand = firm.get_labor_demand(p)
+        L = labor_demand.eval_at_p(w)
+        profit = firm.profit_at(p, w, L)
         self.sol = {'L':L, 'profit':profit}
 
         c_ = k*A
         k_ = k-1
-        demand_curve = fr"\(w = {PolyEq([c_],'L_d',[k_])} \)"
+        demand_curve = fr"\(w = {PolyEq([c_],'p L_d',[k_])} \)"
         c_ = A
         k_ = k-1
-        demand_curve_distractor1 = fr"\(w = {PolyEq([c_],'L_d',[k_])} \)"
+        demand_curve_distractor1 = fr"\(w = {PolyEq([c_],'p L_d',[k_])} \)"
         c_ = 1/(k*A)
         k_ = 1-k
-        demand_curve_distractor2 = fr"\(w = {PolyEq([c_],'L_d',[k_])} \)"
+        demand_curve_distractor2 = fr"\(w = {PolyEq([c_],'p L_d',[k_])} \)"
         c_ = k*A
         k_ = 1/k
-        demand_curve_distractor3 = fr"\(w = {PolyEq([c_],'L_d',[k_])} \)"
+        demand_curve_distractor3 = fr"\(w = {PolyEq([c_],'p L_d',[k_])} \)"
 
         c_ = asfrac(1/A, inline=False, maxdenom=A)
         k_ = asfrac(1/k, inline=True)
@@ -1486,7 +1491,7 @@ class ExponentialProductionFirmProblem(GenericProblem):
             "online_setup": online_setup
         })
         question_list = []
-        question = "Write down the inverse labor demand curve."
+        question = fr"Write down the inverse labor demand curve as a function of \(p\) and \(L\)."
         online_question = question
         answer = demand_curve
         online_answer = answer
@@ -1510,7 +1515,7 @@ class ExponentialProductionFirmProblem(GenericProblem):
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
         })
-        question = fr"Calculate the choice of \(L\) that maximizes profit when the wage rate is \(w={w:g}\)."
+        question = fr"Calculate the choice of \(L\) that maximizes profit when the wage rate is \(w={w:g}\) and the output price is \(p={p:g}\)."
         online_question = question
         answer = L
         online_answer = fr"\(L = {answer:g}\)"
@@ -1522,7 +1527,7 @@ class ExponentialProductionFirmProblem(GenericProblem):
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
         })
-        question = fr"What is the maximum profit attainable when the wage rate is \(w={w:g}\)?"
+        question = fr"What is the maximum profit attainable when the wage rate is \(w={w:g}\) and the output price is \(p={p:g}\)?"
         online_question = question
         answer = profit
         online_answer = fr"\(\Pi = {answer:g}\)"
@@ -1538,8 +1543,16 @@ class ExponentialProductionFirmProblem(GenericProblem):
         self.question_list = question_list
     def check_solution(self):
         if self.sol['L']<1: return False
+        if self.sol['L']>50: return False
         return True
         
+class ExponentialLaborMarketProblem(GenericProblem):
+    # u(L) = wL - d*L^2
+    # f(L) = A*L^k
+    def __init__(self, params=None, rng=rng, name='exponential_labor_market_problem'):
+        default_params = {'a':12,'b':1}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
 
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
@@ -1554,7 +1567,8 @@ PROBLEM_TYPES = {
     'LinearCommodityMarketProblem': LinearCommodityMarketProblem,
     'ExponentialCommodityMarketProblem': ExponentialCommodityMarketProblem,
     'WorkerProblem': WorkerProblem,
-    'ExponentialProductionFirmProblem': ExponentialProductionFirmProblem
+    'ExponentialProductionFirmProblem': ExponentialProductionFirmProblem,
+    'ExponentialLaborMarketProblem': ExponentialLaborMarketProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
