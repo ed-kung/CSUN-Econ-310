@@ -1681,7 +1681,7 @@ class GeneralEquilibriumProblem(GenericProblem):
     # u(L) = wL - d*L^kw
     # f(L) = A*L^kf
     # u(q) = a*ln(q) - p*q
-    def __init__(self, params=None, rng=rng, name='exponential_labor_market_problem'):
+    def __init__(self, params=None, rng=rng, name='general_equilibrium_problem'):
         default_params = {'A':2,'kf':1/2,'d':1/2,'kw':3/2,'a':12}
         GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
         params = self.params
@@ -1816,6 +1816,117 @@ class GeneralEquilibriumProblem(GenericProblem):
         if self.sol['U_consumer']<0: return False
         return True
 
+class ProductivityShockProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='productivity_shock_problem'):
+        default_params = {'A1':2,'A2':1,'kf':1/2,'d':1/2,'kw':3/2,'a':12}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        A1, A2, kf, d, kw, a = params['A1'], params['A2'], params['kf'], params['d'], params['kw'], params['a']
+        assert A1!=A2
+        consumer = LogConsumer(a)
+        firm1 = ExponentialProductionFirm(A1,kf)
+        firm2 = ExponentialProductionFirm(A2,kf)
+        worker = Worker(d,kw)
+        equilibrium1 = GeneralEquilibrium(consumer, firm1, worker)
+        equilibrium2 = GeneralEquilibrium(consumer, firm2, worker)
+        self.eq1 = equilibrium1
+        self.eq2 = equilibrium2
+        dU_consumer = equilibrium2.eq['U_consumer'] - equilibrium1.eq['U_consumer']
+        dU_worker = equilibrium2.eq['U_worker'] - equilibrium1.eq['U_worker']
+        dprofit = equilibrium2.eq['profit'] - equilibrium1.eq['profit']
+        assert equals(dprofit, 0)
+        assert equals(dU_worker, 0)
+        dprofit=0
+        dU_worker=0
+        self.sol = {'dU_consumer':dU_consumer, 'dU_worker':dU_worker, 'dprofit':dprofit}
+        firm_setup = fr"""
+A representative, price-taking firm uses labor to produce and sell a commodity at unit price \(p\). The firm hires labor at a constant wage rate \(w\). If the firm employs \(L\) units of labor, it can produce \(f(L)\) units of commodity output, where:
+
+$$ f(L) = A L^{{{asfrac(kf,inline=True)}}} $$
+"""
+        setup_list = []
+        setup = fr"""
+{consumer.setup()}
+
+{worker.setup()}
+
+{firm_setup}
+
+Suppose the labor productivity, \(A\), changes from {A1:g} to {A2:g}.
+"""
+        online_setup = fr"""
+<p>{consumer.setup()}</p>
+        
+<p>{worker.setup()}</p>
+
+<p>{firm_setup}</p>
+
+<p>Suppose the total factor productivity, \(A\), changes from {A1:g} to {A2:g}.</p>
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"How much does the utility of the consumer change?"
+        online_question = question
+        answer = dU_consumer
+        online_answer = fr"\(\Delta U_c = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"How much does the utility of the worker change?"
+        online_question = question
+        answer = dU_worker
+        online_answer = fr"\(\Delta U_w = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"How much does the profit of the firm change?"
+        online_question = question
+        answer = dprofit
+        online_answer = fr"\(\Delta \Pi = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+        question = fr"Who is the greatest beneficiary of the growth in labor productivity?"
+        online_question = question
+        answer = "consumers"
+        online_answer = answer
+        answers = ['workers', 'firms', 'consumers']
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,2,shuffle=False,sort=False,horz=True,numerical=False,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if self.eq1.eq['U_consumer']<0: return False
+        if self.eq2.eq['U_consumer']<0: return False
+        if np.abs(self.sol['dU_consumer'])<0.1: return False
+        return True
+
+
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
     'ExponentialMarketProblem': ExponentialMarketProblem,
@@ -1832,7 +1943,8 @@ PROBLEM_TYPES = {
     'ExponentialProductionFirmProblem': ExponentialProductionFirmProblem,
     'ExponentialLaborMarketProblem': ExponentialLaborMarketProblem,
     'GeneralEquilibriumProblem': GeneralEquilibriumProblem,
-    'ProductivityShockProblem': ProductivityShockProblem
+    'ProductivityShockProblem': ProductivityShockProblem,
+    'LinearContourLineProblem': LinearContourLineProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
