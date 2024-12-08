@@ -114,6 +114,9 @@ class CobbDouglas:
     def eval_at(self, x, y):
         A, a, b = self.A, self.a, self.b
         return A*(x**a)*(y**b)
+    def get_IC(self, U, xg):
+        A, a, b = self.A, self.a, self.b
+        return (U/A)**(1/b)*xg**(-a/b)
     def __repr__(self):
         return self.print()
 
@@ -145,6 +148,7 @@ class Axis:
         self.xmax = xn*xunit
         self.ymax = yn*yunit
         self.objects = []
+        self.xg = np.arange(0, self.xmax, self.xunit/10)
     def add(self, *args):
         for obj in args:
             self.objects.append(obj)
@@ -271,6 +275,45 @@ class CobbDouglasContours:
             ax.plot(xg[1:], (z/A)**(1/b)*xg[1:]**(-a/b), color=self.color, linewidth=self.linewidth, alpha=self.alpha, label='_nolegend_')
         return ax
 
+class MixedCobbDouglasContours:
+    def __init__(self, x1, y1, px1, py1, x2, y2, px2, py2, I, axis):
+        xn, xunit, xmax, xg = axis.xn, axis.xunit, axis.xmax, axis.xg
+        a1 = px1*x1 / I
+        b1 = py1*y1 / I
+        a2 = px2*x2 / I
+        b2 = py2*y2 / I
+        cb1 = CobbDouglas(A=1,a=a1,b=b1)
+        cb2 = CobbDouglas(A=1,a=a2,b=b2)
+        U1 = cb1.eval_at(x1,y1)
+        U2 = cb2.eval_at(x2,y2)
+        IC1 = cb1.get_IC(U1,xg[1:])
+        IC2 = cb2.get_IC(U2,xg[1:])
+        crossings = np.sum((IC2>=IC1)*(IC2<xmax))
+        self.crossings = crossings
+        Umax1 = cb1.eval_at(xmax, xmax)
+        Umin1 = cb1.eval_at(xunit, xunit)
+        Umax2 = cb2.eval_at(xmax, xmax)
+        Umin2 = cb2.eval_at(xunit, xunit)
+        du_ideal = 0.5*(Umax1 - Umin1)/(xn-2) + 0.5*(Umax2 - Umin2)/(xn-2)
+        ICs = []
+        du = np.abs(U2 - Umin2)/np.maximum(np.round(np.abs(U2-Umin2)/du_ideal),1)
+        for u in np.arange(Umin2, U2+du, du):
+            ic = cb2.get_IC(u, xg[1:])
+            ICs.append(ic)
+        du = np.abs(Umax1 - U1)/np.maximum(np.round(np.abs(Umax1-U1)/du_ideal),1)
+        for u in np.arange(U1, Umax1+du, du):
+            ic = cb1.get_IC(u, xg[1:])
+            ICs.append(ic)
+        N = np.round(np.abs(U1-U2)/du_ideal)
+        for i in np.arange(1,N,1):
+            ic = (i/N)*IC1 + ((N-i)/N)*IC2
+            ICs.append(ic)
+        self.ICs = ICs
+    def plot(self, ax, xg):
+        for ic in self.ICs:
+            ax.plot(xg[1:], ic, color='green', alpha=0.5)        
+        return ax
+
 def get_cb_levels(cobb_douglas, axis, U1=None, U2=None):
     assert type(cobb_douglas)==CobbDouglas
     assert type(axis)==Axis
@@ -290,7 +333,29 @@ def get_cb_levels(cobb_douglas, axis, U1=None, U2=None):
     du = np.abs(U2-U1)/np.maximum(np.round(np.abs(U2-U1)/du_ideal),1)
     levels = [U1+i*du for i in np.arange(-xn,xn) if U1+i*du>=umin and U1+i*du<=umax]
     return levels
-                  
+
+class LeontieffContours:
+    def __init__(self, xunit=1, yunit=1, xn=13, yn=13, linewidth=1, color='green', alpha=0.5):
+        self.xunit = xunit
+        self.xn = xn
+        self.yunit = yunit
+        self.yn = yn
+        self.linewidth = linewidth
+        self.color = color
+        self.alpha = alpha
+    def plot(self, ax, xg):
+        for i in np.arange(1, self.xn):
+            xmax = (self.xn+1)*self.xunit
+            ymax = (self.yn+1)*self.yunit
+            interval = xg[1]-xg[0]
+            x = i*self.xunit
+            y = i*self.yunit
+            myxg = np.arange(x,xmax,interval)
+            myyg = np.arange(y,ymax,interval)
+            ax.plot(myxg, [y]*len(myxg), linewidth=self.linewidth, color=self.color, alpha=self.alpha, label='_nolegend_')
+            ax.plot([x]*len(myyg), myyg, linewidth=self.linewidth, color=self.color, alpha=self.alpha, label='_nolegend_')
+        return ax
+
 ###################################################################
 # ECONOMIC MODELS
 ###################################################################
@@ -2226,6 +2291,22 @@ class CobbDouglasConsumerProblem(GenericProblem):
         self.setup_axis = setup_axis
         self.setup_axis2 = setup_axis2
         self.solution_axis = solution_axis
+        A_, a_, b_, px_ = a, a-1, b, px
+        focx    = fr"\({CobbDouglas(A_,'x',a_,'y',b_)} = {px_:g} \lambda\)"
+        A_, a_, b_, px_ = 1, a-1, b, px
+        focx_d1 = fr"\({CobbDouglas(A_,'x',a_,'y',b_)} = \lambda\)"
+        A_, a_, b_, px_ = a, a-1, b, px
+        focx_d2 = fr"\({CobbDouglas(A_,'x',a_,'y',b_)} = {px_:g} \)"
+        A_, a_, b_, px_ = b, a, b-1, py
+        focx_d3 = fr"\({CobbDouglas(A_,'x',a_,'y',b_)} = {px_:g} \lambda\)"
+        A_, a_, b_, py_ = b, a, b-1, py
+        focy    = fr"\({CobbDouglas(A_,'x',a_,'y',b_)} = {py_:g} \lambda\)"
+        A_, a_, b_, py_ = 1, a, b-1, py
+        focy_d1 = fr"\({CobbDouglas(A_,'x',a_,'y',b_)} = \lambda\)"
+        A_, a_, b_, py_ = b, a, b-1, py
+        focy_d2 = fr"\({CobbDouglas(A_,'x',a_,'y',b_)} = {py_:g} \)"
+        A_, a_, b_, py_ = a, a-1, b, px
+        focy_d3 = fr"\({CobbDouglas(A_,'x',a_,'y',b_)} = {py_:g} \lambda\)"
         setup_list = []
         setup = fr"""
 A consumer with income \(I = {I:g}\) has a utility function over two goods, \(x\) and \(y\):
@@ -2369,6 +2450,30 @@ A consumer's indifference curves and budget constraint over two goods, \(x\) and
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
+        question = fr"Write the first order condition for \(x\)."
+        online_question = question
+        answer = focx
+        online_answer = answer
+        answers = [focx, focx_d1, focx_d2, focx_d3]
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = fr"Write the first order condition for \(y\)."
+        online_question = question
+        answer = focy
+        online_answer = answer
+        answers = [focy, focy_d1, focy_d2, focy_d3]
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
         self.setup_list = setup_list
         self.question_list = question_list
     def check_solution(self):
@@ -2384,6 +2489,350 @@ A consumer's indifference curves and budget constraint over two goods, \(x\) and
         if self.budget_constraint.yint >= self.setup_axis.ymax: return False
         return True
 
+class PerfectSubstitutesProblem(GenericProblem):
+    # u(x,y) = ax + by s.t. px x + py y = I
+    def __init__(self, params=None, rng=rng, name='perfect_substitutes_problem'):
+        default_params = {'a':2,'b':1,'px':1,'py':1,'I':12,'xunit':1,'yunit':1,'xn':13,'yn':13}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        a, b, px, py, I, xunit, yunit, xn, yn = params['a'], params['b'], params['px'], params['py'], params['I'], params['xunit'], params['yunit'], params['xn'], params['yn']
+        budget_constraint = BudgetConstraint(px=px, py=py, I=I)
+        self.budget_constraint = budget_constraint
+        if (a*py - b*px)>0:
+            x, y = I/px, 0
+            passing = [(x_,0) for x_ in np.arange(xunit, xunit*5*xn, xunit)]
+        elif (a*py - b*px)<0:
+            x, y = 0, I/py
+            passing = [(0,y_) for y_ in np.arange(yunit, yunit*5*yn, yunit)]
+        else:
+            x = 0.5*I/px
+            y = 0.5*I/py
+            passing = [(i*xunit,i*yunit) for i in np.arange(1, xn)]
+        U = a*x + b*y
+        self.sol = {'x':x, 'y':y, 'U':U}
+        contours = LineContours(a,b,passing)
+        point = Point(x,y,text='A',position='ne')
+        setup_axis = Axis(xn=xn,yn=yn,xunit=xunit,yunit=yunit)
+        solution_axis = Axis(xn=xn,yn=yn,xunit=xunit,yunit=yunit)
+        setup_axis.add(contours)
+        solution_axis.add(contours)
+        solution_axis.add(budget_constraint)
+        solution_axis.add(point)
+        self.setup_axis = setup_axis
+        self.solution_axis = solution_axis
+        setup_list = []
+        setup = fr"""
+A consumer with income \(I = {I:g}\) has a utility function over two goods, \(x\) and \(y\), represented
+by the indifference curves shown below.
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup.png}}
+\end{{center}}
+The price of good \(x\) is \(p_x = {px:g}\) and the price of good \(y\) is \(p_y = {py:g}\).
+"""
+        online_setup = fr"""
+A consumer with income \(I = {I:g}\) has a utility function over two goods, \(x\) and \(y\), represented
+by the indifference curves shown below.
+<p>
+<img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png">
+</p>
+The price of good \(x\) is \(p_x = {px:g}\) and the price of good \(y\) is \(p_y = {py:g}\).
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Draw the consumer's budget constraint and label the optimal point A."
+        online_question = question
+        answer = fr"\begin{{center}}\includegraphics[width=3in]{{{name}_sol.png}}\end{{center}}"
+        online_answer = f'<img src = "/CSUN-Econ-310/assets/images/graphs/{name}_sol.png">'
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": None
+        })
+        question = fr"What is the consumer's optimal choice of \(x\)?"
+        online_question = question
+        answer = x
+        online_answer = fr"\(x = {answer:g}\)"
+        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })        
+        question = fr"What is the consumer's optimal choice of \(y\)?"
+        online_question = question
+        answer = y
+        online_answer = fr"\(y = {answer:g}\)"
+        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What best describes the relationship between goods \(x\) and \(y\)?"
+        online_question = question
+        answer = "perfect substitutes"
+        online_answer = answer
+        answers = [answer, "perfect complements", "inferior goods", "Giffen goods"]
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if (self.sol['x']>0 and self.sol['y']>0): return False
+        if not is_divisible(self.sol['x'], self.params['xunit']): return False
+        if not is_divisible(self.sol['y'], self.params['yunit']): return False
+        if not is_divisible(self.budget_constraint.xint, self.params['xunit']): return False
+        if not is_divisible(self.budget_constraint.yint, self.params['yunit']): return False
+        if self.sol['x'] >= self.setup_axis.xmax: return False
+        if self.sol['y'] >= self.setup_axis.ymax: return False
+        if self.budget_constraint.xint >= self.setup_axis.xmax: return False
+        if self.budget_constraint.yint >= self.setup_axis.ymax: return False
+        return True
+        
+class PerfectComplementsProblem(GenericProblem):
+    # u(x,y) = min(x,y)
+    def __init__(self, params=None, rng=rng, name='perfect_substitutes_problem'):
+        default_params = {'px':1,'py':1,'I':12,'xunit':1,'yunit':1,'xn':13,'yn':13}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        px, py, I, xunit, yunit, xn, yn = params['px'], params['py'], params['I'], params['xunit'], params['yunit'], params['xn'], params['yn']
+        budget_constraint = BudgetConstraint(px=px, py=py, I=I)
+        self.budget_constraint = budget_constraint
+        x = I/(px+py)
+        y = I/(px+py)
+        U = x
+        self.sol = {'x':x, 'y':y, 'U':U}
+        contours = LeontieffContours(xunit=xunit,yunit=yunit,xn=xn,yn=yn)
+        point = Point(x,y,text='A',position='sw')
+        setup_axis = Axis(xn=xn,yn=yn,xunit=xunit,yunit=yunit)
+        solution_axis = Axis(xn=xn,yn=yn,xunit=xunit,yunit=yunit)
+        setup_axis.add(contours)
+        solution_axis.add(contours)
+        solution_axis.add(budget_constraint)
+        solution_axis.add(point)
+        self.setup_axis = setup_axis
+        self.solution_axis = solution_axis
+        setup_list = []
+        setup = fr"""
+A consumer with income \(I = {I:g}\) has a utility function over two goods, \(x\) and \(y\), represented
+by the indifference curves shown below.
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup.png}}
+\end{{center}}
+The price of good \(x\) is \(p_x = {px:g}\) and the price of good \(y\) is \(p_y = {py:g}\).
+"""
+        online_setup = fr"""
+A consumer with income \(I = {I:g}\) has a utility function over two goods, \(x\) and \(y\), represented
+by the indifference curves shown below.
+<p>
+<img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png">
+</p>
+The price of good \(x\) is \(p_x = {px:g}\) and the price of good \(y\) is \(p_y = {py:g}\).
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Draw the consumer's budget constraint and label the optimal point A."
+        online_question = question
+        answer = fr"\begin{{center}}\includegraphics[width=3in]{{{name}_sol.png}}\end{{center}}"
+        online_answer = f'<img src = "/CSUN-Econ-310/assets/images/graphs/{name}_sol.png">'
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": None
+        })
+        question = fr"What is the consumer's optimal choice of \(x\)?"
+        online_question = question
+        answer = x
+        online_answer = fr"\(x = {answer:g}\)"
+        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })        
+        question = fr"What is the consumer's optimal choice of \(y\)?"
+        online_question = question
+        answer = y
+        online_answer = fr"\(y = {answer:g}\)"
+        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What best describes the relationship between goods \(x\) and \(y\)?"
+        online_question = question
+        answer = "perfect complements"
+        online_answer = answer
+        answers = [answer, "perfect substitutes", "inferior goods", "quasilinear goods"]
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if not is_divisible(self.sol['x'], self.params['xunit']): return False
+        if not is_divisible(self.sol['y'], self.params['yunit']): return False
+        if not is_divisible(self.budget_constraint.xint, self.params['xunit']): return False
+        if not is_divisible(self.budget_constraint.yint, self.params['yunit']): return False
+        if self.sol['x'] >= self.setup_axis.xmax: return False
+        if self.sol['y'] >= self.setup_axis.ymax: return False
+        if self.budget_constraint.xint >= self.setup_axis.xmax: return False
+        if self.budget_constraint.yint >= self.setup_axis.ymax: return False
+        return True        
+        
+class PriceChangeProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='cobb_douglas_consumer_problem'):
+        default_params = {'x1':7,'px1':1,'py1':1,'x2':8,'px2':1,'py2':2,'I':12,'xunit':1,'xn':13}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        x1, px1, py1, x2, px2, py2, I, xunit, xn = params['x1'], params['px1'], params['py1'], params['x2'], params['px2'], params['py2'], params['I'], params['xunit'], params['xn']
+        y1 = (I - px1*x1)/py1
+        y2 = (I - px2*x2)/py2
+        setup_axis = Axis(xn=xn, xunit=xunit, yn=xn, yunit=xunit)
+        solution_axis = Axis(xn=xn, xunit=xunit, yn=xn, yunit=xunit)
+        contours = MixedCobbDouglasContours(x1,y1,px1,py1,x2,y2,px2,py2,I,setup_axis)
+        self.contours = contours
+        setup_axis.add(contours)
+        solution_axis.add(contours)
+        bc1 = BudgetConstraint(px1,py1,I)
+        bc2 = BudgetConstraint(px2,py2,I)
+        point1 = Point(x1,y1,text='A',position='ne')
+        point2 = Point(x2,y2,text='B',position='sw')
+        solution_axis.add(bc1, bc2, point1, point2)
+        self.setup_axis = setup_axis
+        self.solution_axis = solution_axis
+        if px2>px1:
+            price_that_changed = 'x'
+            myp2 = px2
+            if (y2-y1)/(px2-px1) > 0:
+                comp_or_sub = 'substitutes'
+            elif (y2-y1)/(px2-px1) < 0:
+                comp_or_sub = 'complements'
+            else:
+                comp_or_sub = 'neither'
+        if py2>py1:
+            myp2 = py2
+            price_that_changed = 'y'
+            if (x2-x1)/(py2-py1) > 0:
+                comp_or_sub = 'substitutes'
+            elif (x2-x1)/(py2-py1) < 0:
+                comp_or_sub = 'complements'
+            else:
+                comp_or_sub = 'neither'
+        self.sol = {'y1':y1, 'y2':y2, 'price_that_changed':price_that_changed, 'comp_or_sub':comp_or_sub}
+        setup_list = []
+        setup = fr"""
+A consumer with income \(I={I:g}\) has utility over two goods, \(x\) and \(y\), shown by the indifference curves below.
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup.png}}
+\end{{center}}
+The prices of the goods are initially \(p_x = {px1:g}\) and \(p_y = {py1:g}\). One day, the price of good \({price_that_changed}\) increases to \(p_{price_that_changed} = {myp2:g}\).
+"""
+        online_setup = fr"""
+A consumer with income \(I={I:g}\) has utility over two goods, \(x\) and \(y\), shown by the indifference curves below.
+<p>
+<img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png">
+</p>
+The prices of the goods are initially \(p_x = {px1:g}\) and \(p_y = {py1:g}\). One day, the price of good \({price_that_changed}\) increases to \(p_{price_that_changed} = {myp2:g}\).
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Draw the consumer's budget constraint in both periods. Label the optimal point in the initial period A. Label the optimal point after the prices change B."
+        online_question = question
+        answer = fr"\begin{{center}}\includegraphics[width=3in]{{{name}_sol.png}}\end{{center}}"
+        online_answer = f'<img src = "/CSUN-Econ-310/assets/images/graphs/{name}_sol.png">'
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": None
+        })
+        question = fr"Did consumption of \(x\) increase or decrease as a result of the price change?"
+        online_question = question
+        if x2>x1: answer = "increase"
+        elif x2<x1: answer = "decrease"
+        else: answer = "neither"
+        online_answer = answer
+        answers = ["increase", "decrease", "neither"]
+        sol = answers.index(answer)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
+        })
+        question = fr"Did consumption of \(y\) increase or decrease as a result of the price change?"
+        online_question = question
+        if y2>y1: answer = "increase"
+        elif y2<y1: answer = "decrease"
+        else: answer = "neither"
+        online_answer = answer
+        answers = ["increase", "decrease", "neither"]
+        sol = answers.index(answer)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
+        })
+        question = fr"Are \(x\) and \(y\) complements are substitutes at current price levels?"
+        online_question = question
+        answer = comp_or_sub
+        online_answer = answer
+        answers = ["complements", "substitutes","neither"]
+        sol = answers.index(answer)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if self.contours.crossings>0: return False
+        if self.params['x1']==self.params['x2']: return False
+        if self.params['px1']>self.params['px2']: return False
+        if self.params['py1']>self.params['py2']: return False
+        if self.params['px2']>self.params['px1'] and self.params['py2']>self.params['py2']: return False
+        return True
+        
+    
 
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
@@ -2404,7 +2853,10 @@ PROBLEM_TYPES = {
     'ProductivityShockProblem': ProductivityShockProblem,
     'LinearContourProblem': LinearContourProblem,
     'CBDerivativeProblem': CBDerivativeProblem,
-    'CobbDouglasConsumerProblem': CobbDouglasConsumerProblem
+    'CobbDouglasConsumerProblem': CobbDouglasConsumerProblem,
+    'PerfectSubstitutesProblem': PerfectSubstitutesProblem,
+    'PerfectComplementsProblem': PerfectComplementsProblem,
+    'PriceChangeProblem': PriceChangeProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)

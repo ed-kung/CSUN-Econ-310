@@ -23,6 +23,7 @@ python: pyscript
 	<option value="lec07">7. Productivity Growth</option>
 	<option value="lec08">8. Multivariate Optimization</option>
 	<option value="lec09">9. Constrained Multivariate Optimization</option>
+	<option value="lec10">10. Consumer Choice Theory</option>
 </select>
 
 <button id="button" pys-onClick="generate_problem">Generate</button>
