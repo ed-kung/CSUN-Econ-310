@@ -117,8 +117,32 @@ class CobbDouglas:
     def get_IC(self, U, xg):
         A, a, b = self.A, self.a, self.b
         return (U/A)**(1/b)*xg**(-a/b)
+    def get_IC_from_point(self, x, y, xg):
+        U = self.eval_at(x, y)
+        return self.get_IC(U, xg)
     def __repr__(self):
         return self.print()
+
+def get_cb_from_point(x, y, budget_constraint, x_='x', y_='y'):
+    px, py, I = budget_constraint.px, budget_constraint.py, budget_constraint.I
+    assert equals(x*px + y*py, I)
+    a = px*x/I
+    b = py*y/I
+    return CobbDouglas(A=1,a=a,b=b,x=x_,y=y_)
+
+def check_IC_crossings(ic1, ic2, axis):
+    ymax = axis.ymax
+    yunit = axis.yunit
+    tol = 0.1*yunit
+    ids = (ic1<=ymax) & (ic2<=ymax) # points where both curves are shown 
+    num_ic1_greater = np.sum( ic1[ids] >= ic2[ids] + tol )
+    num_ic2_greater = np.sum( ic2[ids] <= ic1[ids] + tol )
+    if num_ic1_greater==np.sum(ids):
+        return {'top_ic':ic1, 'bot_ic':ic2, 'has_crossings':False}
+    elif num_ic2_greater==np.sum(ids):
+        return {'top_ic':ic2, 'bot_ic':ic1, 'has_crossings':False}
+    else:
+        return {'top_ic':ic1, 'bot_ic':ic2, 'has_crossings':True}
 
 def simplifyCB(cbtop, cbbot):
     assert cbtop.a!=0
@@ -276,20 +300,18 @@ class CobbDouglasContours:
         return ax
 
 class MixedCobbDouglasContours:
-    def __init__(self, x1, y1, px1, py1, x2, y2, px2, py2, I, axis):
+    def __init__(self, x1, y1, x2, y2, bc1, bc2, axis):
         xn, xunit, xmax, xg = axis.xn, axis.xunit, axis.xmax, axis.xg
-        a1 = px1*x1 / I
-        b1 = py1*y1 / I
-        a2 = px2*x2 / I
-        b2 = py2*y2 / I
-        cb1 = CobbDouglas(A=1,a=a1,b=b1)
-        cb2 = CobbDouglas(A=1,a=a2,b=b2)
+        cb1 = get_cb_from_point(x1,y1,bc1)
+        cb2 = get_cb_from_point(x2,y2,bc2)
         U1 = cb1.eval_at(x1,y1)
         U2 = cb2.eval_at(x2,y2)
-        IC1 = cb1.get_IC(U1,xg[1:])
-        IC2 = cb2.get_IC(U2,xg[1:])
-        crossings = np.sum((IC2>=IC1)*(IC2<xmax))
-        self.crossings = crossings
+        IC1 = cb1.get_IC_from_point(x1,y1,xg[1:])
+        IC2 = cb2.get_IC_from_point(x2,y2,xg[1:])
+        crossing_results = check_IC_crossings(IC1, IC2, axis)
+        self.has_crossings = crossing_results['has_crossings']
+        IC1 = crossing_results['top_ic']
+        IC2 = crossing_results['bot_ic']
         Umax1 = cb1.eval_at(xmax, xmax)
         Umin1 = cb1.eval_at(xunit, xunit)
         Umax2 = cb2.eval_at(xmax, xmax)
@@ -2716,14 +2738,14 @@ class PriceChangeProblem(GenericProblem):
         x1, px1, py1, x2, px2, py2, I, xunit, xn = params['x1'], params['px1'], params['py1'], params['x2'], params['px2'], params['py2'], params['I'], params['xunit'], params['xn']
         y1 = (I - px1*x1)/py1
         y2 = (I - px2*x2)/py2
+        bc1 = BudgetConstraint(px1,py1,I)
+        bc2 = BudgetConstraint(px2,py2,I)
         setup_axis = Axis(xn=xn, xunit=xunit, yn=xn, yunit=xunit)
         solution_axis = Axis(xn=xn, xunit=xunit, yn=xn, yunit=xunit)
-        contours = MixedCobbDouglasContours(x1,y1,px1,py1,x2,y2,px2,py2,I,setup_axis)
+        contours = MixedCobbDouglasContours(x1,y1,x2,y2,bc1,bc2,setup_axis)
         self.contours = contours
         setup_axis.add(contours)
         solution_axis.add(contours)
-        bc1 = BudgetConstraint(px1,py1,I)
-        bc2 = BudgetConstraint(px2,py2,I)
         point1 = Point(x1,y1,text='A',position='ne')
         point2 = Point(x2,y2,text='B',position='sw')
         solution_axis.add(bc1, bc2, point1, point2)
@@ -2825,13 +2847,15 @@ The prices of the goods are initially \(p_x = {px1:g}\) and \(p_y = {py1:g}\). O
         self.setup_list = setup_list
         self.question_list = question_list
     def check_solution(self):
-        if self.contours.crossings>0: return False
+        if self.contours.has_crossings: return False
         if self.params['x1']==self.params['x2']: return False
         if self.params['px1']>self.params['px2']: return False
         if self.params['py1']>self.params['py2']: return False
         if self.params['px2']>self.params['px1'] and self.params['py2']>self.params['py2']: return False
         return True
         
+class PublicSchoolProblem(GenericProblem):
+    
     
 
 PROBLEM_TYPES = {
@@ -2856,7 +2880,8 @@ PROBLEM_TYPES = {
     'CobbDouglasConsumerProblem': CobbDouglasConsumerProblem,
     'PerfectSubstitutesProblem': PerfectSubstitutesProblem,
     'PerfectComplementsProblem': PerfectComplementsProblem,
-    'PriceChangeProblem': PriceChangeProblem
+    'PriceChangeProblem': PriceChangeProblem,
+    'PublicSchoolProblem': PublicSchoolProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
