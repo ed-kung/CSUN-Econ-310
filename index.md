@@ -92,7 +92,7 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 |    7 | 3/3 - 3/7     | Multivariate Optimization            | Constrained Multivariate Optimization       |
 |    8 | 3/10 - 3/14   | Theory of Consumer Choice            | Consumer Choice: Applications               | 
 |    9 | 3/17 - 3/21   | **NO CLASS - SPRING BREAK**          | **NO CLASS - SPRING BREAK**                 |
-|   10 | 3/24 - 3/28   | Theory of Production                 | General Equilibrium and Welfare             |
+|   10 | 3/24 - 3/28   | Theory of Production I               | Theory of Production II                     |
 |   11 | 3/31 - 4/4    | Review                               | **Midterm 2**                               |
 |   12 | 4/7 - 4/11    | Game Theory                          | Game Theory: Applications                   |
 |   13 | 4/14 - 4/18   | Monopoly                             | Imperfect Competition                       |

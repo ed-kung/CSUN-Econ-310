@@ -130,20 +130,6 @@ def get_cb_from_point(x, y, budget_constraint, x_='x', y_='y'):
     b = py*y/I
     return CobbDouglas(A=1,a=a,b=b,x=x_,y=y_)
 
-def check_IC_crossings(ic1, ic2, axis):
-    ymax = axis.ymax
-    yunit = axis.yunit
-    tol = 0.1*yunit
-    ids = (ic1<=ymax) & (ic2<=ymax) # points where both curves are shown 
-    num_ic1_greater = np.sum( ic1[ids] >= ic2[ids] + tol )
-    num_ic2_greater = np.sum( ic2[ids] <= ic1[ids] + tol )
-    if num_ic1_greater==np.sum(ids):
-        return {'top_ic':ic1, 'bot_ic':ic2, 'has_crossings':False}
-    elif num_ic2_greater==np.sum(ids):
-        return {'top_ic':ic2, 'bot_ic':ic1, 'has_crossings':False}
-    else:
-        return {'top_ic':ic1, 'bot_ic':ic2, 'has_crossings':True}
-
 def simplifyCB(cbtop, cbbot):
     assert cbtop.a!=0
     assert cbtop.b!=0
@@ -164,7 +150,7 @@ def simplifyCB(cbtop, cbbot):
         return fr"\(\frac{{{PTerm(n,y,1).print()}}}{{{PTerm(d,x,1).print()}}}\)"
 
 class Axis:
-    def __init__(self, xn=13, yn=13, xunit=1, yunit=1):
+    def __init__(self, xn=13, yn=13, xunit=1, yunit=1, xlab=r'$x$', ylab=r'$y$'):
         self.xn = xn
         self.yn = yn
         self.xunit = xunit
@@ -173,24 +159,26 @@ class Axis:
         self.ymax = yn*yunit
         self.objects = []
         self.xg = np.arange(0, self.xmax, self.xunit/10)
+        self.xlab = xlab
+        self.ylab = ylab
     def add(self, *args):
         for obj in args:
             self.objects.append(obj)
-    def get_figax(self, xlab=r'$x$', ylab=r'$y$', alpha=0.4, saveas=None):
+    def get_figax(self, alpha=0.4, saveas=None):
         fig, ax = plt.subplots()
         ax.set_xticks(np.arange(0, self.xmax, self.xunit))
         ax.set_yticks(np.arange(0, self.ymax, self.yunit))
         ax.set_xlim([0, self.xmax])
         ax.set_ylim([0, self.ymax])
-        ax.set_xlabel(xlab)
-        ax.set_ylabel(ylab)
+        ax.set_xlabel(self.xlab)
+        ax.set_ylabel(self.ylab)
         ax.set_axisbelow(True)
         ax.grid(alpha=alpha)
         if saveas is not None:
             plt.savefig(saveas, bbox_inches='tight')
         return fig, ax
-    def draw(self, xlab=r'$x$', ylab=r'$y$', alpha=0.4, legend=None, saveas=None):
-        fig, ax = self.get_figax(xlab=xlab, ylab=ylab, alpha=alpha)
+    def draw(self, alpha=0.4, legend=None, saveas=None):
+        fig, ax = self.get_figax(alpha=alpha)
         for obj in self.objects:
             xg = np.arange(0, self.xmax, self.xunit/10)
             obj.plot(ax, xg)
@@ -301,36 +289,61 @@ class CobbDouglasContours:
 
 class MixedCobbDouglasContours:
     def __init__(self, x1, y1, x2, y2, bc1, bc2, axis):
-        xn, xunit, xmax, xg = axis.xn, axis.xunit, axis.xmax, axis.xg
+        xn, yn, xunit, yunit, xmax, ymax, xg = axis.xn, axis.yn, axis.xunit, axis.yunit, axis.xmax, axis.ymax, axis.xg
         cb1 = get_cb_from_point(x1,y1,bc1)
         cb2 = get_cb_from_point(x2,y2,bc2)
         U1 = cb1.eval_at(x1,y1)
         U2 = cb2.eval_at(x2,y2)
         IC1 = cb1.get_IC_from_point(x1,y1,xg[1:])
         IC2 = cb2.get_IC_from_point(x2,y2,xg[1:])
-        crossing_results = check_IC_crossings(IC1, IC2, axis)
-        self.has_crossings = crossing_results['has_crossings']
-        IC1 = crossing_results['top_ic']
-        IC2 = crossing_results['bot_ic']
-        Umax1 = cb1.eval_at(xmax, xmax)
-        Umin1 = cb1.eval_at(xunit, xunit)
-        Umax2 = cb2.eval_at(xmax, xmax)
-        Umin2 = cb2.eval_at(xunit, xunit)
-        du_ideal = 0.5*(Umax1 - Umin1)/(xn-2) + 0.5*(Umax2 - Umin2)/(xn-2)
+
+        # check for crossings
+        tol = 0.1*yunit
+        ids = (IC1<=ymax) & (IC2<=ymax)   # points where both curves are shown
+        num_ic1_greater = np.sum(IC1[ids]>=IC2[ids] + tol)
+        num_ic2_greater = np.sum(IC2[ids]>=IC1[ids] + tol)
+        if num_ic1_greater>=num_ic2_greater:
+            IC_top = IC1
+            cb_top = cb1
+            U_top = U1
+            IC_bot = IC2
+            cb_bot = cb2
+            U_bot = U2
+            has_crossings=num_ic1_greater<np.sum(ids)
+        else:
+            IC_top = IC2
+            cb_top = cb2
+            U_top = U2
+            IC_bot = IC1
+            cb_bot = cb1
+            U_bot = U1
+            has_crossings=num_ic2_greater<np.sum(ids)
+
+        Umax = cb_top.eval_at(xmax, ymax)
+        Umin = cb_bot.eval_at(xunit, yunit)
+        du_ideal = (Umax - Umin)/(xn-2)
+
         ICs = []
-        du = np.abs(U2 - Umin2)/np.maximum(np.round(np.abs(U2-Umin2)/du_ideal),1)
-        for u in np.arange(Umin2, U2+du, du):
-            ic = cb2.get_IC(u, xg[1:])
+        
+        # plot from top IC to top
+        du = np.abs(Umax - U_top)/np.maximum(np.round(np.abs(Umax-U_top)/du_ideal),1)
+        for u in np.arange(U_top, Umax, du):
+            ic = cb_top.get_IC(u, xg[1:])
             ICs.append(ic)
-        du = np.abs(Umax1 - U1)/np.maximum(np.round(np.abs(Umax1-U1)/du_ideal),1)
-        for u in np.arange(U1, Umax1+du, du):
-            ic = cb1.get_IC(u, xg[1:])
+
+        # plot from bot IC to bot
+        du = np.abs(U_bot - Umin)/np.maximum(np.round(np.abs(U_bot-Umin)/du_ideal),1)
+        for u in np.arange(U_bot, Umin, -du):
+            ic = cb_bot.get_IC(u, xg[1:])
             ICs.append(ic)
+        
         N = np.round(np.abs(U1-U2)/du_ideal)
         for i in np.arange(1,N,1):
             ic = (i/N)*IC1 + ((N-i)/N)*IC2
             ICs.append(ic)
+            
         self.ICs = ICs
+        self.has_crossings = has_crossings
     def plot(self, ax, xg):
         for ic in self.ICs:
             ax.plot(xg[1:], ic, color='green', alpha=0.5)        
@@ -342,8 +355,8 @@ def get_cb_levels(cobb_douglas, axis, U1=None, U2=None):
     xn = axis.xn
     yn = axis.yn
     xunit = axis.xunit
-    yunit = axis.xunit
-    umax = cobb_douglas.eval_at((xn-1)*xunit, (yn-1)*yunit)
+    yunit = axis.yunit
+    umax = cobb_douglas.eval_at((xn)*xunit, (yn)*yunit)
     umin = cobb_douglas.eval_at(xunit, yunit)
     du_ideal = (umax - umin)/(xn-2)
     if U1 is None:
@@ -2751,7 +2764,7 @@ class PriceChangeProblem(GenericProblem):
         solution_axis.add(bc1, bc2, point1, point2)
         self.setup_axis = setup_axis
         self.solution_axis = solution_axis
-        if px2>px1:
+        if px2!=px1:
             price_that_changed = 'x'
             myp2 = px2
             if (y2-y1)/(px2-px1) > 0:
@@ -2760,7 +2773,7 @@ class PriceChangeProblem(GenericProblem):
                 comp_or_sub = 'complements'
             else:
                 comp_or_sub = 'neither'
-        if py2>py1:
+        if py2!=py1:
             myp2 = py2
             price_that_changed = 'y'
             if (x2-x1)/(py2-py1) > 0:
@@ -2776,14 +2789,14 @@ A consumer with income \(I={I:g}\) has utility over two goods, \(x\) and \(y\), 
 \begin{{center}}
 \includegraphics[width=3in]{{{name}_setup.png}}
 \end{{center}}
-The prices of the goods are initially \(p_x = {px1:g}\) and \(p_y = {py1:g}\). One day, the price of good \({price_that_changed}\) increases to \(p_{price_that_changed} = {myp2:g}\).
+The prices of the goods are initially \(p_x = {px1:g}\) and \(p_y = {py1:g}\). One day, the price of good \({price_that_changed}\) changes to \(p_{price_that_changed}^\prime = {myp2:g}\).
 """
         online_setup = fr"""
 A consumer with income \(I={I:g}\) has utility over two goods, \(x\) and \(y\), shown by the indifference curves below.
 <p>
 <img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png">
 </p>
-The prices of the goods are initially \(p_x = {px1:g}\) and \(p_y = {py1:g}\). One day, the price of good \({price_that_changed}\) increases to \(p_{price_that_changed} = {myp2:g}\).
+The prices of the goods are initially \(p_x = {px1:g}\) and \(p_y = {py1:g}\). One day, the price of good \({price_that_changed}\) increases to \(p_{price_that_changed}^\prime = {myp2:g}\).
 """
         setup_list.append({
             "setup": setup,
@@ -2831,7 +2844,7 @@ The prices of the goods are initially \(p_x = {px1:g}\) and \(p_y = {py1:g}\). O
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
         })
-        question = fr"Are \(x\) and \(y\) complements are substitutes at current price levels?"
+        question = fr"Are \(x\) and \(y\) complements or substitutes at current price levels?"
         online_question = question
         answer = comp_or_sub
         online_answer = answer
@@ -2849,14 +2862,350 @@ The prices of the goods are initially \(p_x = {px1:g}\) and \(p_y = {py1:g}\). O
     def check_solution(self):
         if self.contours.has_crossings: return False
         if self.params['x1']==self.params['x2']: return False
-        if self.params['px1']>self.params['px2']: return False
-        if self.params['py1']>self.params['py2']: return False
-        if self.params['px2']>self.params['px1'] and self.params['py2']>self.params['py2']: return False
+        if (self.params['px1']==self.params['px2']) and (self.params['py1']==self.params['py2']): return False
+        if (self.params['px1']!=self.params['px2']) and (self.params['py1']!=self.params['py2']): return False
+        if not is_divisible(self.sol['y1'], self.setup_axis.yunit): return False
+        if not is_divisible(self.sol['y2'], self.setup_axis.yunit): return False
+        if not is_divisible(self.params['x1'], self.setup_axis.xunit): return False
+        if not is_divisible(self.params['x2'], self.setup_axis.xunit): return False
+        if not is_divisible(self.params['I']/self.params['py1'], self.setup_axis.yunit): return False
+        if not is_divisible(self.params['I']/self.params['py2'], self.setup_axis.yunit): return False
+        if not is_divisible(self.params['I']/self.params['px1'], self.setup_axis.xunit): return False
+        if not is_divisible(self.params['I']/self.params['px2'], self.setup_axis.xunit): return False
         return True
         
 class PublicSchoolProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='public_school_problem'):
+        default_params = {'x_private':6,'x_public':4,'px':1,'py':1,'I':12,'xunit':1,'xn':13}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        x_private, x_public, px, py, I, xunit, xn = params['x_private'], params['x_public'], params['px'], params['py'], params['I'], params['xunit'], params['xn']
+        y_private = (I-px*x_private)/py
+        bc = BudgetConstraint(px,py,I)
+        cb = get_cb_from_point(x_private, y_private, bc)
+        U_private = cb.eval_at(x_private, y_private)
+        U_public = cb.eval_at(x_public, I/py)
+        if equals(U_private, U_public):
+            choice = 'unknown'
+            xchoice = None
+            ychoice = None
+        elif U_private>U_public: 
+            choice = 'private'
+            xchoice = x_private
+            ychoice = y_private
+        else:
+            choice = 'public'
+            xchoice = x_public
+            ychoice = I/py
+        self.sol = {'y_private':y_private,'U_private':U_private, 'U_public':U_public, 'choice':choice, 'xchoice':xchoice, 'ychoice':ychoice}
+        setup_axis = Axis(xn=xn,yn=xn,xunit=xunit,yunit=xunit, xlab="Education", ylab="Other Goods")
+        solution_axis = Axis(xn=xn,yn=xn,xunit=xunit,yunit=xunit, xlab="Education", ylab="Other Goods")
+        levels = get_cb_levels(cb, setup_axis, U_private)
+        contours = CobbDouglasContours(cb, levels)
+        setup_axis.add(contours)
+        solution_axis.add(contours)
+        private_point = Point(x=x_private, y=y_private, text='A', position='sw')
+        public_point = Point(x=x_public, y=I/py, text='B', position='ne')
+        solution_axis.add(private_point)
+        setup_axis.add(bc)
+        solution_axis.add(bc)
+        solution_axis.add(public_point)
+        self.setup_axis = setup_axis
+        self.solution_axis = solution_axis
+        setup_list = []
+        setup = fr"""
+A family can spend their income on either education or other goods. The diagram below shows the family's budget constraint when only private school options are available, as well as their indifference curves over education and other consumption.
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup.png}}
+\end{{center}}
+A public school option is also available which provides {x_public:g} units of education for free.
+"""
+        online_setup = fr"""
+A family can spend their income on either education or other goods. The diagram below shows the family's budget constraint when only private school options are available, as well as their indifference curves over education and other consumption.
+<p>
+<img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png">
+</p>
+A public school option is also available which provides {x_public:g} units of education for free.
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"On the diagram, label the optimal private school option A and label the public school option B."
+        online_question = question
+        answer = fr"\begin{{center}}\includegraphics[width=3in]{{{name}_sol.png}}\end{{center}}"
+        online_answer = f'<img src = "/CSUN-Econ-310/assets/images/graphs/{name}_sol.png">'
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": None
+        })
+        question = fr"Which option offers higher utility, public or private?"
+        online_question = question
+        if choice=="private": answer="private"
+        elif choice=="public": answer="public"
+        else: answer="they offer the same utility"
+        online_answer = answer
+        answers = ["public", "private", "they offer the same utility"]
+        sol = answers.index(answer)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
+        })
+        question = fr"Which option will the family choose?"
+        online_question = question
+        if choice=="private": answer="private"
+        elif choice=="public": answer="public"
+        else: answer="not enough information"
+        online_answer = answer
+        answers = ["public", "private", "not enough information"]
+        sol = answers.index(answer)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
+        })
+        question = fr"If the public school option were removed, would this increase or decrease the amount of education consumed?"
+        online_question = question
+        if choice=='private': answer="neither increase nor decrease"
+        elif choice=='unknown': answer="not enough information"
+        elif x_private>xchoice: answer="increase"
+        elif x_private<xchoice: answer="decrease"
+        else: answer="neither increase nor decrease"
+        online_answer = answer
+        answers = ["increase", "decrease", "neither increase nor decrease", "not enough information"]
+        sol = answers.index(answer)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=False,shuffle=False,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if not is_divisible(self.sol['y_private'], self.params['xunit']): return False
+        if np.abs(self.sol['U_public'] - self.sol['U_private'])/self.sol['U_private']<0.1: return False
+        return True
     
-    
+class CobbDouglasWorkerProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='cobb_douglas_worker_problem'):
+        default_params = {'x':6,'w':15,'yunit':15*5}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        x, w, yunit = self.params['x'], self.params['w'], self.params['yunit']
+        T = 60 # time budget
+        I = w*T
+        y = I-w*x
+        bc = BudgetConstraint(w,1,I)
+        cb = get_cb_from_point(x, y, bc)
+        U = cb.eval_at(x,y)
+        self.sol = {'y':y, 'I':I}
+        setup_axis = Axis(xn=13, yn=13, xunit=5, yunit=yunit, xlab='Leisure Hours', ylab='Income')
+        solution_axis = Axis(xn=13, yn=13, xunit=5, yunit=yunit, xlab='Leisure Hours', ylab='Income')
+        levels = get_cb_levels(cb, setup_axis, U)
+        contours = CobbDouglasContours(cb, levels)
+        self.contours = contours
+        setup_axis.add(contours)
+        solution_axis.add(contours)
+        point = Point(x,y,text='A',position='sw')
+        solution_axis.add(bc, point)
+        self.setup_axis = setup_axis
+        self.solution_axis = solution_axis
+        setup_list = []
+        setup = fr"""
+A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of \(w={w:g}\) dollars per hour. The worker's 
+indifference curves over leisure and income are shown in the diagram below.
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup.png}}
+\end{{center}}
+"""
+        online_setup = fr"""
+A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of \(w={w:g}\) dollars per hour. The worker's 
+indifference curves over leisure and income are shown in the diagram below.
+<p>
+<img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png">
+</p>
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Draw the worker's budget constraint. Label the optimal point A."
+        online_question = question
+        answer = fr"\begin{{center}}\includegraphics[width=3in]{{{name}_sol.png}}\end{{center}}"
+        online_answer = f'<img src = "/CSUN-Econ-310/assets/images/graphs/{name}_sol.png">'
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": None
+        })
+        question = fr"How many hours per week does the worker choose to work?"
+        online_question = question
+        answer = T - x
+        online_answer = fr"\({answer:g}\) hours"
+        answers = generate_distractors(answer,delta=5,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })        
+        question = fr"How income per week does the worker make?"
+        online_question = question
+        answer = y
+        online_answer = fr"\({answer:g}\) dollars"
+        answers = generate_distractors(answer,delta=setup_axis.yunit,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })        
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if not is_divisible(self.params['x'], self.setup_axis.xunit): return False
+        if not is_divisible(self.sol['y'], self.setup_axis.yunit): return False
+        if not is_divisible(self.sol['I'], self.setup_axis.yunit): return False
+        if not is_divisible(self.setup_axis.yunit, 1): return False
+        return True
+
+class WageChangeProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='wage_change_problem'):
+        default_params = {'x1':6,'w1':15,'x2':6,'w2':30}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        x1, w1, x2, w2 = params['x1'], params['w1'], params['x2'], params['w2']
+        T = 60 # time budget
+        I1 = w1*T
+        I2 = w2*T
+        y1 = (I1 - w1*x1)
+        y2 = (I2 - w2*x2)
+        bc1 = BudgetConstraint(w1,1,I1)
+        bc2 = BudgetConstraint(w2,1,I2)
+        setup_axis = Axis(xn=13, yn=13, xunit=5, yunit=np.maximum(I1,I2)/12, xlab='Leisure Hours', ylab='Income')
+        solution_axis = Axis(xn=13, yn=13, xunit=5, yunit=np.maximum(I1,I2)/12, xlab='Leisure Hours', ylab='Income')
+        contours = MixedCobbDouglasContours(x1,y1,x2,y2,bc1,bc2,setup_axis)
+        self.contours = contours
+        setup_axis.add(contours)
+        solution_axis.add(contours)
+        point1 = Point(x1,y1,text='A',position='sw')
+        point2 = Point(x2,y2,text='B',position='sw')
+        solution_axis.add(bc1, bc2, point1, point2)
+        self.setup_axis = setup_axis
+        self.solution_axis = solution_axis
+        if w1>w2:
+            wage_inc_or_dec = 'decreases'
+        elif w1<w2:
+            wage_inc_or_dec = 'increases'
+        else:
+            wage_inc_or_dec = 'neither'
+        if x1>x2:
+            labor_inc_or_dec = 'increase'
+        elif x1<x2:
+            labor_inc_or_dec = 'decrease'
+        else:
+            labor_inc_or_dec = 'neither increase nor decrease'
+        self.sol = {'y1':y1, 'y2':y2, 'I1':I1, 'I2':I2, 'wage_inc_or_dec':wage_inc_or_dec, 'labor_inc_or_dec':labor_inc_or_dec}
+        setup_list = []
+        setup = fr"""
+A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of \(w={w1:g}\) dollars per hour. The worker's 
+indifference curves over leisure and income are shown in the diagram below.
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup.png}}
+\end{{center}}
+One day, the worker's hourly wage changes to \(w^\prime = {w2:g}\).
+"""
+        online_setup = fr"""
+A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of \(w={w1:g}\) dollars per hour. The worker's 
+indifference curves over leisure and income are shown in the diagram below.
+<p>
+<img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png">
+</p>
+One day, the worker's hourly wage changes to \(w^\prime = {w2:g}\).
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Draw the worker's budget constraint at both the initial wage and the subsequent wage. Label the optimal point at the initial wage A. Label the optimal point at the subsequent wage B."
+        online_question = question
+        answer = fr"\begin{{center}}\includegraphics[width=3in]{{{name}_sol.png}}\end{{center}}"
+        online_answer = f'<img src = "/CSUN-Econ-310/assets/images/graphs/{name}_sol.png">'
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": None
+        })
+        question = fr"How many hours per week does the worker work at the initial wage, \(w\)?"
+        online_question = question
+        answer = T - x1
+        online_answer = fr"\({answer:g}\) hours"
+        answers = generate_distractors(answer,delta=5,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })        
+        question = fr"How many hours per week does the worker work at the subsequent wage, \(w^\prime\)?"
+        online_question = question
+        answer = T - x2
+        online_answer = fr"\({answer:g}\) hours"
+        answers = generate_distractors(answer,delta=5,type='add',rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"Did the number of hours worked increase or decrease as a result of the wage change?"
+        online_question = question
+        if labor_inc_or_dec=='increase': answer = "increase"
+        elif labor_inc_or_dec=='decrease': answer = "decrease"
+        else: answer = "neither increase nor decrease"
+        online_answer = answer
+        answers = ["increase", "decrease", "neither increase nor decrease"]
+        sol = answers.index(answer)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if self.contours.has_crossings: return False
+        if equals(self.params['w1'], self.params['w2']): return False
+        if not is_divisible(self.setup_axis.yunit, 1): return False
+        if not is_divisible(self.sol['I1'], self.setup_axis.yunit): return False
+        if not is_divisible(self.sol['I2'], self.setup_axis.yunit): return False
+        if not is_divisible(self.sol['y1'], self.setup_axis.yunit): return False
+        if not is_divisible(self.sol['y2'], self.setup_axis.yunit): return False
+        return True
+        
 
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
@@ -2881,7 +3230,9 @@ PROBLEM_TYPES = {
     'PerfectSubstitutesProblem': PerfectSubstitutesProblem,
     'PerfectComplementsProblem': PerfectComplementsProblem,
     'PriceChangeProblem': PriceChangeProblem,
-    'PublicSchoolProblem': PublicSchoolProblem
+    'PublicSchoolProblem': PublicSchoolProblem,
+    'CobbDouglasWorkerProblem': CobbDouglasWorkerProblem,
+    'WageChangeProblem': WageChangeProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
