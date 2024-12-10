@@ -107,6 +107,7 @@ class PolyEq:
 class CobbDouglas:
     def __init__(self, A=1, x='x', a=1/2, y='y', b=1/2):
         self.A, self.x, self.a, self.y, self.b = A, x, a, y, b
+        self.bad=False
     def print(self, maxdenom=8, rmplus=True, rmneg=False):
         out = PTerm(self.A, self.x, self.a).print(maxdenom=maxdenom,rmplus=rmplus,rmneg=rmneg)
         out+= PTerm(1, self.y, self.b).print(maxdenom=maxdenom,rmplus=True,rmneg=True)
@@ -123,12 +124,62 @@ class CobbDouglas:
     def __repr__(self):
         return self.print()
 
+class CES:
+    def __init__(self, a=0.5, rho=0.5):
+        self.a = a
+        self.rho = rho
+        self.bad = False
+        if self.a<=0.1 or self.a>=0.9:
+            self.bad = True
+        if self.rho>=0.8:
+            self.bad = True
+        if self.rho<-2:
+            self.bad = True
+        if np.abs(self.rho)<=0.1:
+            self.bad = True
+    def eval_at(self, x, y):
+        a, rho = self.a, self.rho
+        return (a*x**rho + (1-a)*y**rho)**(1/rho)
+    def get_IC(self, U, xg):
+        a, rho = self.a, self.rho
+        numerator = U**rho - a*xg**rho
+        ids = (numerator>0)
+        return xg[ids], (numerator[ids]/(1-a))**(1/rho)
+    def get_IC_from_point(self, x, y, xg):
+        U = self.eval_at(x,y)
+        return self.get_IC(U, xg)
+
 def get_cb_from_point(x, y, budget_constraint, x_='x', y_='y'):
     px, py, I = budget_constraint.px, budget_constraint.py, budget_constraint.I
     assert equals(x*px + y*py, I)
     a = px*x/I
     b = py*y/I
     return CobbDouglas(A=1,a=a,b=b,x=x_,y=y_)
+
+def get_ces_from_points(x1,y1,x2,y2,bc1,bc2):
+    px1, py1, I1 = bc1.px, bc1.py, bc1.I
+    px2, py2, I2 = bc2.px, bc2.py, bc2.I
+    assert equals(px1*x1 + py1*y1, I1)
+    assert equals(px2*x2 + py2*y2, I2)
+    A1 = np.log((I1-px1*x1)/(py1*x1))
+    A2 = np.log((I2-px2*x2)/(py2*x2))
+    B1 = np.log(py1/px1)
+    B2 = np.log(py2/px2)
+    try:
+        M = np.array([
+            [A1, 1],
+            [A2, 1]
+        ])
+        Y = np.array([B1, B2])
+        X = np.linalg.solve(M,Y)
+    except:
+        return CES(rho=2,a=0)
+    rho = X[0]+1
+    a = 1/(1+np.exp(X[1]))
+    if equals(rho, 0):
+        return CobbDouglas(A=1, a=a, b=1-a)
+    else:
+        return CES(rho=rho, a=a)
 
 def simplifyCB(cbtop, cbbot):
     assert cbtop.a!=0
@@ -287,66 +338,34 @@ class CobbDouglasContours:
             ax.plot(xg[1:], (z/A)**(1/b)*xg[1:]**(-a/b), color=self.color, linewidth=self.linewidth, alpha=self.alpha, label='_nolegend_')
         return ax
 
-class MixedCobbDouglasContours:
-    def __init__(self, x1, y1, x2, y2, bc1, bc2, axis):
+class CESContours:
+    def __init__(self, x1, y1, x2, y2, bc1, bc2, axis, color='green', alpha=0.5, linewidth=1):
+        self.color = color
+        self.alpha = alpha
+        self.linewidth = linewidth
         xn, yn, xunit, yunit, xmax, ymax, xg = axis.xn, axis.yn, axis.xunit, axis.yunit, axis.xmax, axis.ymax, axis.xg
-        cb1 = get_cb_from_point(x1,y1,bc1)
-        cb2 = get_cb_from_point(x2,y2,bc2)
-        U1 = cb1.eval_at(x1,y1)
-        U2 = cb2.eval_at(x2,y2)
-        IC1 = cb1.get_IC_from_point(x1,y1,xg[1:])
-        IC2 = cb2.get_IC_from_point(x2,y2,xg[1:])
-
-        # check for crossings
-        tol = 0.1*yunit
-        ids = (IC1<=ymax) & (IC2<=ymax)   # points where both curves are shown
-        num_ic1_greater = np.sum(IC1[ids]>=IC2[ids] + tol)
-        num_ic2_greater = np.sum(IC2[ids]>=IC1[ids] + tol)
-        if num_ic1_greater>=num_ic2_greater:
-            IC_top = IC1
-            cb_top = cb1
-            U_top = U1
-            IC_bot = IC2
-            cb_bot = cb2
-            U_bot = U2
-            has_crossings=num_ic1_greater<np.sum(ids)
-        else:
-            IC_top = IC2
-            cb_top = cb2
-            U_top = U2
-            IC_bot = IC1
-            cb_bot = cb1
-            U_bot = U1
-            has_crossings=num_ic2_greater<np.sum(ids)
-
-        Umax = cb_top.eval_at(xmax, ymax)
-        Umin = cb_bot.eval_at(xunit, yunit)
-        du_ideal = (Umax - Umin)/(xn-2)
-
-        ICs = []
-        
-        # plot from top IC to top
-        du = np.abs(Umax - U_top)/np.maximum(np.round(np.abs(Umax-U_top)/du_ideal),1)
-        for u in np.arange(U_top, Umax, du):
-            ic = cb_top.get_IC(u, xg[1:])
-            ICs.append(ic)
-
-        # plot from bot IC to bot
-        du = np.abs(U_bot - Umin)/np.maximum(np.round(np.abs(U_bot-Umin)/du_ideal),1)
-        for u in np.arange(U_bot, Umin, -du):
-            ic = cb_bot.get_IC(u, xg[1:])
-            ICs.append(ic)
-        
-        N = np.round(np.abs(U1-U2)/du_ideal)
-        for i in np.arange(1,N,1):
-            ic = (i/N)*IC1 + ((N-i)/N)*IC2
-            ICs.append(ic)
-            
-        self.ICs = ICs
-        self.has_crossings = has_crossings
+        ces = get_ces_from_points(x1,y1,x2,y2,bc1,bc2)
+        self.ces = ces
+        if not self.ces.bad:
+            U1 = ces.eval_at(x1, y1)
+            U2 = ces.eval_at(x2, y2)
+            IC1 = ces.get_IC_from_point(x1,y1,xg[1:])
+            IC2 = ces.get_IC_from_point(x2,y2,xg[1:])
+            Umax = ces.eval_at((xn+1)*xunit, (yn+1)*yunit)
+            Umin = ces.eval_at(xunit, yunit)
+            du_ideal = (Umax - Umin)/(xn-2)
+            du = np.abs(U2-U1)/np.maximum(np.round(np.abs(U2-U1)/du_ideal),1)
+            levels = [U1+i*du for i in np.arange(-xn,xn) if U1+i*du>=Umin and U1+i*du<=Umax]
+            self.levels = levels
     def plot(self, ax, xg):
-        for ic in self.ICs:
-            ax.plot(xg[1:], ic, color='green', alpha=0.5)        
+        if not self.ces.bad:
+            for u in self.levels:
+                if type(self.ces)==CES:
+                    myxg, ic = self.ces.get_IC(u, xg[1:])
+                else: 
+                    myxg = xg[1:]
+                    ic = self.ces.get_IC(u, xg[1:])
+                ax.plot(myxg, ic, color=self.color, alpha=self.alpha, linewidth=self.linewidth, label='_nolegend_')
         return ax
 
 def get_cb_levels(cobb_douglas, axis, U1=None, U2=None):
@@ -663,6 +682,16 @@ class CobbDouglasConsumer:
         self.y = y
         self.U = U
 
+class IncomeSupportBudget:
+    def __init__(self, bc, min_y):
+        self.bc = bc
+        self.min_y = min_y
+    def plot(self, ax, xg):
+        m = - self.bc.px / self.bc.py
+        b = self.bc.I / self.bc.py
+        bc = m*xg + b
+        ax.plot(xg, np.maximum(bc, self.min_y), color=self.bc.color, linewidth=self.bc.linewidth, alpha=self.bc.alpha, label=self.bc.label)
+        return ax
 
 ###################################################################
 # PROBLEM GENERATION UTILITIES
@@ -2755,11 +2784,11 @@ class PriceChangeProblem(GenericProblem):
         bc2 = BudgetConstraint(px2,py2,I)
         setup_axis = Axis(xn=xn, xunit=xunit, yn=xn, yunit=xunit)
         solution_axis = Axis(xn=xn, xunit=xunit, yn=xn, yunit=xunit)
-        contours = MixedCobbDouglasContours(x1,y1,x2,y2,bc1,bc2,setup_axis)
+        contours = CESContours(x1,y1,x2,y2,bc1,bc2,setup_axis)
         self.contours = contours
         setup_axis.add(contours)
         solution_axis.add(contours)
-        point1 = Point(x1,y1,text='A',position='ne')
+        point1 = Point(x1,y1,text='A',position='sw')
         point2 = Point(x2,y2,text='B',position='sw')
         solution_axis.add(bc1, bc2, point1, point2)
         self.setup_axis = setup_axis
@@ -2860,7 +2889,9 @@ The prices of the goods are initially \(p_x = {px1:g}\) and \(p_y = {py1:g}\). O
         self.setup_list = setup_list
         self.question_list = question_list
     def check_solution(self):
-        if self.contours.has_crossings: return False
+        if self.contours.ces.bad: return False
+        if self.contours.ces.a<=0: return False
+        if self.contours.ces.a>=1: return False
         if self.params['x1']==self.params['x2']: return False
         if (self.params['px1']==self.params['px2']) and (self.params['py1']==self.params['py2']): return False
         if (self.params['px1']!=self.params['px2']) and (self.params['py1']!=self.params['py2']): return False
@@ -3098,9 +3129,9 @@ class WageChangeProblem(GenericProblem):
         y2 = (I2 - w2*x2)
         bc1 = BudgetConstraint(w1,1,I1)
         bc2 = BudgetConstraint(w2,1,I2)
-        setup_axis = Axis(xn=13, yn=13, xunit=5, yunit=np.maximum(I1,I2)/12, xlab='Leisure Hours', ylab='Income')
-        solution_axis = Axis(xn=13, yn=13, xunit=5, yunit=np.maximum(I1,I2)/12, xlab='Leisure Hours', ylab='Income')
-        contours = MixedCobbDouglasContours(x1,y1,x2,y2,bc1,bc2,setup_axis)
+        setup_axis = Axis(xn=13, yn=13, xunit=5, yunit=5*T, xlab='Leisure Hours', ylab='Income')
+        solution_axis = Axis(xn=13, yn=13, xunit=5, yunit=5*T, xlab='Leisure Hours', ylab='Income')
+        contours = CESContours(x1,y1,x2,y2,bc1,bc2,setup_axis)
         self.contours = contours
         setup_axis.add(contours)
         solution_axis.add(contours)
@@ -3197,7 +3228,9 @@ One day, the worker's hourly wage changes to \(w^\prime = {w2:g}\).
         self.setup_list = setup_list
         self.question_list = question_list
     def check_solution(self):
-        if self.contours.has_crossings: return False
+        if self.contours.ces.bad: return False
+        if self.contours.ces.a<=0: return False
+        if self.contours.ces.a>=1: return False
         if equals(self.params['w1'], self.params['w2']): return False
         if not is_divisible(self.setup_axis.yunit, 1): return False
         if not is_divisible(self.sol['I1'], self.setup_axis.yunit): return False
@@ -3205,7 +3238,119 @@ One day, the worker's hourly wage changes to \(w^\prime = {w2:g}\).
         if not is_divisible(self.sol['y1'], self.setup_axis.yunit): return False
         if not is_divisible(self.sol['y2'], self.setup_axis.yunit): return False
         return True
-        
+
+
+class IncomeSupportProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='income_support_problem'):
+        default_params = {'x':6,'w':15,'yunit':15*5,'ymin':15*5}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        x, w, yunit, ymin = self.params['x'], self.params['w'], self.params['yunit'], self.params['ymin']
+        T = 60 # time budget
+        I = w*T
+        y = I-w*x
+        bc = BudgetConstraint(w,1,I)
+        ibc = IncomeSupportBudget(bc, ymin)
+        cb = get_cb_from_point(x, y, bc)
+        U_work = cb.eval_at(x,y)
+        U_nowork = cb.eval_at(T,ymin)
+        if U_work > U_nowork:
+            work = 'yes'
+            x_choice = x
+            y_choice = y
+        elif U_work < U_nowork:
+            work = 'no'
+            x_choice = T
+            y_choice = ymin
+        else:
+            work = 'not enough information'
+            x_choice = x
+            y_choice = y
+        self.sol = {'y':y, 'I':I, 'U_work':U_work, 'U_nowork':U_nowork, 'work':work, 'x_choice':x_choice, 'y_choice':y_choice}
+        setup_axis = Axis(xn=13, yn=13, xunit=5, yunit=yunit, xlab='Leisure Hours', ylab='Income')
+        solution_axis = Axis(xn=13, yn=13, xunit=5, yunit=yunit, xlab='Leisure Hours', ylab='Income')
+        levels = get_cb_levels(cb, setup_axis, U_work)
+        contours = CobbDouglasContours(cb, levels)
+        self.contours = contours
+        setup_axis.add(contours)
+        solution_axis.add(contours)
+        point = Point(x_choice,y_choice,text='A',position='sw')
+        solution_axis.add(ibc, point)
+        self.setup_axis = setup_axis
+        self.solution_axis = solution_axis
+        setup_list = []
+        setup = fr"""
+A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of \(w={w:g}\) dollars per hour. The worker's 
+indifference curves over leisure and income are shown in the diagram below.
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup.png}}
+\end{{center}}
+In addition, the government provides minimum income support of up to \({ymin:g}\) dollars a week. That is, if someone earns less than \({ymin:g}\) dollars a week, the government supplements their income until it reaches \({ymin:g}\) a week.
+"""
+        online_setup = fr"""
+A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of \(w={w:g}\) dollars per hour. The worker's 
+indifference curves over leisure and income are shown in the diagram below.
+<p>
+<img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png">
+</p>
+In addition, the government provides minimum income support of up to \({ymin:g}\) dollars a week. That is, if someone earns less than \({ymin:g}\) dollars a week, the government supplements their income until it reaches \({ymin:g}\) a week.
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Draw the worker's budget constraint. Label the optimal point A."
+        online_question = question
+        answer = fr"\begin{{center}}\includegraphics[width=3in]{{{name}_sol.png}}\end{{center}}"
+        online_answer = f'<img src = "/CSUN-Econ-310/assets/images/graphs/{name}_sol.png">'
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": None
+        })
+        question = fr"How many hours per week does the worker choose to work?"
+        online_question = question
+        if work=='yes': answer = fr'{T-x:g}'
+        elif work=='no': answer = fr'{0:g}'
+        else: answer = 'not enough information'
+        online_answer = fr"{answer} hours"
+        answers = [fr'{0:g}', fr'{T-x:g}', fr'{60:g}', 'not enough information']
+        sol = answers.index(answer)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
+        })
+        question = fr"If income support were removed, how many hours would the worker choose to work?"
+        online_question = question
+        answer = fr'{T-x:g}'
+        online_answer = fr"{answer} hours"
+        answers = [fr'{0:g}', fr'{T-x:g}', fr'{60:g}', 'not enough information']
+        sol = answers.index(answer)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if not is_divisible(self.params['x'], self.setup_axis.xunit): return False
+        if not is_divisible(self.sol['y'], self.setup_axis.yunit): return False
+        if not is_divisible(self.sol['I'], self.setup_axis.yunit): return False
+        if not is_divisible(self.params['ymin'], self.setup_axis.yunit): return False
+        if not is_divisible(self.setup_axis.yunit, 1): return False
+        if np.abs(self.sol['U_work'] - self.sol['U_nowork'])/self.sol['U_work']<0.1: return False
+        return True
+    
+
 
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
@@ -3232,7 +3377,8 @@ PROBLEM_TYPES = {
     'PriceChangeProblem': PriceChangeProblem,
     'PublicSchoolProblem': PublicSchoolProblem,
     'CobbDouglasWorkerProblem': CobbDouglasWorkerProblem,
-    'WageChangeProblem': WageChangeProblem
+    'WageChangeProblem': WageChangeProblem,
+    'IncomeSupportProblem': IncomeSupportProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)

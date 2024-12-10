@@ -25,6 +25,7 @@ python: pyscript
 	<option value="lec09">9. Constrained Multivariate Optimization</option>
 	<option value="lec10">10. Consumer Choice Theory</option>
 	<option value="lec11">11. Consumer Choice Applications</option>
+	<option value="lec12">12. Labor-Leisure Choice Applications</option>
 </select>
 
 <button id="button" pys-onClick="generate_problem">Generate</button>
