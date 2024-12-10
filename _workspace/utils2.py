@@ -201,7 +201,7 @@ def simplifyCB(cbtop, cbbot):
         return fr"\(\frac{{{PTerm(n,y,1).print()}}}{{{PTerm(d,x,1).print()}}}\)"
 
 class Axis:
-    def __init__(self, xn=13, yn=13, xunit=1, yunit=1, xlab=r'$x$', ylab=r'$y$'):
+    def __init__(self, xn=13, yn=13, xunit=1, yunit=1, xlab=r'$x$', ylab=r'$y$', noticklabels=False):
         self.xn = xn
         self.yn = yn
         self.xunit = xunit
@@ -212,6 +212,7 @@ class Axis:
         self.xg = np.arange(0, self.xmax, self.xunit/10)
         self.xlab = xlab
         self.ylab = ylab
+        self.noticklabels = noticklabels
     def add(self, *args):
         for obj in args:
             self.objects.append(obj)
@@ -219,6 +220,9 @@ class Axis:
         fig, ax = plt.subplots()
         ax.set_xticks(np.arange(0, self.xmax, self.xunit))
         ax.set_yticks(np.arange(0, self.ymax, self.yunit))
+        if self.noticklabels:
+            ax.set_xticklabels([])
+            ax.set_yticklabels([])
         ax.set_xlim([0, self.xmax])
         ax.set_ylim([0, self.ymax])
         ax.set_xlabel(self.xlab)
@@ -692,6 +696,48 @@ class IncomeSupportBudget:
         bc = m*xg + b
         ax.plot(xg, np.maximum(bc, self.min_y), color=self.bc.color, linewidth=self.bc.linewidth, alpha=self.bc.alpha, label=self.bc.label)
         return ax
+
+class CobbDouglasFirm:
+    # f(L,K) = A*L^a K^(1-a)
+    def __init__(self, A, a, color='black', linewidth=2, label='_nolegend_', linestyle='solid', alpha=1.0):
+        self.cb = CobbDouglas(A=A, a=a, b=1-a, x='L', y='K')
+        self.color = color
+        self.linewidth = linewidth
+        self.label = label
+        self.linestyle = linestyle
+        self.alpha = alpha
+    def print(self, maxdenom=8, rmplus=True, rmneg=False):
+        return self.cb.print(maxdenom=maxdenom,rmplus=rmplus,rmneg=rmneg)
+    def eval_at(self, L, K):
+        return cb.eval_at(L, K)
+    def get_isoquant(self, Q, xg):
+        return self.cb.get_IC(Q, xg)
+    def get_isoquant_from_point(self, L, K, xg):
+        return self.cb.get_IC_from_point(L, K, xg)
+    def __repr__(self):
+        return self.print()
+    def unit_cost_K(self, w, r):
+        A, a = self.cb.A, self.cb.a
+        return (1/A)*(((1-a)/a)**a)*(w/r)**a
+    def unit_cost_L(self, w, r):
+        A, a = self.cb.A, self.cb.a
+        return (1/A)*((a/(1-a)))**(1-a)*(r/w)**(1-a)
+    def unit_cost(self, w, r):
+        K = self.unit_cost_K(w,r)
+        L = self.unit_cost_L(w,r)
+        return w*L + r*K
+    def get_unit_isoquant(self, xg):
+        return self.get_isoquant(1, xg)
+    def plot(self, ax, xg):  # draw unit isoquant
+        ic = self.get_unit_isoquant(xg[1:])
+        ax.plot(xg[1:], ic, color=self.color, linewidth=self.linewidth, label=self.label, linestyle=self.linestyle, alpha=self.alpha)
+        return ax
+
+def get_cb_firm_from_point(L, K, w, r):
+    a = w*L/(w*L + r*K)
+    b = 1-a
+    A = 1/(L**a*K**(1-a))
+    return CobbDouglasFirm(A=A, a=a)
 
 ###################################################################
 # PROBLEM GENERATION UTILITIES
@@ -3321,7 +3367,7 @@ In addition, the government provides minimum income support of up to \({ymin:g}\
         sol = answers.index(answer)
         question_list.append({
             "question": question,
-            "online_question": question,
+            "online_question": online_question,
             "answer": answer,
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
@@ -3334,7 +3380,7 @@ In addition, the government provides minimum income support of up to \({ymin:g}\
         sol = answers.index(answer)
         question_list.append({
             "question": question,
-            "online_question": question,
+            "online_question": online_question,
             "answer": answer,
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
@@ -3349,7 +3395,312 @@ In addition, the government provides minimum income support of up to \({ymin:g}\
         if not is_divisible(self.setup_axis.yunit, 1): return False
         if np.abs(self.sol['U_work'] - self.sol['U_nowork'])/self.sol['U_work']<0.1: return False
         return True
-    
+
+class ReturnsToScaleProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='cobb_douglas_consumer_problem'):
+        default_params = {'A':1,'a':1/2,'b':1/2,'delta':0.5}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        A, a, b, delta = params['A'], params['a'], params['b'], params['delta']
+        if delta<0: 
+            input_inc_dec = "reduces"
+            output_inc_dec = "decrease"
+        elif delta>0: 
+            input_inc_dec = "increases"
+            output_inc_dec = "increase"
+        else: 
+            input_inc_dec = "neither"
+            output_inc_dec = "neither"
+        if a+b==1: rts="constant returns to scale"
+        elif a+b>1: rts="increasing returns to scale"
+        else: rts="decreasing returns to scale"
+        self.sol['rts'] = rts
+        cb = CobbDouglas(A=A,a=a,b=b,x='L',y='K')
+        setup_list = []
+        setup = fr"""
+A firm uses labor \(L\) and capital \(K\) to produce a commodity output. The firm's production function is:
+$$f(L,K) = {cb}$$
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Does the firm exhibit increasing, decreasing, or constant returns to scale?"
+        online_question = question
+        answer = rts
+        online_answer = answer
+        answers = ["increasing returns to scale", "decreasing returns to scale", "constant returns to scale"]
+        sol = answers.index(answer)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,rng=rng)
+        })
+        question = fr"Suppose the firm {input_inc_dec} both its labor and capital input by \({np.abs(delta)*100:g}\%\). This would cause the firm's output to {output_inc_dec} by a factor of:"
+        online_question = fr"Suppose the firm {input_inc_dec} both its labor and capital input by \({np.abs(delta)*100:g}\%\). This would cause the firm's output to {output_inc_dec} by a factor of what?"
+        answer = np.abs((1+delta)**(a+b)-1)
+        online_answer = fr"\({answer*100:g}\%\)"
+        answers = generate_distractors(answer,K=4,delta=1.25,type='mul')
+        answers = [fr"\({ans*100:g}\%\)" for ans in answers]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,sort=True,rng=rng)
+        })
+        question = fr"Suppose the firm {input_inc_dec} its labor input by \({np.abs(delta)*100:g}\%\) without changing its capital input. This would cause the firm's output to {output_inc_dec} by a factor of:"
+        online_question = fr"Suppose the firm {input_inc_dec} its labor input by \({np.abs(delta)*100:g}\%\) without changing its capital input. This would cause the firm's output to {output_inc_dec} by a factor of what?"
+        answer = np.abs((1+delta)**a-1)
+        online_answer = fr"\({answer*100:g}\%\)"
+        answers = generate_distractors(answer,K=4,delta=1.25,type='mul')
+        answers = [fr"\({ans*100:g}\%\)" for ans in answers]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,sort=True,rng=rng)
+        })
+        question = fr"Suppose the firm {input_inc_dec} its capital input by \({np.abs(delta)*100:g}\%\) without changing its labor input. This would cause the firm's output to {output_inc_dec} by a factor of:"
+        online_question = fr"Suppose the firm {input_inc_dec} its capital input by \({np.abs(delta)*100:g}\%\) without changing its labor input. This would cause the firm's output to {output_inc_dec} by a factor of what?"
+        answer = np.abs((1+delta)**b-1)
+        online_answer = fr"\({answer*100:g}\%\)"
+        answers = generate_distractors(answer,K=4,delta=1.25,type='mul')
+        answers = [fr"\({ans*100:g}\%\)" for ans in answers]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,sort=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+        
+class CobbDouglasFirmProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='cobb_douglas_firm_problem'):
+        default_params = {'A':1, 'a':1/2, 'w':1, 'r':1}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        A, a, w, r = params['A'], params['a'], params['w'], params['r']
+        firm = CobbDouglasFirm(A,a)
+        L = firm.unit_cost_L(w,r)
+        K = firm.unit_cost_K(w,r)
+        unit_cost = firm.unit_cost(w,r)
+        self.sol = {'L':L, 'K':K, 'unit_cost':unit_cost}
+        setup_list = []
+        setup = fr"""
+A firm has a constant returns to scale production function over labor and capital given by:
+$$ f(L,K) = {firm.cb} $$
+The unit price of labor is \(w={w:g}\) and the unit price of capital is \(r={r:g}\).
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"What choice of labor \(L\) minimizes the cost to produce one unit of output?"
+        online_question = question
+        answer = L
+        online_answer = fr"\(L = {answer:g}\)"
+        answers = generate_distractors(answer, type='add')
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What choice of capital \(K\) minimizes the cost to produce one unit of output?"
+        online_question = question
+        answer = K
+        online_answer = fr"\(K = {answer:g}\)"
+        answers = generate_distractors(answer, type='add')
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the firm's cost to produce one unit?"
+        online_question = question
+        answer = unit_cost
+        online_answer = fr"\(MC = {answer:g}\)"
+        answers = generate_distractors(answer, type='add')
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list        
+        
+class CobbDouglasFirmGraphicalProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='cobb_douglas_firm_problem'):
+        default_params = {'L':4, 'K':4, 'w':1, 'r':1, 'xunit':1}
+        xn = 13
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        L, K, w, r, xunit = params['L'], params['K'], params['w'], params['r'], params['xunit']
+        unit_cost = w*L + r*K
+        self.sol['unit_cost'] = unit_cost
+        firm = get_cb_firm_from_point(L, K, w, r)
+        setup_axis = Axis(xn=13,yn=13,xunit=xunit,yunit=xunit,xlab=r'$L$',ylab=r'$K$')
+        passing = [(L+i*xunit, K+i*xunit) for i in np.arange(-xn,xn)]
+        contours = LineContours(w, r, passing)
+        self.contours = contours
+        setup_axis.add(contours)
+        setup_axis.add(firm)
+        self.setup_axis = setup_axis
+        setup_list = []
+        setup = fr"""
+A firm has a constant returns to scale production function. Its unit isoquant and isocost curves are shown in the diagram below:
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup.png}}
+\end{{center}}
+The unit price of labor is \(w={w:g}\) and the unit price of capital is \(r={r:g}\).
+"""
+        online_setup = fr"""
+A firm has a constant returns to scale production function. Its unit isoquant and isocost curves are shown in the diagram below:
+<p>
+<img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png">
+</p>
+The unit price of labor is \(w={w:g}\) and the unit price of capital is \(r={r:g}\).
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"What choice of labor \(L\) minimizes the cost to produce one unit of output?"
+        online_question = question
+        answer = L
+        online_answer = fr"\(L = {answer:g}\)"
+        answers = generate_distractors(answer, delta=xunit, type='add')
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What choice of capital \(K\) minimizes the cost to produce one unit of output?"
+        online_question = question
+        answer = K
+        online_answer = fr"\(K = {answer:g}\)"
+        answers = generate_distractors(answer, delta=xunit, type='add')
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the firm's cost to produce one unit?"
+        online_question = question
+        answer = unit_cost
+        online_answer = fr"\(MC = {answer:g}\)"
+        answers = generate_distractors(answer, type='add')
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if not is_divisible(self.params['L'], self.setup_axis.xunit): return False
+        if not is_divisible(self.params['K'], self.setup_axis.yunit): return False
+        return True
+
+class TechnicalChangeProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='technical_change_problem'):
+        default_params = {'A1':1, 'A2':2, 'a1':1/2, 'a2':1/2}
+        xn = 13
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        A1, A2, a1, a2 = params['A1'], params['A2'], params['a1'], params['a2']
+        if A2>A1:
+            changetype = 'increase in total factor productivity'
+        elif A2<A1:
+            changetype = 'decrease in total factor productivity'
+        elif a2>a1:
+            changetype = 'technical change favoring labor'
+        elif a2<a1:
+            changetype = 'technical change favoring capital'
+        else:
+            changetype = 'no change'
+        self.sol['changetype'] = changetype
+        firm1 = CobbDouglasFirm(A=A1, a=a1, label='T1')
+        firm2 = CobbDouglasFirm(A=A2, a=a2, color='red', linestyle='dashed', label='T2')
+        if equals(A1,A2):
+            xunit = (1/A1)/6
+            yunit = (1/A1)/6
+        else:
+            yunit = (1/A1 + 1/A2)/12
+            xunit = (1/A1 + 1/A2)/12
+        setup_axis = Axis(xn=xn,yn=xn,xunit=xunit,yunit=yunit,noticklabels=True,xlab=r'$L$',ylab=r'$K$')
+        setup_axis.add(firm1)
+        setup_axis.add(firm2)
+        self.setup_axis = setup_axis
+        setup_list = []
+        setup = fr"""
+The diagram below illustrates a technological change in a firm's production function. The black solid line shows the firm's unit isoquant prior to the technical change, and the red dashed line shows the firm's unit isoquant subsequent to the technical change.
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup.png}}
+\end{{center}}
+"""
+        online_setup = fr"""
+The diagram below illustrates a technological change in a firm's production function. The black solid line shows the firm's unit isoquant prior to the technical change, and the red dashed line shows the firm's unit isoquant subsequent to the technical change.
+<p>
+<img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png">
+</p>
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"What type of technical change does this illustrate?"
+        online_question = question
+        answer = changetype
+        online_answer = answer
+        answers = [
+            'increase in total factor productivity',
+            'decrease in total factor productivity',
+            'technical change favoring labor',
+            'technical change favoring capital'
+        ]
+        sol = answers.index(answer)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=False,shuffle=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        params = self.params
+        A1, A2, a1, a2 = params['A1'], params['A2'], params['a1'], params['a2']
+        if (A1!=A2) and (a1!=a2): return False
+        if equals(A1,A2) and equals(a1,a2): return False
+        return True
+        
+        
+        
 
 
 PROBLEM_TYPES = {
@@ -3378,7 +3729,11 @@ PROBLEM_TYPES = {
     'PublicSchoolProblem': PublicSchoolProblem,
     'CobbDouglasWorkerProblem': CobbDouglasWorkerProblem,
     'WageChangeProblem': WageChangeProblem,
-    'IncomeSupportProblem': IncomeSupportProblem
+    'IncomeSupportProblem': IncomeSupportProblem,
+    'ReturnsToScaleProblem': ReturnsToScaleProblem,
+    'CobbDouglasFirmProblem': CobbDouglasFirmProblem,
+    'CobbDouglasFirmGraphicalProblem': CobbDouglasFirmGraphicalProblem,
+    'TechnicalChangeProblem': TechnicalChangeProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
