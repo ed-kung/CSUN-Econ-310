@@ -107,11 +107,11 @@ What is the relationship between a firm's production function, $$f(L)$$, and its
 
 $$ c(q) = \min_{L} ~ wL ~ \text{ where } ~ q = f(L) $$
 
-In other words, what is the minimum labor cost ($$wL$$) necessary to produce $$q$$ units of output?
+In other words, $$c(q)$$ is the minimum labor cost ($$wL$$) necessary to produce $$q$$ units of output.
 
 Since there's a 1:1 mapping between $$q$$ and $$L$$, the cost function is equal to:
 
-$$c(q) = w f^{-1}(L) $$
+$$c(q) = w f^{-1}(q) $$
 
 {: .yellow-callout-title }
 > Example: Deriving a cost function
