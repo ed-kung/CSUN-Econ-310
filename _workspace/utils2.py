@@ -739,6 +739,144 @@ def get_cb_firm_from_point(L, K, w, r):
     A = 1/(L**a*K**(1-a))
     return CobbDouglasFirm(A=A, a=a)
 
+class NormalForm:
+    def __init__(self, players, strategies, payoffs, gametype):
+        assert len(players)==2
+        assert len(strategies)==2
+        assert len(strategies[0])==len(payoffs)
+        assert len(payoffs[0])==len(strategies[1])
+        _payoffs_ = payoffs
+        # Initialize payoffs and best responses
+        payoffs = {}
+        payoffs[players[0]] = {}
+        payoffs[players[1]] = {}
+        br = {}
+        br[players[0]] = {}
+        br[players[1]] = {}
+        for s in strategies[1]:
+            payoffs[players[0]][s] = {}
+            br[players[0]][s] = {}
+        for s in strategies[0]:
+            payoffs[players[1]][s] = {}
+            br[players[1]][s] = {}
+
+        # Populate payoffs
+        for i in range(len(_payoffs_)):
+            for j in range(len(_payoffs_[0])):
+                strategy_1 = strategies[0][i]
+                strategy_2 = strategies[1][j]
+                payoffs[players[0]][strategy_2][strategy_1] = _payoffs_[i][j][0]
+                payoffs[players[1]][strategy_1][strategy_2] = _payoffs_[i][j][1]
+
+        # Find best responses
+        for player, opp_strategies in payoffs.items():
+            for opp_strategy, my_strategies in opp_strategies.items():
+                my_payoffs = np.array([v for (k,v) in my_strategies.items()])
+                #print(my_payoffs)
+                #print(my_payoffs.shape)
+                my_br = []
+                my_br_ids = np.argwhere(my_payoffs==np.amax(my_payoffs)).flatten()
+                #print(type(my_br_ids))
+                #print(my_br_ids)
+                #print(type(list(my_strategies.keys())))
+                #print(list(my_strategies.keys()))
+                for br_id in my_br_ids:
+                    my_br.append(list(my_strategies.keys())[br_id] )
+                br[player][opp_strategy] = my_br
+
+        # Find Nash equilibria
+        ne = []
+        ne_payoffs = []
+        ne_distractors = []
+        for s1 in strategies[0]:
+            for s2 in strategies[1]:
+                if (s1 in br[players[0]][s2]) and (s2 in br[players[1]][s1]):
+                    ne.append((s1,s2))
+                    ne_payoffs.append((payoffs[players[0]][s1][s2], payoffs[players[1]][s1][s2]))
+                else:
+                    ne_distractors.append((s1,s2))
+        
+        self.players = players
+        self.strategies = strategies
+        self._payoffs_ = _payoffs_
+        self.payoffs = payoffs
+        self.br = br
+        self.ne = ne
+        self.ne_payoffs = ne_payoffs
+        self.ne_distractors = ne_distractors
+        self.gametype = gametype
+    
+    def table_as_html(self, circle_br=False):
+        t = '<table border=1px align="center">'
+        N = len(self.strategies[0])
+        K = len(self.strategies[1])
+        players = self.players
+        strategies = self.strategies
+        payoffs = self.params['payoffs']
+        br = self.br
+        t+=  '<tr>'
+        t+=  '<td></td>'
+        t+=  '<td></td>'
+        t+= f'<td colspan={K} align="center">{players[1]}</td>'
+        t+=  '</tr>'
+        t+=  '<tr>'
+        t+=  '<td></td>'
+        t+=  '<td></td>'
+        for k in range(K):
+            t+= f'<td align="center">{strategies[1][k]}</td>'
+        t+= '</tr>'
+        for i in range(N):
+            t+= '<tr>'
+            if i==0:
+                t+= f'<td rowspan={N}>{players[0]}</td>'
+            t+= f'<td>{strategies[0][i]}</td>'
+            for k in range(K):
+                if circle_br and (strategies[0][i] in br[players[0]][strategies[1][k]]):
+                    u1 = f'<span style="border-width:2px; border-style:solid; border-color:#FF0000;">{payoffs[i][k][0]}</span>'
+                else:
+                    u1 = f'{payoffs[i][k][0]}'
+                if circle_br and (strategies[1][k] in br[players[1]][strategies[0][i]]):
+                    u2 = f'<span style="border-width:2px; border-style:solid; border-color:#FF0000;">{payoffs[i][k][1]}</span>'
+                else:
+                    u2 = f'{payoffs[i][k][1]}'
+                t+= f'<td align="center">{u1}, {u2}</td>'
+            t+=  '</tr>'
+        t+=  '</table>'
+        return t
+
+    def table_as_latex(self):
+        players = self.players
+        strategies = self.strategies
+        payoffs = self.params['payoffs']
+        N = len(strategies[0])
+        K = len(strategies[1])
+        t = fr"""
+\begin{{center}}
+\begin{{tabular}}{{|c|c|{'c|'*K}}} \hline
+ & & \multicolumn{{{K}}}{{c|}}{{ {players[1]} }} \\ \hline
+"""
+        t+= " & "
+        for k in range(K):
+            t+= fr" & {strategies[1][k]}"
+        t+= fr"\\ \hline" + '\n'
+        for i in range(N):
+            if i==0:
+                t+= fr"\multirow{{{N}}}{{*}}{{{players[0]}}} "
+            t+= fr" & {strategies[0][i]} "
+            for k in range(K):
+                t+= fr" & {payoffs[i][k][0]}, {payoffs[i][k][1]} "
+            if i==N-1:
+                t+= fr"\\ \hline" + '\n'
+            else:
+                t+= fr"\\ \cline{{2-{K+2}}}" + '\n'
+        t+=fr"""
+\end{{tabular}}
+\end{{center}}
+"""
+        return t
+        
+        
+    
 ###################################################################
 # PROBLEM GENERATION UTILITIES
 ###################################################################
@@ -3699,8 +3837,75 @@ The diagram below illustrates a technological change in a firm's production func
         if equals(A1,A2) and equals(a1,a2): return False
         return True
         
-        
-        
+class NormalFormProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='normal_form_problem'):
+        default_params = {
+            'players': ['Player 1', 'Player 2'],
+            'strategies': [['A','B'],['A','B']],
+            'payoffs': [[[4,4],[10,0]],
+                        [[0,10],[6,6]]],
+            'gametype': "Prisoner's Dilemma"
+        }
+        xn = 13
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        players, strategies, payoffs, gametype = params['players'], params['strategies'], params['payoffs'], params['gametype']
+        normalform = NormalForm(players=players, strategies=strategies, payoffs=payoffs, gametype=gametype)
+        ne = normalform.ne
+        ne_distractors = normalform.ne_distractors
+        if len(ne)==0:
+            ne_sol = fr"No Nash Equilibria"
+            _distractors_ = rng.choice(ne_distractors, 2)
+            ne_d1 = fr"1 Nash Equilibria: {_distractors_[0]}"
+            ne_d2 = fr"1 Nash Equilibria: {_distractors_[1]}"
+            ne_d3 = fr"2 Nash Equilibria: {', '.join(rng.choice(ne_distractors,2))}"
+        else:
+            ne_sol = fr"{len(ne)} Nash Equilibria: {', '.join(ne)}"
+            ne_d1 = fr"No Nash Equilibria"
+            ne_d2 = fr"1 Nash Equilibria: {rng.choice(ne_distractors)}"
+            ne_d3 = fr"2 Nash Equilibria: {', '.join(rng.choice(ne_distractors,2))}"
+        self.normalform = normalform
+        setup_list = []
+        setup = fr"""
+Consider the 2-player game described by the normal form below:
+{normalform.table_as_latex()}
+"""
+        online_setup = fr"""
+<p>Consider the 2-player game described by the normal form below:</p>
+{normalform.table_as_html()}
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = "Find all the Nash equilibria."
+        online_question = question
+        answer = ne_sol
+        online_answer = answer
+        answers = [ne_sol, ne_d1, ne_d2, ne_d3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=False,shuffle=True,rng=rng)
+        })
+        question = "Do the strategic dynamics of this game most resemble Prisoner's Dilemma, Stag Hunt, Chicken, or Rock Paper Scissors?"
+        online_question = question
+        answer = gametype
+        online_answer = answer
+        answers = ["Prisoner's Dilemma", "Stag Hunt", "Chicken", "Rock Paper Scissors"]
+        sol = answers.index(answer)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
 
 
 PROBLEM_TYPES = {
@@ -3733,7 +3938,8 @@ PROBLEM_TYPES = {
     'ReturnsToScaleProblem': ReturnsToScaleProblem,
     'CobbDouglasFirmProblem': CobbDouglasFirmProblem,
     'CobbDouglasFirmGraphicalProblem': CobbDouglasFirmGraphicalProblem,
-    'TechnicalChangeProblem': TechnicalChangeProblem
+    'TechnicalChangeProblem': TechnicalChangeProblem,
+    'NormalFormProblem': NormalFormProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
