@@ -1,8 +1,8 @@
 ---
 layout: default
-title: 1. Math Review
+title: 2. Math Review
 parent: Lecture Notes
-nav_order: 1
+nav_order: 2
 ---
 
 # Math Review
