@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "9. Unconstrained Multivariate Optimization"
+title: "8. Unconstrained Multivariate Optimization"
 parent: Lecture Notes
-nav_order: 9
+nav_order: 8
 ---
 
 # Unconstrained Multivariate Optimization

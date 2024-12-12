@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "10. Constrained Multivariate Optimization"
+title: "9. Constrained Multivariate Optimization"
 parent: Lecture Notes
-nav_order: 10
+nav_order: 9
 ---
 
 # Constrained Multivariate Optimization
