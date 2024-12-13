@@ -791,10 +791,10 @@ class NormalForm:
         for s1 in strategies[0]:
             for s2 in strategies[1]:
                 if (s1 in br[players[0]][s2]) and (s2 in br[players[1]][s1]):
-                    ne.append((s1,s2))
+                    ne.append(fr"({s1},{s2})")
                     ne_payoffs.append((payoffs[players[0]][s1][s2], payoffs[players[1]][s1][s2]))
                 else:
-                    ne_distractors.append((s1,s2))
+                    ne_distractors.append(fr"({s1},{s2})")
         
         self.players = players
         self.strategies = strategies
@@ -812,7 +812,7 @@ class NormalForm:
         K = len(self.strategies[1])
         players = self.players
         strategies = self.strategies
-        payoffs = self.params['payoffs']
+        payoffs = self._payoffs_
         br = self.br
         t+=  '<tr>'
         t+=  '<td></td>'
@@ -847,7 +847,7 @@ class NormalForm:
     def table_as_latex(self):
         players = self.players
         strategies = self.strategies
-        payoffs = self.params['payoffs']
+        payoffs = self._payoffs_
         N = len(strategies[0])
         K = len(strategies[1])
         t = fr"""
@@ -874,9 +874,36 @@ class NormalForm:
 \end{{center}}
 """
         return t
+
+class Monopoly:
+    # c(q) = f + aq + b*q^2
+    # demand is of class LinearDemand
+    def __init__(self, demand, f=0, a=0, b=0.5):
+        q = (demand.a - a)/(2*(demand.b + b))
+        p = demand.a - demand.b*q
+        profit = p*q - f - a*q - b*q**2
+        CS = 0.5*(demand.a - p)*q
+        q_eff = (demand.a - a)/(demand.b + 2*b)
+        p_eff = demand.a - demand.b*q_eff
+        profit_eff = p_eff*q_eff - f - a*q_eff - b*q_eff**2
+        CS_eff = 0.5*(demand.a - p_eff)*q_eff
+        DWL = (CS_eff + profit_eff) - (CS + profit)
+        self.demand = demand
+        self.f = f
+        self.a = a
+        self.b = b
+        self.sol = {'q':q, 'p':p, 'CS':CS, 'profit':profit, 
+                    'q_eff': q_eff, 'p_eff': p_eff, 'CS_eff':CS_eff, 'profit_eff':profit_eff,
+                    'DWL':DWL}
+    def print_cost_function(self, q='q'):
+        f, a, b = self.f, self.a, self.b
+        return fr"{PolyEq([f,a,b],q,[0,1,2])}"
+    def setup(self):
+        return fr"""
+The market is supplied by a single monopolist, who can produce \(q\) units of the commodity at a total cost of:
+$$ c(q) = {self.print_cost_function()} $$
+"""
         
-        
-    
 ###################################################################
 # PROBLEM GENERATION UTILITIES
 ###################################################################
@@ -3855,15 +3882,20 @@ class NormalFormProblem(GenericProblem):
         ne_distractors = normalform.ne_distractors
         if len(ne)==0:
             ne_sol = fr"No Nash Equilibria"
-            _distractors_ = rng.choice(ne_distractors, 2)
+            _distractors_ = rng.choice(ne_distractors, 2, replace=False)
             ne_d1 = fr"1 Nash Equilibria: {_distractors_[0]}"
             ne_d2 = fr"1 Nash Equilibria: {_distractors_[1]}"
-            ne_d3 = fr"2 Nash Equilibria: {', '.join(rng.choice(ne_distractors,2))}"
+            ne_d3 = fr"2 Nash Equilibria: {', '.join(rng.choice(ne_distractors,2,replace=False))}"
+        elif len(ne)==1:
+            ne_sol = fr"{len(ne)} Nash Equilibria: {ne[0]}"
+            ne_d1 = fr"No Nash Equilibria"
+            ne_d2 = fr"1 Nash Equilibria: {rng.choice(ne_distractors)}"
+            ne_d3 = fr"2 Nash Equilibria: {', '.join(rng.choice(ne_distractors,2,replace=False))}"
         else:
             ne_sol = fr"{len(ne)} Nash Equilibria: {', '.join(ne)}"
             ne_d1 = fr"No Nash Equilibria"
             ne_d2 = fr"1 Nash Equilibria: {rng.choice(ne_distractors)}"
-            ne_d3 = fr"2 Nash Equilibria: {', '.join(rng.choice(ne_distractors,2))}"
+            ne_d3 = fr"2 Nash Equilibria: {', '.join(rng.choice(ne_distractors,2,replace=False))}"
         self.normalform = normalform
         setup_list = []
         setup = fr"""
@@ -3907,7 +3939,144 @@ Consider the 2-player game described by the normal form below:
         self.setup_list = setup_list
         self.question_list = question_list
 
-
+class MonopolyProblem(GenericProblem):
+    # p = alpha - beta*q
+    # c(q) = f + a*q + b*q^2
+    def __init__(self, params=None, rng=rng, name='quadratic_optimization_problem'):
+        default_params = {'alpha':12,'beta':1,'f':0,'a':0,'b':0.5}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        alpha, beta, f, a, b = params['alpha'], params['beta'], params['f'], params['a'], params['b']
+        consumer = LinearConsumer(alpha, beta)
+        monopoly = Monopoly(consumer.demand, f, a, b)
+        self.consumer = consumer
+        self.monopoly = monopoly
+        self.sol = monopoly.sol.copy()
+        setup_list = []
+        setup = fr"""
+Price-taking consumers in the market for a commodity have a demand curve given by:
+$$ q = {consumer.demand.print()} $$
+{monopoly.setup()}
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        setup = fr"""
+{consumer.setup()}
+{monopoly.setup()}
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = "Calculate the profit maximizing price."
+        answer = monopoly.sol['p']
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(p = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the profit maximizing quantity."
+        answer = monopoly.sol['q']
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(q = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the monopolist's profit."
+        answer = monopoly.sol['profit']
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(\Pi = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the consumer surplus."
+        answer = monopoly.sol['CS']
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(CS = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "What is the efficient quantity that would maximize total surplus?"
+        answer = monopoly.sol['q_eff']
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(q_e = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "What is the efficient price level?"
+        answer = monopoly.sol['p_eff']
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(p_e = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "Calcualte the monopolist's profit at the efficient outcome."
+        answer = monopoly.sol['profit_eff']
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(\Pi_e = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "Calcualte the consumer surplus at the efficient outcome."
+        answer = monopoly.sol['CS_eff']
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(CS_e = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "Calcualte the deadweight loss caused by monopolistic behavior."
+        answer = monopoly.sol['DWL']
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(DWL = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if not is_divisible(self.sol['q'],1): return False
+        if not is_divisible(self.sol['p'],1): return False
+        if not is_divisible(self.sol['q_eff'],1): return False
+        if not is_divisible(self.sol['p_eff'],1): return False
+        if self.sol['q']<=0: return False
+        if self.sol['p']<=0: return False
+        if self.sol['q_eff']<=0: return False
+        if self.sol['p_eff']<=0: return False
+        if self.sol['profit']<=0: return False
+        return True
+        
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
     'ExponentialMarketProblem': ExponentialMarketProblem,
@@ -3939,7 +4108,8 @@ PROBLEM_TYPES = {
     'CobbDouglasFirmProblem': CobbDouglasFirmProblem,
     'CobbDouglasFirmGraphicalProblem': CobbDouglasFirmGraphicalProblem,
     'TechnicalChangeProblem': TechnicalChangeProblem,
-    'NormalFormProblem': NormalFormProblem
+    'NormalFormProblem': NormalFormProblem,
+    'MonopolyProblem': MonopolyProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
