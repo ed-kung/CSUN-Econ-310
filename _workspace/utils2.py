@@ -903,7 +903,62 @@ class Monopoly:
 The market is supplied by a single monopolist, who can produce \(q\) units of the commodity at a total cost of:
 $$ c(q) = {self.print_cost_function()} $$
 """
-        
+
+class Cournot2:
+    def __init__(self, firm1, firm2, demand):
+        a1 = firm1.a
+        b1 = firm1.b
+        a2 = firm2.a
+        b2 = firm2.b
+        alpha = demand.a
+        beta = demand.b
+        M = np.array([
+            [2*beta+b1,      beta],
+            [     beta, 2*beta+b2]
+        ])
+        y = np.array([alpha-a1, alpha-a2])
+        x = np.linalg.solve(M, y)
+        q1 = x[0]
+        q2 = x[1]
+        Q = q1 + q2
+        p = alpha - beta*Q
+        profit1 = firm1.profit_at(p, q1)
+        profit2 = firm2.profit_at(p, q2)
+        self.sol = {'p':p, 'q1':q1, 'q2':q2, 'Q':Q, 'profit1':profit1, 'profit2':profit2}
+        self.firm1 = firm1
+        self.firm2 = firm2
+        self.demand = demand
+    def setup(self):
+        return fr"""
+Price-taking consumers in the market for a commodity have a demand curve given by:
+$$ Q = {self.demand.print()} $$
+The market is supplied by two firms who produce identical products. Firm 1 has a cost function given by:
+$$ c_1(q_1) = {self.firm1.print_cost_function(q='q_1')} $$
+Firm 2 has a cost function given by:
+$$ c_2(q_2) = {self.firm2.print_cost_function(q='q_2')} $$
+The firms engage in Cournot competition, i.e. they choose the quantity they wish to produce and let the market determine the price.
+"""
+
+class CournotN:
+    def __init__(self, mc, N, demand):
+        alpha = demand.a
+        beta = demand.b
+        q = (alpha - mc)/((N+1)*beta)
+        Q = N*q
+        p = alpha - beta*Q
+        profit = p*q - mc*q
+        total_profit = N*profit
+        self.N = N
+        self.mc = mc
+        self.demand = demand
+        self.sol = {'q':q, 'Q':Q, 'p':p, 'profit':profit, 'total_profit':total_profit}
+    def setup(self):
+        return fr"""
+Price-taking consumers in the market for a commodity have a demand curve given by:
+$$ Q = {self.demand.print()} $$
+The market is supplied by \(N={self.N:g}\) identical firms. Each firm has a constant average and marginal cost of production equal to \(c={self.mc:g}\). The firms engage in Cournot competition, i.e. they choose the quantity they wish to produce and let the market determine the price.
+"""
+
 ###################################################################
 # PROBLEM GENERATION UTILITIES
 ###################################################################
@@ -4077,6 +4132,169 @@ $$ q = {consumer.demand.print()} $$
         if self.sol['profit']<=0: return False
         return True
         
+class Cournot2Problem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='cournot2_problem'):
+        default_params = {'alpha':12,'beta':1,'a1':0,'b1':1,'a2':0,'b2':1}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        alpha, beta, a1, b1, a2, b2 = params['alpha'], params['beta'], params['a1'], params['b1'], params['a2'], params['b2']
+        firm1 = QuadraticCostFirm(a=a1, b=b1)
+        firm2 = QuadraticCostFirm(a=a2, b=b2)
+        demand = LinearDemand(a=alpha, b=beta)
+        cournot2 = Cournot2(firm1, firm2, demand)
+        self.sol = cournot2.sol.copy()
+        self.cournot2 = cournot2
+        setup_list = []
+        setup = cournot2.setup()
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = "What quantity does firm 1 produce in the Nash equilibrium?"
+        online_question = question
+        answer = cournot2.sol['q1']
+        online_answer = fr"\(q_1 = {answer:g}\)"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "What quantity does firm 2 produce in the Nash equilibrium?"
+        online_question = question
+        answer = cournot2.sol['q2']
+        online_answer = fr"\(q_2 = {answer:g}\)"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "What is the Nash equilibrium price in this market?"
+        online_question = question
+        answer = cournot2.sol['p']
+        online_answer = fr"\(p = {answer:g}\)"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "What is the Nash equilibrium profit of firm 1?"
+        online_question = question
+        answer = cournot2.sol['profit1']
+        online_answer = fr"\(\Pi_1 = {answer:g}\)"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "What is the Nash equilibrium profit of firm 2?"
+        online_question = question
+        answer = cournot2.sol['profit2']
+        online_answer = fr"\(\Pi_2 = {answer:g}\)"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if not is_divisible(self.sol['p'],1): return False
+        if not is_divisible(self.sol['q1'],1): return False
+        if not is_divisible(self.sol['q2'],1): return False
+        if self.sol['p']<=0: return False
+        if self.sol['q1']<=0: return False
+        if self.sol['q2']<=0: return False
+        return True
+        
+class CournotNProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='cournotN_problem'):
+        default_params = {'alpha':12,'beta':1,'mc':3,'N':2}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        alpha, beta, mc, N = params['alpha'], params['beta'], params['mc'], params['N']
+        demand = LinearDemand(a=alpha, b=beta)
+        cournotN = CournotN(mc, N, demand)
+        self.sol = cournotN.sol.copy()
+        self.cournotN = cournotN
+        setup_list = []
+        setup = cournotN.setup()
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = "What quantity does each firm produce in the Nash equilibrium?"
+        online_question = question
+        answer = cournotN.sol['q']
+        online_answer = fr"\(q_i = {answer:g}\)"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "What is the total quantity produced in the Nash equilibrium?"
+        online_question = question
+        answer = cournotN.sol['Q']
+        online_answer = fr"\(Q = {answer:g}\)"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "What is the Nash equilibrium price in this market?"
+        online_question = question
+        answer = cournotN.sol['p']
+        online_answer = fr"\(p = {answer:g}\)"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "What is the Nash equilibrium profit of each firm?"
+        online_question = question
+        answer = cournotN.sol['profit']
+        online_answer = fr"\(\Pi_i = {answer:g}\)"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        return True
+        
+
 PROBLEM_TYPES = {
     'LinearMarketProblem': LinearMarketProblem,
     'ExponentialMarketProblem': ExponentialMarketProblem,
@@ -4109,7 +4327,9 @@ PROBLEM_TYPES = {
     'CobbDouglasFirmGraphicalProblem': CobbDouglasFirmGraphicalProblem,
     'TechnicalChangeProblem': TechnicalChangeProblem,
     'NormalFormProblem': NormalFormProblem,
-    'MonopolyProblem': MonopolyProblem
+    'MonopolyProblem': MonopolyProblem,
+    'Cournot2Problem': Cournot2Problem,
+    'CournotNProblem': CournotNProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)

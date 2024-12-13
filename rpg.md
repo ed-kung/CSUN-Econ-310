@@ -29,6 +29,7 @@ python: pyscript
 	<option value="lec13">13. Theory of Production</option>
 	<option value="lec14">14. Game Theory I</option>
 	<option value="lec16">16. Monopolies</option>
+	<option value="lec17">17. Imperfect Competition</option>
 </select>
 
 <button id="button" pys-onClick="generate_problem">Generate</button>
