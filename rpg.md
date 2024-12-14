@@ -30,6 +30,8 @@ python: pyscript
 	<option value="lec14">14. Game Theory I</option>
 	<option value="lec16">16. Monopolies</option>
 	<option value="lec17">17. Imperfect Competition</option>
+	<option value="lec18">18. Risk and Uncertainty</option>
+	<option value="lec19">19. Consumption and Savings</option>
 </select>
 
 <button id="button" pys-onClick="generate_problem">Generate</button>

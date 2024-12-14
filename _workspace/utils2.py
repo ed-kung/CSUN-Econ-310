@@ -959,6 +959,52 @@ $$ Q = {self.demand.print()} $$
 The market is supplied by \(N={self.N:g}\) identical firms. Each firm has a constant average and marginal cost of production equal to \(c={self.mc:g}\). The firms engage in Cournot competition, i.e. they choose the quantity they wish to produce and let the market determine the price.
 """
 
+class Insurance:
+    def __init__(self, W0=1000, D=200, p=0.2, fun='ln'):
+        self.W0 = W0
+        self.D = D
+        self.p = p
+        self.fun = fun
+        if fun=='ln':
+            ufun = np.log
+            uinv = np.exp
+        elif fun=='sqrt':
+            ufun = np.sqrt
+            uinv = lambda x: x**2
+        EX = (1-p)*W0 + p*(W0 - D)
+        EU = (1-p)*ufun(W0) + p*ufun(W0 - D)
+        CE = uinv(EU)
+        WTP = W0 - CE
+        FairCost = p*D
+        self.sol = {'EX':EX, 'EU':EU, 'CE':CE, 'WTP':WTP, 'FairCost':FairCost}
+    def setup(self):
+        W0, D, p, fun = self.W0, self.D, self.p, self.fun
+        if fun=='ln':
+            funstr = fr"\ln X"
+        elif fun=='sqrt':
+            funstr = fr"\sqrt{{X}}"
+        return fr"""
+An individual has an initial wealth of \({W0:,g}\). There is a \({p*100:g}\%\) chance that the individual has an accident which would force them to pay \({D:,g}\) to fix the problem. Let \(X\) be a random variable representing the person's wealth at the end of the day. The individual's utility function over wealth is:
+$$ u(X) = {funstr} $$
+"""
+
+class Savings:
+    def __init__(self, Y, beta, p):
+        self.Y = Y
+        self.beta = beta
+        self.p = p
+        c2 = Y/(p*(1+1/beta))
+        c1 = Y - p*c2
+        r = (1-p)/p
+        self.sol = {'c1':c1, 'c2':c2, 'r':r}
+    def setup(self):
+        Y, beta, p = self.Y, self.beta, self.p
+        return fr"""
+An individual lives for two periods. In period 1, they earn an income of \(Y={Y:,g}\). In period 2, they earn no income. In order to consume in period 2, they must buy bonds in period 1. One bond pays \(\$1\) in period 2, and can be purchased for price \(p={p:g}\) in period 1. The individual's objective is to maximize the present value of their utility:
+$$u(c_1,c_2) = \ln c_1 + \beta \ln c_2$$
+where \(c_1\) is consumption period 1, \(c_2\) is consumption in period 2, and \(\beta={beta:g}\) is the individual's subjective time discount factor.
+"""
+
 ###################################################################
 # PROBLEM GENERATION UTILITIES
 ###################################################################
@@ -4293,6 +4339,229 @@ class CournotNProblem(GenericProblem):
         self.question_list = question_list
     def check_solution(self):
         return True
+
+class ExpectedValueProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='expected_value_problem'):
+        default_params = {'x':[1,2,3,4],'p':[0.25,0.25,0.25,0.25]}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        x, p = params['x'], params['p']
+        x = np.array(x)
+        p = np.array(p)
+        EX = np.sum(x*p)
+        self.sol['EX'] = EX
+        list_x = ', '.join([fr"\(x_{i+1}={x[i]:g}\)" for i in range(len(x))])
+        list_p = ', '.join([fr"\(p_{i+1}={p[i]:g}\)" for i in range(len(p))])
+        setup_list = []
+        setup = fr"""
+A random variable \(X\) can take on the following values: {list_x}, with probabilities {list_p}.
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Calculate the expected value of \(X\)."
+        answer = EX
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(E[X] = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if not equals(np.sum(self.params['p']), 1): return False
+        return True
+
+class InsuranceProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='insurance_problem'):
+        default_params = {'W0':1000, 'D':200, 'p':0.2, 'fun':'ln'}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        W0, D, p, fun = params['W0'], params['D'], params['p'], params['fun']
+        insurance = Insurance(W0=W0, D=D, p=p, fun=fun)
+        self.sol = insurance.sol
+        setup_list = []
+        setup = insurance.setup()
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Calculate the expected value of \(X\)."
+        answer = insurance.sol['EX']
+        online_answer = fr"\(E[X] = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the expected utility."
+        answer = insurance.sol['EU']
+        online_answer = fr"\(E[u(X)] = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"Calculate the certainty equivalent of \(X\)."
+        answer = insurance.sol['CE']
+        online_answer = fr"\(CE = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"How much is the person willing to pay to avoid the risk of the accident?"
+        answer = insurance.sol['WTP']
+        online_answer = fr"\(WTP = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"How much would it cost a risk-neutral insurance company to insure the individual against this risk?"
+        answer = insurance.sol['FairCost']
+        online_answer = fr"\(C = {answer:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+
+class PresentValueProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='present_value_problem'):
+        default_params = {'beta':0.95,'x':100,'T':20}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        beta, x, T = params['beta'], params['x'], params['T']
+        if T==0:
+            x = np.array(x)
+            xlist = ', '.join([fr"\(x_{i+1} = {x[i]:,g}\)" for i in range(len(x))])
+            question = fr"Calculate the present value of a promise to receive payments {xlist} in periods \(t=1,\ldots,{len(x):g}\), when the time discount factor is \(\beta = {beta:g}\)."
+            PV = np.sum(beta**np.arange(1,len(x)+1) * x)
+        elif T==np.inf:
+            question = fr"Calculate the present value of a promise to receive a constant payment of {x:,g} every period from \(t=1\) to eternity, when the time discount factor is \(\beta = {beta:g}\)"
+            PV = beta/(1-beta)*x
+        else:
+            question = fr"Calculate the present value of a promise to receive a constant payment of {x:,g} every period for \({T:g}\) periods, when the time discount factor is \(\beta = {beta:g}\)" 
+            PV = ((1-beta**(T+1))/(1-beta)-1)*x
+        self.sol['PV'] = PV
+        setup_list = []
+        setup = ""
+        online_setup = ""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = question
+        online_question = question
+        answer = PV
+        online_answer = fr"\(PV = {answer:,g}\)"
+        answers = generate_distractors(answer, rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+
+class SavingsProblem(GenericProblem):
+    def __init__(self, params=None, rng=rng, name='savings_problem'):
+        default_params = {'beta':0.95, 'p':0.95, 'Y':50000}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        beta, p, Y = params['beta'], params['p'], params['Y']
+        savings = Savings(Y=Y, beta=beta, p=p)
+        self.sol = savings.sol.copy()
+        setup_list = []
+        setup = savings.setup()
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = "How many bonds will the person buy in period 1?"
+        answer = savings.sol['c2']
+        online_answer = fr"\(b = {answer:,g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "How much will the person consume in period 1?"
+        answer = savings.sol['c1']
+        online_answer = fr"\(c_1 = {answer:,g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "How much will the person consume in period 2?"
+        answer = savings.sol['c2']
+        online_answer = fr"\(c_2 = {answer:,g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "What is the interest rate on bonds?"
+        answer = savings.sol['r']
+        online_answer = fr"\(r = {answer*100:,g}\%\)"
+        answers = generate_distractors(answer,rng=rng)
+        answers = [fr"\({ans*100:g}\%\)" for ans in answers]
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if self.sol['c1']<=0: return False
+        if self.sol['c2']<=0: return False
+        if self.params['p']>=1: return False
+        if self.params['beta']>=1: return False
+        return True
         
 
 PROBLEM_TYPES = {
@@ -4329,7 +4598,11 @@ PROBLEM_TYPES = {
     'NormalFormProblem': NormalFormProblem,
     'MonopolyProblem': MonopolyProblem,
     'Cournot2Problem': Cournot2Problem,
-    'CournotNProblem': CournotNProblem
+    'CournotNProblem': CournotNProblem,
+    'ExpectedValueProblem': ExpectedValueProblem,
+    'InsuranceProblem': InsuranceProblem,
+    'PresentValueProblem': PresentValueProblem,
+    'SavingsProblem': SavingsProblem
 }
 def load_problem(problem_str, params=None, name='generic_problem', rng=rng):
     return PROBLEM_TYPES[problem_str](params=params, name=name, rng=rng)
