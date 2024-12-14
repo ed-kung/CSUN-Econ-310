@@ -1010,13 +1010,6 @@ where \(c_1\) is consumption period 1, \(c_2\) is consumption in period 2, and \
 ###################################################################
 
 def get_online_format(problem, setup_id=None, question_ids=None):
-    if setup_id is None or question_ids is None:
-        print("Please select a setup_id and a list of question_ids:\n")
-        print("Setups:")
-        problem.show_setups()
-        print("\nQuestions:")
-        problem.show_questions()
-        return None
     setup = problem.setup_list[setup_id]['online_setup']
     if len(setup)>0:
         setup = '<p>'+setup+'</p>\n'
@@ -1030,14 +1023,19 @@ def get_online_format(problem, setup_id=None, question_ids=None):
         i+=1
     return {'setup': setup, 'solution': solution}
 
-def get_multipart(problem, setup_id=None, question_ids=None):
-    if setup_id is None or question_ids is None:
-        print("Please select a setup_id and a list of question_ids:\n")
-        print("Setups:")
-        problem.show_setups()
-        print("\nQuestions:")
-        problem.show_questions()
-        return None
+def get_multipart_sa(problem, setup_id=None, question_ids=None):
+    setup = problem.setup_list[setup_id]['setup']
+    assert len(setup)>0
+    t = "\\begin{q}\n"
+    t+= setup
+    t+= "\\begin{enumerate}[a.]\n"
+    for qid in question_ids:
+        t+="\\item " + problem.question_list[qid]['question'] + "\n"
+    t+= "\\end{enumerate}\n"
+    t+= "\\end{q}\n"
+    return RawLatex(t)
+
+def get_multipart_mcq(problem, setup_id=None, question_ids=None):
     multipart = Multipart()
     setup = problem.setup_list[setup_id]['setup']
     assert len(setup)>0
@@ -1046,14 +1044,17 @@ def get_multipart(problem, setup_id=None, question_ids=None):
         multipart.add(problem.question_list[qid]['MCQ'])
     return multipart
     
-def get_single(problem, setup_id=None, question_id=None):
-    if setup_id is None or question_id is None:
-        print("Please select a setup_id and a list of question_ids:\n")
-        print("Setups:")
-        problem.show_setups()
-        print("\nQuestions:")
-        problem.show_questions()
-        return None
+def get_single_sa(problem, setup_id=None, question_id=None):
+    setup = problem.setup_list[setup_id]['setup']
+    question = problem.question_list[question_id]['question']
+    if len(setup)>0:
+        question = setup + "\n\n" + question
+    t = "\\begin{q}\n"
+    t+= question
+    t+= "\\end{q}\n"
+    return RawLatex(t)
+
+def get_single_mcq(problem, setup_id=None, question_id=None):
     setup = problem.setup_list[setup_id]['setup']
     mcq = problem.question_list[question_id]['MCQ']
     if len(setup)>0:
@@ -1706,7 +1707,7 @@ class QuadraticCostFirmProblem(GenericProblem):
 class QuadraticOptimizationProblem(GenericProblem):
     # f(x) = ax - 0.5*bx^2 + c
     def __init__(self, params=None, rng=rng, name='quadratic_optimization_problem'):
-        default_params = {'a':12,'b':1,'c':0}
+        default_params = {'a':12,'b':1,'c':7}
         GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
         params = self.params
         a, b, c = params['a'], params['b'], params['c']
@@ -2512,7 +2513,18 @@ class LinearContourProblem(GenericProblem):
             "online_setup": online_setup
         })
         question_list = []
-        question = fr"What is the y-intercept of the contour line for \(f(x)={z:g}\)?"
+        question = fr"Write an equation describing the contour line for \(f(x,y)=z\)."
+        online_question = question
+        answer = fr"\(y = {PolyEq([1/b,-a/b],'z',[0,1])}\)"
+        online_answer = answer
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": None
+        })
+        question = fr"What is the y-intercept of the contour line for \(f(x,y)={z:g}\)?"
         online_question = question
         answer = yint
         online_answer = fr"{answer:g}"
@@ -2524,7 +2536,7 @@ class LinearContourProblem(GenericProblem):
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = fr"What is the x-intercept of the contour line for \(f(x)={z:g}\)?"
+        question = fr"What is the x-intercept of the contour line for \(f(x,y)={z:g}\)?"
         online_question = question
         answer = xint
         online_answer = fr"{answer:g}"
@@ -2537,13 +2549,13 @@ class LinearContourProblem(GenericProblem):
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
         question = fr"""
-Using the grid below, draw multiple contour lines for \(f(x)\).
+Using the grid below, draw contour lines for \(f(x,z)=z\) for multiple values of \(z\).
 \begin{{center}}
 \includegraphics[width=3in]{{{name}_setup.png}}
 \end{{center}}
 """
         online_question = fr"""
-Using the grid below, draw multiple contour lines for \(f(x)\).
+Using the grid below, draw contour lines for \(f(x,z)=z\) for multiple values of \(z\).
 <p><img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png"></p>
 """
         answer = fr"""
@@ -4611,6 +4623,7 @@ def show_menu(problem_str, params=None, name='generic_problem', rng=rng):
     prob = load_problem(problem_str, params, name, rng=rng)
     setup_list = prob.setup_list
     question_list = prob.question_list
+    print(prob.params)
     for i in range(len(setup_list)):
         print(f"{i}: {setup_list[i]['setup']}".replace('\n',' '))
         print("")

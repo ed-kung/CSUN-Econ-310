@@ -83,21 +83,21 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 
 | Week | Dates         | Session 1                            | Session 2                                   |  
 | ---: | :------------ | :----------------------------------- | :------------------------------------------ | 
-|    1 | 1/20 - 1/24   | Introduction                         | Microeconomics Review                       |   
+|    1 | 1/20 - 1/24   | Introduction                         | Econ Review                                 |   
 |    2 | 1/27 - 1/31   | Math Review                          | Single Variable Optimization                |
 |    3 | 2/3 - 2/7     | A Model of Commodity Markets         | A Model of Labor Markets                    |
 |    4 | 2/10 - 2/14   | A General Equilibrium Model          | Application: Productivity Shocks            |
-|    5 | 2/17 - 2/21   | Review                               | **Midterm 1**                               |  
-|    6 | 2/24 - 2/28   | Discussion: Economic Calculation     | Discussion: The Role of Money               |
+|    5 | 2/17 - 2/21   | Discussion Session                   | Review                                      |  
+|    6 | 2/24 - 2/28   | **Midterm 1**                        | Discussion Session                          |
 |    7 | 3/3 - 3/7     | Multivariate Optimization            | Constrained Multivariate Optimization       |
 |    8 | 3/10 - 3/14   | Theory of Consumer Choice            | Consumer Choice: Applications               | 
 |    9 | 3/17 - 3/21   | **NO CLASS - SPRING BREAK**          | **NO CLASS - SPRING BREAK**                 |
 |   10 | 3/24 - 3/28   | Labor/Leisure Choice                 | Theory of Production                        |
-|   11 | 3/31 - 4/4    | Review                               | **Midterm 2**                               |
-|   12 | 4/7 - 4/11    | Game Theory                          | Game Theory: Applications                   |
+|   11 | 3/31 - 4/4    | Discussion Session                   | Review                                      |
+|   12 | 4/7 - 4/11    | **Midterm 2**                        | Game Theory                                 |
 |   13 | 4/14 - 4/18   | Monopoly                             | Imperfect Competition                       |
 |   14 | 4/28 - 5/2    | Risk and Insurance                   | Saving and Borrowing                        |
-|   15 | 5/5 - 5/9     | Discussion: Economic Modeling        | Review                                      |
+|   15 | 5/5 - 5/9     | Discussion Session                   | Review                                      |
 
 Final Exam: 
 
