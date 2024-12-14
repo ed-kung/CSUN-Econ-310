@@ -2814,7 +2814,7 @@ A consumer's indifference curves and budget constraint over two goods, \(x\) and
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = fr"Calcualte the consumer's utility at the optimal choice."
+        question = fr"Calculate the consumer's utility at the optimal choice."
         online_question = question
         answer = U
         online_answer = fr"\(U = {answer:g}\)"
@@ -4146,7 +4146,7 @@ $$ q = {consumer.demand.print()} $$
             "online_answer": fr"\(p_e = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = "Calcualte the monopolist's profit at the efficient outcome."
+        question = "Calculate the monopolist's profit at the efficient outcome."
         answer = monopoly.sol['profit_eff']
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
@@ -4156,7 +4156,7 @@ $$ q = {consumer.demand.print()} $$
             "online_answer": fr"\(\Pi_e = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = "Calcualte the consumer surplus at the efficient outcome."
+        question = "Calculate the consumer surplus at the efficient outcome."
         answer = monopoly.sol['CS_eff']
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
@@ -4166,7 +4166,7 @@ $$ q = {consumer.demand.print()} $$
             "online_answer": fr"\(CS_e = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = "Calcualte the deadweight loss caused by monopolistic behavior."
+        question = "Calculate the deadweight loss caused by monopolistic behavior."
         answer = monopoly.sol['DWL']
         answers = generate_distractors(answer,rng=rng)
         question_list.append({

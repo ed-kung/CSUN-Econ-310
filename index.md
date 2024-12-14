@@ -94,10 +94,11 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 |    9 | 3/17 - 3/21   | **NO CLASS - SPRING BREAK**          | **NO CLASS - SPRING BREAK**                 |
 |   10 | 3/24 - 3/28   | Labor/Leisure Choice                 | Theory of Production                        |
 |   11 | 3/31 - 4/4    | Discussion Session                   | Review                                      |
-|   12 | 4/7 - 4/11    | **Midterm 2**                        | Game Theory                                 |
-|   13 | 4/14 - 4/18   | Monopoly                             | Imperfect Competition                       |
-|   14 | 4/28 - 5/2    | Risk and Insurance                   | Saving and Borrowing                        |
-|   15 | 5/5 - 5/9     | Discussion Session                   | Review                                      |
+|   12 | 4/7 - 4/11    | **Midterm 2**                        | Discussion Session                          |
+|   13 | 4/14 - 4/18   | Game Theory I                        | Game Theory II                              |
+|   14 | 4/21 - 4/25   | Monopolies                           | Imperfect Competition                       |
+|   15 | 4/28 - 5/2    | Risk and Insurance                   | Saving and Borrowing                        |
+|   16 | 5/5 - 5/9     | Discussion Session                   | Review                                      |
 
 Final Exam: 
 
