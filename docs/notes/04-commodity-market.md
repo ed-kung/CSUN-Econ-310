@@ -35,7 +35,8 @@ The consumer's optimization problem is the following:
 
 $$ \max_{q_d} ~ v(q_d) - pq_d $$
 
-Taking the derivative with respect to $$q$$ gives us the first order condition:
+The maximum utility is achieved when the derivative of the consumer's uitlity function is equal to zero. Taking the derivative and setting it equal to zero yields the first order condition:
+
 
 $$ v^\prime(q_d) - p = 0 $$
 
@@ -52,6 +53,31 @@ Equation (1) shows that at the consumer's optimal choice, price equals marginal 
 {: .blue-callout-title }
 > Example: Deriving a demand curve
 > 
+> A representative, price-taking consumer decides how many units, $$q$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q$$ units at price $$p$$ is:
+>
+> $$ u(q) = 9q - \frac{3}{2} q^2 - pq $$
+>
+> 1. Write down the consumer's demand curve.
+>
+> *Answer.*
+>
+> Step 1. Write down the consumer's optimization problem.
+>
+> $$ \max_{q} ~ 9q - \frac{3}{2}q^2 - pq $$
+>
+> Step 2. Write down the consumer's first order condition.
+>
+> $$ 9 - 3q - p = 0 $$
+>
+> Step 3. Rearrange the first order condition so that we write the quantity demanded in terms of $$p$$.
+>
+> $$\begin{aligned}
+9 - 3q - p &= 0 & \\
+3q &= 9 - p ~ ~ ~ ~ & \text{(Add 3q to both sides)} \\
+q &= 3 - \frac{1}{3}p ~ ~ ~ ~ & \text{(Divide both sides by 3)}
+\end{aligned}$$
+>
+> So $$q_d = 3 - \frac{1}{3}p$$ is the consumer's demand curve.
 
 ## Firms
 
@@ -86,7 +112,39 @@ Equation (2) also shows that at the producer's optimal choice, price equals marg
 {: .green-callout-title }
 > Example: Deriving a supply curve
 > 
-
+> A representative, price-taking firm decides how many units, $$q$$, of a commodity to produce and sell at unit price $$p$$. The firm's total cost function for producing $$q$$ units is:
+>
+> $$ c(q) = q + q^2 $$
+>
+> 1. Write down the firm's demand curve.
+>
+> *Answer.*
+>
+> Step 1. Write down the firm's profit function.
+>
+> $$\begin{aligned}
+\Pi(q) &= \text{Revenue} - \text{Cost} \\
+&= pq - c(q) \\
+&= pq - q - q^2 
+\end{aligned}$$
+>
+> Step 2. Write down the firm's optimization problem.
+>
+> $$ \max_{q} ~ pq - q - q^2 $$
+>
+> Step 3. Write down the firm's first order condition.
+>
+> $$ p - 1 - 2q = 0 $$
+>
+> Step 4. Rearrange the first order condition to write $$q$$ in terms of $$p$$.
+>
+> $$\begin{aligned}
+p - 1 - 2q &= 0 \\
+2q &= p - 1 \\
+q &= \frac{1}{2}p - \frac{1}{2}
+\end{aligned}$$
+>
+> So $$q_s = \frac{1}{2}p - \frac{1}{2} $$ is the producer's supply curve.
 
 ## Market equilibrium 
 
@@ -104,10 +162,171 @@ The equation also lets us solve for the equilibrium mathematically.  $$v^\prime(
 
 {: .yellow-callout-title }
 > Example: Commodity market equilibrium
+> 
+> A representative, price-taking consumer decides how many units, $$q$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q$$ units at price $$p$$ is:
 >
+> $$ u(q) = 9q - \frac{3}{2} q^2 - pq $$
+> 
+> A representative, price-taking firm decides how many units, $$q$$, of a commodity to produce and sell at unit price $$p$$. The firm's total cost function for producing $$q$$ units is:
+>
+> $$ c(q) = q + q^2 $$
+>
+> 1. Write down the consumer's demand curve.
+> 2. Write down the producer's supply curve.
+> 3. Calculate the equilibrium price and quantity.
+> 4. Calcualte the consumer surplus in equilibrium (i.e. the consumer's utility.)
+> 5. Calculate the producer surplus in equilibrium (i.e. the producer's profit.)
+>
+> *Answer.*
+>
+> **Write down the consumer's demand curve.**
+>
+> We already did this in the previous example.
+>
+> $$q_d = 3 - \frac{1}{3}p$$
+>
+> **Write down the producer's supply curve.**
+>
+> We did this too.
+>
+> $$q_s = \frac{1}{2}p - \frac{1}{2}$$
+>
+> **Calculate the equilibrium price and quantity.**
+>
+> To do this, write down the equilibrium condition ($$q_s=q_d$$) and solve for $$p$$.
+>
+> $$\begin{aligned}
+q_s &= q_d & \\
+\tfrac{1}{2}p - \tfrac{1}{2} &= 3 - \tfrac{1}{3}p & \\
+\tfrac{1}{2}p + \tfrac{1}{3}p &= 3 + \tfrac{1}{2} & \\
+\left( \tfrac{1}{2} + \tfrac{1}{3} \right) p &= 3.5 & \\
+\tfrac{5}{6}p &= 3.5 & \\
+p &= \tfrac{6}{5} \times 3.5 & \\
+p &= 4.2 &
+\end{aligned}$$
+>
+> Then, plug $$p=4.2$$ into either the supply or demand curve to get $$q$$.
+>
+> $$\begin{aligned}
+q_d &= 3 - \tfrac{1}{3}p \\
+    &= 3 - \tfrac{1}{3}\times 4.2 \\
+	&= 1.6
+\end{aligned}$$
+>
+> So the equilibrium price and quantity are $$p=4.2$$, $$q=1.6$$.
+>
+> **Calculate the consumer surplus.**
+>
+> To do this, just plug $$p$$ and $$q$$ into the utility function.
+>
+> $$\begin{aligned}
+u &= 9q - \tfrac{3}{2}q^2 - pq \\
+&= 9(1.6) - \tfrac{3}{2}(1.6)^2 - (4.2)(1.6) \\
+&= 3.84
+\end{aligned}$$
+>
+> **Calculate the producer surplus.**
+>
+> To do this, just plug $$p$$ and $$q$$ into the profit function.
+>
+> $$\begin{aligned}
+\Pi &= pq - q - q^2 \\
+&= (4.2)(1.6) - 1.6 - (1.6)^2 \\
+&= 2.56
+\end{aligned}$$
+>
+> Note that if you had drawn the supply and demand curves and calculated the consumer and producer surpluses graphically, you'd get the same answers.
 
 {: .blue-callout-title }
 > Example: Another commodity market equilibrium
+> 
+> A representative, price-taking consumer decides how many units, $$q$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q$$ units at price $$p$$ is:
 >
-
+> $$ u(q) = 9 \ln q - pq $$
+> 
+> A representative, price-taking firm decides how many units, $$q$$, of a commodity to produce and sell at unit price $$p$$. The firm's total cost function for producing $$q$$ units is:
+>
+> $$ c(q) = \frac{1}{2} q^2 $$
+>
+> 1. Write down the consumer's inverse demand curve. (The inverse demand curve simply writes $$p$$ in terms of $$q$$.)
+> 2. Write down the producer's inverse supply curve.
+> 3. Calculate the equilibrium price and quantity.
+> 4. Calcualte the consumer surplus in equilibrium (i.e. the consumer's utility.)
+> 5. Calculate the producer surplus in equilibrium (i.e. the producer's profit.)
+>
+> *Answer.*
+>
+> **Write down the consumer's inverse demand curve.**
+>
+> Step 1. Write down the consumer's optimization problem.
+>
+> $$ \max_{q} ~ 9 \ln q - pq $$
+>
+> Step 2. Write down the consumer's first order condition.
+>
+> $$ \frac{9}{q} - p = 0 $$
+>
+> Step 3. Rearrange the first order condition to write $$p$$ as a function of quantity demanded.
+>
+> $$\begin{aligned}
+\frac{9}{q_d} - p &= 0 \\
+p &= \frac{9}{q_d}
+\end{aligned}$$
+>
+> **Write down the producer's inverse supply curve.**
+>
+> Step 1. Write down the firm's profit function.
+>
+> $$\begin{aligned}
+\Pi(q) &= pq - c(q) \\
+&= pq - \frac{1}{2}q^2 
+\end{aligned}$$
+>
+> Step 2. Write down the firm's optimization problem.
+>
+> $$ \max_{q} ~ pq - \frac{1}{2}q^2 $$
+>
+> Step 3. Write down the firm's first order condition.
+>
+> $$ p - q &= 0
+>
+> Step 4. Rearrange the first order condition to write $$p$$ as a function of quantity supplied.
+>
+> $$ p = q_s $$
+>
+> **Calculate the equilibrium price and quantity.**
+>
+> In equilibrium, the inverse supply curve and the inverse demand curve should equal each other at the same quantity. So set the inverse supply and demand curves equal to each other and solve for $$q$$.
+>
+> $$\begin{aligned}
+q &= \frac{9}{q} \\ 
+q^2 &= 9 \\
+q &= \sqrt{9} \\
+q &= 3
+\end{aligned}$$
+>
+> To get the equilibrium price, plug $$q=3$$ into either the inverse supply curve or the inverse demand curve.
+>
+> $$\begin{aligned}
+p &= q_s ~ ~ ~ ~ & \text{(inverse supply curve)} \\
+&= 3
+\end{aligned}$$
+>
+> So the equilibrium price and quantity are $$p=3$$, $$q=3$$.
+>
+> **Calculate the producer and consumer surplus in equilibrium.**
+>
+> To get consumer surplus, plug $$p$$ and $$q$$ into the consumer's utility function. To get producer surplus, plug $$p$$ and $$q$$ into the producer's profit function.
+>
+> $$\begin{aligned}
+CS &= 9\ln q - pq \\
+&= 9\ln(3) - 3\times3 \\
+&= 0.8875
+\end{aligned}$$
+>
+> $$\begin{aligned}
+PS &= pq - \tfrac{1}{2}q^2 \\
+&= 3\times3 - \tfrac{1}{2}(3)^2 \\
+&= 4.5
+\end{aligned}$$
 

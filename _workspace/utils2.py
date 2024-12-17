@@ -201,7 +201,7 @@ def simplifyCB(cbtop, cbbot):
         return fr"\(\frac{{{PTerm(n,y,1).print()}}}{{{PTerm(d,x,1).print()}}}\)"
 
 class Axis:
-    def __init__(self, xn=13, yn=13, xunit=1, yunit=1, xlab=r'$x$', ylab=r'$y$', noticklabels=False):
+    def __init__(self, xn=13, yn=13, xunit=1, yunit=1, xlab=r'$x$', ylab=r'$y$', noticklabels=False, title=None):
         self.xn = xn
         self.yn = yn
         self.xunit = xunit
@@ -213,6 +213,7 @@ class Axis:
         self.xlab = xlab
         self.ylab = ylab
         self.noticklabels = noticklabels
+        self.title = title
     def add(self, *args):
         for obj in args:
             self.objects.append(obj)
@@ -229,6 +230,8 @@ class Axis:
         ax.set_ylabel(self.ylab)
         ax.set_axisbelow(True)
         ax.grid(alpha=alpha)
+        if self.title is not None:
+            ax.set_title(self.title)
         if saveas is not None:
             plt.savefig(saveas, bbox_inches='tight')
         return fig, ax
@@ -421,12 +424,12 @@ class LeontieffContours:
 class LinearDemand:
     # p = a - bq
     # q = (a/b) - (1/b)*p
-    def __init__(self, a=12, b=1):
+    def __init__(self, a=12, b=1,color='black',linewidth=1,label='_nolegend_'):
         assert a>0
         assert b>0
         self.a = a
         self.b = b
-        self.line = Line(-b,a)
+        self.line = Line(-b,a,linewidth=linewidth,color=color,label=label)
     def print(self, x='p', maxdenom=8):
         return PolyEq(c=[self.a/self.b, -1/self.b], x=x, p=[0,1]).print(maxdenom=maxdenom, rmplus=True)
     def print_inverse(self, x='q', maxdenom=8):
@@ -435,6 +438,8 @@ class LinearDemand:
         return self.a/self.b - (1/self.b)*p
     def eval_at_q(self, q):
         return self.a - self.b*q
+    def plot(self,ax, xg):
+        return self.line.plot(ax,xg)
         
 class ExponentialDemand:
     # p = a*q^k
@@ -460,12 +465,12 @@ class ExponentialDemand:
 class LinearSupply:
     # p = a + bq
     # q = (1/b)*p - (a/b)
-    def __init__(self, a=0, b=1):
+    def __init__(self, a=0, b=1,linewidth=1,color='black',label='_nolegend_'):
         assert a>=0
         assert b>0
         self.a = a
         self.b = b
-        self.line = Line(b,a)
+        self.line = Line(b,a,linewidth=linewidth,color=color,label=label)
     def print(self, x='p', maxdenom=8):
         return PolyEq(c=[1/self.b, -self.a/self.b], x=x, p=[1,0]).print(maxdenom=maxdenom, rmplus=True)
     def print_inverse(self, x='q', maxdenom=5):
@@ -474,6 +479,8 @@ class LinearSupply:
         return (1/self.b)*p - (self.a/self.b)
     def eval_at_q(self, q):
         return self.a + self.b*q
+    def plot(self,ax, xg):
+        return self.line.plot(ax,xg)
         
 class ExponentialSupply:
     # p = aq^k
@@ -557,7 +564,8 @@ class LogConsumer:
         self.demand = demand
     def print_utility(self, q='q'):
         a = self.a
-        return fr"{PTerm(a,fr'\ln {q}',1)} - p{q}"
+        lnq = PTerm(a,fr'\ln {q}',1)
+        return fr"{lnq} - p{q}"
     def setup(self):
         return fr"""
 A representative, price-taking consumer decides how many units, \(q\), of a commodity to purchase at unit price \(p\). The utility
@@ -1096,7 +1104,7 @@ class LinearMarketProblem(GenericProblem):
         demand = LinearDemand(a=params['ad'], b=params['bd'])
         supply = LinearSupply(a=params['as'], b=params['bs'])
         market = LinearMarket(demand, supply)
-        axis = Axis(xn=params['xn'],yn=params['yn'],xunit=params['xunit'],yunit=params['yunit'])
+        axis = Axis(xn=params['xn'],yn=params['yn'],xunit=params['xunit'],yunit=params['yunit'],xlab=r'$q$',ylab=r'$p$')
         demand.line.color = 'blue'
         supply.line.color = 'red'
         axis.add(demand.line, supply.line)

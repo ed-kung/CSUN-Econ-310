@@ -137,6 +137,14 @@ q_d &= q_s & \\
 
 It's also quite common in economics to work with natural logs (the $$\ln$$ function). The log function is useful because the difference in the log of two quantities is approximately equal to the percent change between the two quantities.
 
+{: .purple-callout-title }
+> Working with natural logs
+>
+> The difference in the natural log of two quantities is approximately equal to the percent difference between the two quantities.
+>
+> Example: If $$\ln x - \ln y = 0.05$$, this implies that $$x$$ is larger than $$y$$ by 5%.
+
+
 To work with logs, you'll need to memorize these rules:
 
 | Log of 1            | $$\ln 1 = 0$$                     |
