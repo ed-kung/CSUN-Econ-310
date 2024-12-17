@@ -57,7 +57,26 @@ Equation (1) shows that at the worker's optimal choice, the wage rate equals the
 {: .blue-callout-title }
 > Example: Deriving a labor supply function
 >
-> 
+> A representative, price-taking worker decides how many units, $$L$$, of labor to supply (e.g. how many hours to work), at a unit wage $$w$$. The worker's utility function over working $$L$$ labor-units at wage $$w$$ is:
+>
+> $$ u(L) = wL - \frac{4}{3} L^{3/2} $$
+>
+> 1. Write down the worker's inverse labor supply curve. ($$w$$ in terms of $$L$$)
+>
+> *Answer.*
+>
+> Step 1. Write down the worker's optimization problem.
+>
+> $$ \max_{L} ~ wL - \frac{4}{3}L^{3/2} $$
+>
+> Step 2. Write down the worker's first order condition and rearrange it to get $$w$$ in terms of $$L$$.
+>
+> $$\begin{aligned}
+w - \left(\tfrac{3}{2}\right)\left(\tfrac{4}{3}\right) L^{1/2} &= 0  \\
+w - 2L^{1/2} &= 0 \\
+w &= 2L^{1/2} 
+\end{aligned}$$
+
 
 ## Firms
 
@@ -99,7 +118,33 @@ Equation (2) also shows that at the firm's optimal choice, the wage rate equals 
 {: .green-callout-title }
 > Example: Deriving a labor demand function
 >
-> 
+> A representative, price-taking firm uses labor to produce and sell a commodity at unit price $$p=3$$. The firm hires labor at a constant wage rate $$w$$. If the firm employs $$L$$ units of labor, it can produce $$f(L)$$ units of commodity output, where:
+>
+> $$ f(L) = 16L^{1/2} $$
+>
+> 1. Write down the firm's inverse labor demand curve. 
+>
+> *Answer.*
+>
+> Step 1. Write down the firm's profit function.
+>
+> $$\begin{aligned}
+\Pi(q) &= \text{Revenue} - \text{Cost} \\
+&= 3\times16L^{1/2} - wL \\
+&= 48 L^{1/2} - wL 
+\end{aligned}$$
+>
+> Step 2. Write down the firm's optimization problem.
+>
+> $$ \max_{L} ~ 48L^{1/2} - wL $$
+>
+> Step 3. Write down the firm's first order condition and rearrange it to write $$w$$ in terms of $$L$$.
+>
+> $$\begin{aligned}
+24L^{-1/2} - w &= 0 \\
+w &= 24L^{-1/2}
+\end{aligned}$$
+
 
 ### Cost minimization
 
@@ -116,7 +161,23 @@ $$c(q) = w f^{-1}(q) $$
 {: .yellow-callout-title }
 > Example: Deriving a cost function
 >
+> Derive the cost function for the firm in the previous example, with a production function of:
 >
+> $$ f(L) = 16L^{1/2} $$
+>
+> *Answer.*
+>
+> Step 1. Use the production function to find out how much labor would be needed to produce $$q$$ units of output.
+>
+> $$\begin{aligned}
+q &= 16L^{1/2}  ~ ~ ~ ~ & \text{(Write down the relationship between L and q)} \\
+\frac{q}{16} &= L^{1/2} ~ ~ ~ ~ & \text{(Divide both sides by 16)}\\
+L &= \left(\frac{q}{16}\right)^2 ~ ~ ~ ~ & \text{(Square both sides)}
+\end{aligned}$$
+>
+> Step 2. The total cost is simply $$wL$$, so the firm's cost function is:
+>
+> $$c(q) = w\left(\frac{q}{16}\right)^2 $$
 
 ## Market equilibrium 
 
@@ -135,7 +196,65 @@ The equation also lets us solve for the equilibrium mathematically.  $$pf^\prime
 {: .blue-callout-title }
 > Example: Labor market equilibrium
 >
-> 
+> A representative, price-taking worker decides how many units, $$L$$, of labor to supply (e.g. how many hours to work), at a unit wage $$w$$. The worker's utility function over working $$L$$ labor-units at wage $$w$$ is:
+>
+> $$ u(L) = wL - \frac{4}{3} L^{3/2} $$
+>
+> A representative, price-taking firm uses labor to produce and sell a commodity at unit price $$p=3$$. The firm hires labor at a constant wage rate $$w$$. If the firm employs $$L$$ units of labor, it can produce $$f(L)$$ units of commodity output, where:
+>
+> $$ f(L) = 16L^{1/2} $$
+>
+> 1. Write down the inverse labor supply curve.
+> 2. Write down the inverse labor demand curve.
+> 3. Calculate the equilibrium wage rate $$w$$ and quantity of labor demanded/supplied, $$L$$.
+> 4. Calculate the equilibrium utility of the worker.
+> 5. Calculate the equilibrium profit of the firm.
+>
+> *Answer.*
+>
+> **Write down the inverse labor supply and demand curves.**
+>
+> Since this problem's setup is the same as the above two examples, we already did this part.
+>
+> $$\begin{aligned}
+w &= 2L^{1/2} ~ ~ ~ ~ & \text{(Labor supply)} \\
+w &= 24L^{-1/2} ~ ~ ~ ~ & \text{(Labor demand)}
+\end{aligned}$$
+>
+> **Calculate the equilibrium wage and quantity of labor.**
+>
+> To do this, set the inverse demand function equal to the inverse supply function and solve for the equilibrium quantity of labor, $$L$$.
+>
+> $$\begin{aligned}
+2L^{1/2} &= 24L^{-1/2} & \\
+2L^{1/2} L^{1/2} &= 24 ~ ~ ~ ~ & \text{(Multiply both sides by }L^{1/2}\text{)} \\
+2L &= 24 & \\
+L &= 12 &
+\end{aligned}$$
+>
+> To get the equilibrium wage rate, plug $$L$$ into either the inverse demand equation or the inverse supply equation.
+>
+> $$\begin{aligned}
+w &= 2L^{1/2} ~ ~ ~ ~ & \text{(inverse supply equation)} \\
+&= 2(12)^{1/2} &
+&= 6.9282
+\end{aligned}$$
+>
+> **Calculate the equilibrium utility of the worker and profit of the firm.**
+>
+> Simply plug into the worker's utility function and firm's profit function.
+>
+> $$\begin{aligned}
+U &= wL - \tfrac{4}{3}L^{3/2} \\
+&= 6.9282(12) - \tfrac{4}{3}(12)^{3/2} \\
+&= 27.7128
+\end{aligned}$$
+>
+> $$\begin{aligned}
+\Pi &= 48L^{1/2} - wL \\
+&= 48 (12)^{1/2} - 6.9282(12) \\
+&= 83.1384
+\end{aligned}$$
 
 
 
