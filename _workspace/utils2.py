@@ -253,13 +253,14 @@ class Axis:
 class Line:
     # y = mx + b
     # x = (y-b)/m
-    def __init__(self, m, b, linewidth=1, color='black', label='_nolegend_'):
+    def __init__(self, m, b, linewidth=1, color='black', label='_nolegend_', linestyle='solid'):
         self.m, self.b = m, b
         self.linewidth = linewidth
         self.color = color
         self.label = label
+        self.linestyle = linestyle
     def plot(self, ax, xg):
-        return ax.plot(xg, self.m*xg + self.b, color=self.color, linewidth=self.linewidth, label=self.label)
+        return ax.plot(xg, self.m*xg + self.b, color=self.color, linewidth=self.linewidth, label=self.label, linestyle=self.linestyle)
     def eval_at_x(self, x):
         return self.m*x + self.b
     def eval_at_y(self, y):
@@ -424,12 +425,12 @@ class LeontieffContours:
 class LinearDemand:
     # p = a - bq
     # q = (a/b) - (1/b)*p
-    def __init__(self, a=12, b=1,color='black',linewidth=1,label='_nolegend_'):
+    def __init__(self, a=12, b=1,color='black',linewidth=1,label='_nolegend_',linestyle='solid'):
         assert a>0
         assert b>0
         self.a = a
         self.b = b
-        self.line = Line(-b,a,linewidth=linewidth,color=color,label=label)
+        self.line = Line(-b,a,linewidth=linewidth,color=color,label=label,linestyle=linestyle)
     def print(self, x='p', maxdenom=8):
         return PolyEq(c=[self.a/self.b, -1/self.b], x=x, p=[0,1]).print(maxdenom=maxdenom, rmplus=True)
     def print_inverse(self, x='q', maxdenom=8):
@@ -465,12 +466,12 @@ class ExponentialDemand:
 class LinearSupply:
     # p = a + bq
     # q = (1/b)*p - (a/b)
-    def __init__(self, a=0, b=1,linewidth=1,color='black',label='_nolegend_'):
+    def __init__(self, a=0, b=1,linewidth=1,color='black',label='_nolegend_',linestyle='solid'):
         assert a>=0
         assert b>0
         self.a = a
         self.b = b
-        self.line = Line(b,a,linewidth=linewidth,color=color,label=label)
+        self.line = Line(b,a,linewidth=linewidth,color=color,label=label,linestyle=linestyle)
     def print(self, x='p', maxdenom=8):
         return PolyEq(c=[1/self.b, -self.a/self.b], x=x, p=[1,0]).print(maxdenom=maxdenom, rmplus=True)
     def print_inverse(self, x='q', maxdenom=5):
