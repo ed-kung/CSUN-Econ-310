@@ -1,92 +1,195 @@
 ---
 layout: default
-title: "13. Application: In-Kind vs. Monetary Transfers"
+title: "12. Labor/Leisure Choice"
 parent: Lecture Notes
-nav_order: 13
+nav_order: 12
 ---
 
-# Application: In-Kind vs. Monetary Transfers
+# Labor/Leisure Choice
 {: .no_toc }
 
 - TOC
 {:toc}
 
+In this lecture, we'll apply concepts from consumer choice theory to explain peoples' decisions on how much to work. These are known as labor/leisure choice models because the decision being made is how to split your time between working (labor) and not working (leisure).
 
-## In-kind vs. monetary transfers
+## General Setup
 
-A food stamp is a voucher that the government gives to low-income households to help them buy food. Food stamps can only be used on food. Have you ever wondered if low-income households would be better off if the government just gave them money instead?
+A worker can work up to a maximum of $$H$$ hours per week. For every hour worked, the worker makes a wage of $$w$$ dollars per hour, which he spends on consumption. If the worker spends $$c$$ dollars on consumption per week and spends $$\ell$$ hours on leisure, he gets a utility of $$u(c,\ell)$$.
 
+The worker's optimization problem is to choose hours worked, $$h$$, and hours of leisure, $$\ell$$ to maximize their utility:
 
-{: .purple-callout-title }
-> Note
->
-> A direct transfer of a commodity is called an **in-kind transfer**. A transfer of money is called a **monetary transfer**. Food stamps are a type of in-kind transfer since they can only be used to buy food.
+$$ \max_{h,\ell} ~ u(c,\ell) ~ \text{s.t.} ~ c = wh ~ \text{and} ~ h+\ell = H $$
 
-The two examples below will use graphical analysis and consumer choice theory to show that monetary transfers are always preferable in-kind transfers.
+The constraint $$c=wh$$ simply says that the amount the worker consumes is equal to their hourly wage times their hours worked.
 
-### Example where monetary transfers are preferable to in-kind 
+The constraint $$h + \ell = H$$ simply says that their total hours add up to the weekly maximum.
+
+Although these models can be set up with equations and solved using the principles of constrained multivariate optimization, we'll primarily be using the graphical method.
 
 {: .blue-callout-title }
 > Example
 >
-> A consumer gets utility from food consumption $$x$$ and "other consumption" $$y$$. The consumer has income $$I=60$$. The price of both food is $$p_x=1$$ and the price of other goods is also $$p_y=1$$. The consumer's utility function is shown by the following indifference curves:
+> A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of \(w=30\) dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
 >
-> ![food-stamps-A-setup](/CSUN-Econ-310/assets/images/13-inkind-vs-monetary-food-stamps-A-setup.png)
+> ![example](/CSUN-Econ-310/assets/images/graphs/lec12_example_0_setup.png)
 >
-> 1. Draw the budget line and mark the optimal point. Label it "A".
+> 1. Draw the worker's budget constraint and label the optimal point A.
+> 2. How many hours a week does the worker work?
+> 3. How much income per week does the worker make?
 >
-> 2. Suppose the consumer receives food stamps worth 40 units of food without spending any of his own money. Draw the new budget line and find the new optimal point. Label it "B".
+> *Answer.*
 >
-> 3. Now suppose that the consumer instead receives a direct monetary transfer of 40 dollars. Draw the new budget line and find the new optimal point. Label it "C". Is the utility at "C" higher or lower than the utility at "B"?
+> To draw the budget constraint, we first note that the $$x$$ intercept must be 60, because the maximum leisure hours per week is 60.
 >
-> *Answer to part 1.*
+> To get the $$y$$ intercept, we note that the maximum income happens when the worker works all 60 hours. He'll make an income of $$60w = 1,800$$.
 >
-> The x and y intercepts of the budget line are both $$60$$. The optimal point is on the indifference curve tangent to the budget line.
+> To draw the budget constraint, we simply connect the $$x$$ and $$y$$ intercepts.
 >
-> ![food-stamps-A-baseline](/CSUN-Econ-310/assets/images/13-inkind-vs-monetary-food-stamps-A-baseline.png)
+> ![example](/CSUN-Econ-310/assets/images/graphs/lec12_example_0_solution.png)
 >
-> *Answer to part 2.*
->
-> The budget line shifts right by 40 units. That's because the consumer can now spend all 60 dollars of his income on $$y$$ and still receive 40 units of $$x$$. He can buy more $$x$$ if he wants, but he cannot consume more $$y$$ than his base income allows.
->
-> ![food-stamps-A-in-kind](/CSUN-Econ-310/assets/images/13-inkind-vs-monetary-food-stamps-A-in-kind.png)
->
-> *Answer to part 3.*
->
-> The budget line now extends backwards because it's as if the consumer has 100 dollars of income instead of 60 dollars. "C" lines on an indifference curve that is northeast of "B", so it has higher utility.
->
-> ![food-stamps-A-monetary](/CSUN-Econ-310/assets/images/13-inkind-vs-monetary-food-stamps-A-monetary.png)
+> In this example, the worker spends 20 hours per week on leisure, which means he works 40 hours a week and makes a weekly income of 1,200.
 
-### Example where monetary transfers are equivalent to in-kind
+## Application: Response to wage changes
+
+The labor/leisure model can be used to help us understand how workers respond to changes in their hourly wage.
 
 {: .green-callout-title }
-> Example
+> Wage Change Example 1
 >
-> A consumer gets utility from food consumption $$x$$ and "other consumption" $$y$$. The consumer has income $$I=60$$. The price of both food is $$p_x=1$$ and the price of other goods is also $$p_y=1$$. The consumer's utility function is shown by the following indifference curves:
+> A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of $$w=15$$ dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
 >
-> ![food-stamps-B-setup](/CSUN-Econ-310/assets/images/13-inkind-vs-monetary-food-stamps-B-setup.png)
->
-> 1. Draw the budget line and mark the optimal point. Label it "A".
->
-> 2. Suppose the consumer receives food stamps worth 40 units of food without spending any of his own money. Draw the new budget line and find the new optimal point. Label it "B".
->
-> 3. Now suppose that the consumer instead receives a direct monetary transfer of 40 dollars. Draw the new budget line and find the new optimal point. Label it "C". Is the utility at "C" higher or lower than the utility at "B"?
->
-> *Answer to all parts.*
->
-> Following the same logic as the previous example, we get the diagram below. "B" and "C" give the same utility, so the monetary transfer is not strictly preferable to the food stamps in this example. However, neither are the food stamps strictly preferable to the monetary transfer.
->
-> ![food-stamps-B-monetary](/CSUN-Econ-310/assets/images/13-inkind-vs-monetary-food-stamps-B-monetary.png)
->
+> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_1_setup.png">
 > 
+> One day, the worker's hourly wage changes to $$w^\prime = 40$$.
+>
+> 1. Draw the worker's budget constraint at both the initial wage and the subsequent wage. Label the optimal point at the initial wage A and the optimal point at the new wage B.
+> 2. How many hours does the worker work at the initial wage?
+> 3. How many hours does the worker work at the new wage?
+> 4. Does the wage change increase or decrease the number of hours worked?
+>
+> *Answer.*
+>
+> The maximum leisure is always 60. The maximum income at the initial wage is $$60\times15=900$$, and the maximum income at the new wage is $$60\times40=2,400$$. Thus, the diagram with both budget constraints shown is:
+>
+> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_1_solution.png">
+>
+> At the initial wage, the worker works 40 hours (20 hours leisure). At the new wage, the worker works 45 hours (15 hours leisure).
+>
+> The rise in wage increased the number of hours worked.
 
-### In-kind transfers are never preferable to monetary
+{: .yellow-callout-title }
+> Wage Change Example 2
+>
+> A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of $$w=20$$ dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
+>
+> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_2_setup.png">
+> 
+> One day, the worker's hourly wage changes to $$w^\prime = 60$$.
+>
+> 1. Draw the worker's budget constraint at both the initial wage and the subsequent wage. Label the optimal point at the initial wage A and the optimal point at the new wage B.
+> 2. How many hours does the worker work at the initial wage?
+> 3. How many hours does the worker work at the new wage?
+> 4. Does the wage change increase or decrease the number of hours worked?
+>
+> *Answer.*
+>
+> The maximum leisure is always 60. The maximum income at the initial wage is $$60\times20=1,200$$, and the maximum income at the new wage is $$60\times60=3,600$$. Thus, the diagram with both budget constraints shown is:
+>
+> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_2_solution.png">
+>
+> At the initial wage, the worker works 30 hours (30 hours leisure). At the new wage, the worker works 25 hours (35 hours leisure).
+>
+> The rise in wage decreased the number of hours worked.
 
-Since the effect of a monetary transfer is simply to extend the budget line, there is no scenario (under our current framework) where in-kind transfers are preferable. 
 
 {: .purple-callout-title }
 > Economic Insight
 >
-> If consumers are rational, then in-kind transfers will never result in higher consumer utility than monetary transfers of the same value. 
+> In response to a wage increase, workers could work more or they could work less. It all depends on their preferences over consumption vs. leisure.
 >
-> Therefore, in-kind transfers need to be justified by arguments outside the framework of rational utility maximization. Either consumers are not rational (i.e. they don't know what's best for themselves), or public policy has objectives beyond maximizing consumers' hedonic utility (for example, the government may want to promote healthy eating even if it's not the consumer's first preference.)
+> It might feel strange to talk about working more or less hours depending on the wage. Most full time workers will work about 40 hours a week regardless of the wage rate, and salaried workers don't get paid by the hour.
+>
+> However, the results of the labor/leisure model may still show up in how hard someone is willing to work, how many unpaid sick days they take, or how hard they work to try and get the next promotion.
+
+## Application: Income support policies
+
+An income support policy is a policy that gives money to people whose incomes fall below a certain level. A much debated question in economics is whether or not income support policies disincentivize work. The labor/leisure model can help answer such questions.
+
+{: .blue-callout-title }
+> Income support policies example 1
+>
+> A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of $$w=10$$ dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
+> 
+> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_3_setup.png">
+> 
+> In addition, the government provides minimum income support of up to $$250$$ dollars a week. That is, if someone earns less than $$250$$ dollars a week, the government supplements their income until it reaches $$250$$ a week.
+> 
+> 1. Draw the budget constraint without income support and label the optimal point A.
+> 2. Draw the budget constraint with income support and label the optimal point B.
+> 3. Does the income support policy increase or decrease hours worked?
+> 4. Does the income support policy increase or decrease the worker's income?
+>
+> *Answer.*
+>
+> To draw the budget constraint without income support, simply draw a straight line from the $$y$$-intercept of $$60\times10 = 600$$ to the $$x$$-intercept of $$60$$.
+>
+> To draw the budget constraint *with* income support, note that if at any time the person's income goes below $$250$$, it is instead raised to $$250$$. This means that there is an income floor at $$250$$. So draw a horizontal line at $$y=250$$ wherever the original budget constraint is below $$250$$.
+>
+> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_3_solution.png">
+>
+> The red line above shows the budget constraint without income support. The optimal point is A, where it is tangent to the indifference curves. At that point, the worker works 20 hours and earns 200 weekly income.
+>
+> The black line shows the budget constraint with income support. Point B is optimal because it is the highest indifference curve touching the budget constraint.
+>
+> Based on this analysis, the provision of minimum income support reduces the number of hours worked, but increases the worker's income.
+
+{: .green-callout-title }
+> Income support policies example 2
+>
+> A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of $$w=10$$ dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
+> 
+> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_4_setup.png">
+> 
+> In addition, the government provides minimum income support of up to $$250$$ dollars a week. That is, if someone earns less than $$250$$ dollars a week, the government supplements their income until it reaches $$250$$ a week.
+> 
+> 1. Draw the budget constraint without income support and label the optimal point A.
+> 2. Draw the budget constraint with income support and label the optimal point B.
+> 3. Does the income support policy increase or decrease hours worked?
+> 4. Does the income support policy increase or decrease the worker's income?
+>
+> *Answer.*
+>
+> We can repeat the process as with the previous example. We get the following diagram:
+>
+> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_4_solution.png">
+>
+> The setup was the same, the only difference was that this worker has different indifference curves. 
+>
+> Based on this analysis, minimum income support reduces the number of hours worked *and* reduces the income of this worker.
+
+
+{: .yellow-callout-title }
+> Income support policies example 3
+>
+> A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of $$w=15$$ dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
+> 
+> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_5_setup.png">
+> 
+> In addition, the government provides minimum income support of up to $$150$$ dollars a week. That is, if someone earns less than $$150$$ dollars a week, the government supplements their income until it reaches $$150$$ a week.
+> 
+> 1. Draw the budget constraint without income support and label the optimal point A.
+> 2. Draw the budget constraint with income support and label the optimal point B.
+> 3. Does the income support policy increase or decrease hours worked?
+> 4. Does the income support policy increase or decrease the worker's income?
+>
+> *Answer.*
+>
+> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_5_solution.png">
+>
+> This time, the provision of minimum income support does not change the worker's decision to work. The income support offered is too low, and results in lower utility than if the worker continues his same working hours from before.
+
+{: .purple-callout-title }
+> Economic Insight
+>
+> Income support policies, such as TANF, can potentially disincentivize people from looking for work or from working more hours. In some cases, it can even cause a person's income to *decline*. Therefore, when designing welfare policies, lawmakers should be aware of the tradeoffs between helping those in need and disincentivizing work.

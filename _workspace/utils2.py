@@ -696,14 +696,15 @@ class CobbDouglasConsumer:
         self.U = U
 
 class IncomeSupportBudget:
-    def __init__(self, bc, min_y):
+    def __init__(self, bc, min_y, color='black'):
         self.bc = bc
         self.min_y = min_y
+        self.color = color
     def plot(self, ax, xg):
         m = - self.bc.px / self.bc.py
         b = self.bc.I / self.bc.py
         bc = m*xg + b
-        ax.plot(xg, np.maximum(bc, self.min_y), color=self.bc.color, linewidth=self.bc.linewidth, alpha=self.bc.alpha, label=self.bc.label)
+        ax.plot(xg, np.maximum(bc, self.min_y), color=self.color, linewidth=self.bc.linewidth, alpha=self.bc.alpha, label=self.bc.label)
         return ax
 
 class CobbDouglasFirm:
@@ -3582,33 +3583,44 @@ class IncomeSupportProblem(GenericProblem):
         T = 60 # time budget
         I = w*T
         y = I-w*x
-        bc = BudgetConstraint(w,1,I)
-        ibc = IncomeSupportBudget(bc, ymin)
+        bc = BudgetConstraint(w,1,I,color='red')
+        ibc = IncomeSupportBudget(bc, ymin, color='black')
         cb = get_cb_from_point(x, y, bc)
+        setup_axis = Axis(xn=13, yn=13, xunit=5, yunit=yunit, xlab='Leisure Hours', ylab='Income')
+        solution_axis = Axis(xn=13, yn=13, xunit=5, yunit=yunit, xlab='Leisure Hours', ylab='Income')
         U_work = cb.eval_at(x,y)
         U_nowork = cb.eval_at(T,ymin)
         if U_work > U_nowork:
             work = 'yes'
             x_choice = x
             y_choice = y
+            income_inc_or_dec = 'neither increase nor decrease'
+            levels = get_cb_levels(cb, setup_axis, U_work)
         elif U_work < U_nowork:
             work = 'no'
             x_choice = T
             y_choice = ymin
+            levels = get_cb_levels(cb, setup_axis, U_work, U_nowork)
+            if ymin>y:
+                income_inc_or_dec = 'increase'
+            elif ymin<y:
+                income_inc_or_dec = 'decrease'
+            else:
+                income_inc_or_dec = 'neither increase nor decrease'
         else:
             work = 'not enough information'
             x_choice = x
             y_choice = y
-        self.sol = {'y':y, 'I':I, 'U_work':U_work, 'U_nowork':U_nowork, 'work':work, 'x_choice':x_choice, 'y_choice':y_choice}
-        setup_axis = Axis(xn=13, yn=13, xunit=5, yunit=yunit, xlab='Leisure Hours', ylab='Income')
-        solution_axis = Axis(xn=13, yn=13, xunit=5, yunit=yunit, xlab='Leisure Hours', ylab='Income')
-        levels = get_cb_levels(cb, setup_axis, U_work)
+            income_inc_or_dec = 'not enough information'
+            levels = get_cb_levels(cb, setup_axis, U_work)
+        self.sol = {'y':y, 'I':I, 'U_work':U_work, 'U_nowork':U_nowork, 'work':work, 'x_choice':x_choice, 'y_choice':y_choice, 'income_inc_or_dec':income_inc_or_dec}
         contours = CobbDouglasContours(cb, levels)
         self.contours = contours
         setup_axis.add(contours)
         solution_axis.add(contours)
-        point = Point(x_choice,y_choice,text='A',position='sw')
-        solution_axis.add(ibc, point)
+        pointB = Point(x_choice,y_choice,text='B',position='ne')
+        pointA = Point(x,y,text='A',position='sw')
+        solution_axis.add(bc, ibc, pointA, pointB)
         self.setup_axis = setup_axis
         self.solution_axis = solution_axis
         setup_list = []
@@ -3633,7 +3645,7 @@ In addition, the government provides minimum income support of up to \({ymin:g}\
             "online_setup": online_setup
         })
         question_list = []
-        question = fr"Draw the worker's budget constraint. Label the optimal point A."
+        question = fr"Draw the worker's budget constraint without income support. Label the optimal point A. Draw the worker's budget constraint with the income support. Label the optimal point B."
         online_question = question
         answer = fr"\begin{{center}}\includegraphics[width=3in]{{{name}_sol.png}}\end{{center}}"
         online_answer = f'<img src = "/CSUN-Econ-310/assets/images/graphs/{name}_sol.png">'
@@ -3644,7 +3656,33 @@ In addition, the government provides minimum income support of up to \({ymin:g}\
             "online_answer": online_answer,
             "MCQ": None
         })
-        question = fr"How many hours per week does the worker choose to work?"
+        question = fr"If there were no income support, how many hours per week does the worker work?"
+        online_question = question
+        answer = T-x
+        online_answer = fr"{answer:,g} hours"
+        answers = generate_distractors(answer,delta=5,type='add',rng=rng)
+        sol = 0
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"If there were no income support, how much income per week does the worker make?"
+        online_question = question
+        answer = y
+        online_answer = fr"{answer:,g} dollars"
+        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng)
+        sol = 0
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"With income support, how many hours per week does the worker work?"
         online_question = question
         if work=='yes': answer = fr'{T-x:g}'
         elif work=='no': answer = fr'{0:g}'
@@ -3659,11 +3697,24 @@ In addition, the government provides minimum income support of up to \({ymin:g}\
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
         })
-        question = fr"If income support were removed, how many hours would the worker choose to work?"
+        question = fr"With income support, how much income per week does the worker get?"
         online_question = question
-        answer = fr'{T-x:g}'
-        online_answer = fr"{answer} hours"
-        answers = [fr'{0:g}', fr'{T-x:g}', fr'{60:g}', 'not enough information']
+        answer = y_choice
+        online_answer = fr"{answer:,g} dollars"
+        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng)
+        sol = 0
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,sol,horz=True,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"Does the income support policy increase or decrease the worker's actual income?"
+        online_question = question
+        answer = income_inc_or_dec
+        online_answer = answer
+        answers = ['increase', 'decrease', 'neither increase nor decrease', 'not enough information']
         sol = answers.index(answer)
         question_list.append({
             "question": question,
@@ -4633,6 +4684,7 @@ def show_menu(problem_str, params=None, name='generic_problem', rng=rng):
     setup_list = prob.setup_list
     question_list = prob.question_list
     print(prob.params)
+    print(prob.sol)
     for i in range(len(setup_list)):
         print(f"{i}: {setup_list[i]['setup']}".replace('\n',' '))
         print("")
