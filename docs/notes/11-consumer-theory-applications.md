@@ -1,271 +1,162 @@
 ---
 layout: default
-title: "12. Exploring Utility Functions"
+title: "11. Consumer Choice: Applications"
 parent: Lecture Notes
-nav_order: 12
+nav_order: 11
 ---
 
-# Exploring Utility Functions
+# Consumer Choice Theory: Applications
 {: .no_toc }
 
 - TOC
 {:toc}
 
-In this lecture we explore the properties of various types of utility functions over two goods, $$u(x,y)$$.
+In this lecture we explore a few applications of consumer choice theory, mainly using the tools of graphical analysis. There are, of course, many other applications of the general theory.
 
+## Assessing price changes
 
-## Cobb Douglas
+Consumer choice theory can be used to understand how consumers respond to price changes. In particular, it can be used to illustrate complementarity vs. substitutability between goods.
 
-A Cobb Douglas utility function has the following form:
-
-$$ u(x,y) = x^a y^b $$
-
-where $$a>0$$ and $$b>0$$.
-
-A Cobb Douglas utility function has indifference curves that look like:
-
-![cobb-douglas](/CSUN-Econ-310/assets/images/12-exploring-utility-cobb-douglas.png)
-
-The MRS between $$x$$ and $$y$$ in a Cobb Douglas utility function is:
-
-$$MRS_{xy} (x,y) = \frac{u_x(x,y)}{u_y(x,y)} = \frac{ay}{bx}$$
-
-As can be seen from the MRS, Cobb Douglas has the realistic property of "taste for variety". That is, the desirability of $$x$$ relative to $$y$$ goes down when the consumer consumes more of $$x$$, and goes up when the consumer consumes more of $$y$$.
-
-Cobb Douglas also has the interesting property that the proportion of income a consumer spends on a good depends only on $$a$$ and $$b$$, and does not depend on the relative prices. (I leave it as an exercise for you to show this.)
-
-Because of its flexibility and mathematical convenience, Cobb Douglas is a common choice for modeling consumer utility.
-
-
----
+As a reminder:
+- Two goods are **complements** if the consumption of one good goes down when the price of the other rises. 
+- Two goods are **substitutes** if the consumption of one good goes up when the price of the other rises.
 
 {: .blue-callout-title }
-> Cobb Douglas Example
+> Example: Substitutes
 >
-> A consumer derives utility over goods $$x$$ and $$y$$ given by:
+> A consumer with income $$I=60$$ has utility over two goods, $$x$$ and $$y$$, shown by the indifference curves below.
 >
-> $$ u(x,y) = x^{\frac{2}{3}} y^{\frac{1}{3}} $$
+> ![example-1-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_1_setup.png)
 >
-> The consumer has income $$I=120$$. The price of $$x$$ is $$p_x = 20$$ and the price of $$y$$ is $$p_y = 10$$. 
+> The price of the goods are initially $$p_x=3$$ and $$p_y=1$$. One day, the price of good $$x$$ changes to $$p_x^\prime=1$$.
 >
-> Find the optimal choice of $$x$$ and $$y$$. Draw a diagram representing the consumer's optimal choice.
+> 1. Draw the initial budget constraint and label the optimal point A.
+> 2. Draw the budget constraint after the price change. Label the optimal point B.
+> 3. Did the consumption of $$x$$ increase or decrease? What about for $$y$$?
+> 4. Are $$x$$ and $$y$$ substitutes or complements at these price levels?
 >
 > *Answer.*
 >
-> Step 1. Write down the optimization problem.
+> The budget constraints and optimal points in both periods will look as follows:
 >
-> $$ \max_{x,y} ~ x^{\frac{2}{3}} y^{\frac{1}{3}} ~ ~ \text{ s.t. } ~ ~ 20x + 10y = 120 $$
+> ![example-2-solution](/CSUN-Econ-310/assets/images/graphs/lec11_example_1_solution.png)
 >
-> Step 2. Write down the first order conditions.
->
-> $$\begin{align}
-\tfrac{2}{3} x^{-\frac{1}{3}} y^{\frac{1}{3}} &= 20 \lambda  \\
-\tfrac{1}{3} x^{\frac{2}{3}} y^{-\frac{2}{3}} &= 10 \lambda 
-\end{align}$$
->
-> Step 3. Divide the two first order conditions.
->
-> $$\begin{align}
-\frac{\tfrac{2}{3} x^{-\frac{1}{3}} y^{\frac{1}{3}}}{\tfrac{1}{3} x^{\frac{2}{3}} y^{-\frac{2}{3}}} &= \frac{20\lambda}{10\lambda} \\
-\frac{2y}{x} &= 2 \\
-y&=x 
-\end{align}$$
->
-> Step 4. Plug $$y=x$$ into the budget constraint.
->
-> $$\begin{align}
-20x + 10y &= 120 \\
-20x + 10x &= 120 \\
-30x &= 120 \\
-x &= 4
-\end{align}$$
->
-> Step 5. Use $$y=x$$ to get $$y=4$$.
->
-> So the optimal choice is $$x=4$$ and $$y=4$$.  The optimal choice is represented by the diagram below. (Instead of drawing many indifference curves, I'm only drawing the one that the optimal point lies on.)
->
-> ![cb-example](/CSUN-Econ-310/assets/images/12-exploring-utility-cb-example.png)
-
-
----
-
-## Perfect Substitutes
-
-If two goods $$x$$ and $$y$$ are perfect substitutes, then the utility function of the consumer must look like:
-
-$$ u(x,y) = ax + by $$
-
-where $$a>0$$ and $$b>0$$.
-
-The indifference curves will be straight lines:
-
-![cobb-douglas](/CSUN-Econ-310/assets/images/12-exploring-utility-perfect-subs.png)
-
-The MRS between $$x$$ and $$y$$ is:
-
-$$MRS_{xy} (x,y) = \frac{u_x(x,y)}{u_y(x,y)} = \frac{a}{b}$$
-
-The MRS is constant, which means that the consumer is always willing to trade between $$x$$ and $$y$$ at a rate of $$a/b$$. (The consumer is always willing to give up $$a/b$$ units of $$y$$ to get $$1$$ unit of $$x$$.)
-
-### Corner solutions
-
-Perfect substitutes are interesting because the optimal choice is usually either a *corner solution*, or there are *infinitely many* optimal choices. 
-
-For example, consider your decision to choose between Exxon gasoline and Shell gasoline, which are perfect substitutes. If Exxon is cheaper, you would only purchase gas from Exxon and zero from Shell. On the other hand, if Shell is cheaper, you would only purchase from Shell and zero from Exxon. If they are the same price, then any combination of Shell and Exxon gasoline would be optimal.
-
----
+> This shows that consumption of $$x$$ increased and consumption of $$y$$ decreased.
+> 
+> Since the consumption of $$y$$ decreased in response to a decrease in the price of $$x$$, the two goods are substitutes.
 
 {: .green-callout-title }
-> Perfect Substitutes Example
+> Example: Complements
 >
-> $$x$$ and $$y$$ are perfect substitutes. A consumer's utility over $$x$$ and $$y$$ is represented by the indifference curves below.
+> A consumer with income $$I=12$$ has utility over two goods, $$x$$ and $$y$$, shown by the indifference curves below.
 >
-> ![perfect-subs-example-setup](/CSUN-Econ-310/assets/images/12-exploring-utility-pf-example-setup.png)
+> ![example-1-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_2_setup.png)
 >
-> The consumer has an income of $$80$$. The price of $$x$$ is $$p_x = 10$$ and the price of $$y$$ is $$p_y = 10$$. 
+> The price of the goods are initially $$p_x=1$$ and $$p_y=1$$. One day, the price of good $$y$$ changes to $$p_y^\prime=4$$.
 >
-> Plot the budget line and find the optimal choice of $$x$$ and $$y$$.
+> 1. Draw the initial budget constraint and label the optimal point A.
+> 2. Draw the budget constraint after the price change. Label the optimal point B.
+> 3. Did the consumption of $$x$$ increase or decrease? What about for $$y$$?
+> 4. Are $$x$$ and $$y$$ substitutes or complements at these price levels?
 >
 > *Answer.*
 >
-> To plot the budget line, simply draw a straight line between the x and y intercepts. The x-intercept is $$I/p_x=8$$ and the y-intercept is $$I/p_y=8$$.
+> The budget constraints and optimal points in both periods will look as follows:
 >
-> ![perfect-subs-example-setup](/CSUN-Econ-310/assets/images/12-exploring-utility-pf-example-solution.png)
+> ![example-2-solution](/CSUN-Econ-310/assets/images/graphs/lec11_example_2_solution.png)
 >
-> The optimal point is the point on the budget line that touches the highest indifference curve. That occurs at $$x=8$$ and $$y=0$$. Note that this is a corner solution.
+> This shows that consumption of $$x$$ and $$y$$ both decreased.
+> 
+> Since the consumption of $$x$$ decreased in response to an increase in the price of $$x$$, the two goods are complements.
 
+{: .purple-callout-title }
+> Economic Insight
+>
+> Whether two goods are substitutes or complements depends on the shape of the indifference curves (which in turn depend on the form of the utility function).
 
----
+## Public vs. private schools
 
-## Leontieff (Perfect Complements)
-
-If two goods are perfect complements, we say that the consumer has a "Leontieff" utility function. A Leontieff utility function is defined by:
-
-$$u(x,y) = \min (x,y) $$
-
-A Leontieff utility function has the following indifference curves:
-
-![cobb-douglas](/CSUN-Econ-310/assets/images/12-exploring-utility-leontieff.png)
-
-The MRS of a Leontieff utility function is tricky to define mathematically. It is either zero or infinity depending on the location.
-
-Leontieff utility functions are used to model goods that require one another in order to be useful. For example, if $$x$$ are left shoes and $$y$$ are right shoes, then the utility over $$x$$ and $$y$$ is appropriately modeled by Leontieff utility.
-
-The important thing to remember about Leontieff utility is that $$x$$ and $$y$$ must always be purchased in equal quantities.
-
----
+Consumer choice theory can be used to understand how parents choose between private and public schools. It can also be used to assess the impact of public education.
 
 {: .yellow-callout-title }
-> Leontieff Example 1
+> Public vs. Private School Example 1
 >
-> $$x$$ and $$y$$ are perfect complements. A consumer's utility over $$x$$ and $$y$$ is represented by the indifference curves below.
+> A family can spend their income on either education or other goods. The diagram below shows the family's budget constraint when only private school options are available, as well as their indifference curves over education and other consumption. 
 >
-> ![perfect-subs-example-setup](/CSUN-Econ-310/assets/images/12-exploring-utility-leontieff-example-setup.png)
+> ![example-3-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_3_setup.png)
 >
-> The consumer has an income of $$120$$. 
+> A public school option is also available which provides 60 units of education for free. 
 >
-> 1. Plot the budget line and show the optimal choice when $$p_x = 40$$ and $$p_y = 20$$.
->
-> 2. Plot the budget line and show the optimal choice when $$p_x = 20$$ and $$p_y = 40$$.
+> 1. On the diagram, label the optimal private school option A and label the public school option B.
+> 2. Which offers higher utility, public or private?
+> 3. Which option will the family choose?
+> 4. If the public school option were removed, would this increase or decrease the amount of education consumed?
 >
 > *Answer.*
 >
-> The budget line when $$p_x=40$$ and $$p_y=20$$:
+> The optimal private school option is labeled A and the public school option is labeled B.
 >
-> ![perfect-subs-example-setup](/CSUN-Econ-310/assets/images/12-exploring-utility-leontieff-example-solution-1.png)
+> ![example-3-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_3_solution.png)
 >
-> The budget line when $$p_x=20$$ and $$p_y=40$$:
+> It can be seen from the diagram that point B has higher utility than point A, so the family will choose the public school option.
 >
-![perfect-subs-example-setup](/CSUN-Econ-310/assets/images/12-exploring-utility-leontieff-example-solution-2.png)
->
-> In both cases, the optimal choice is $$x=2$$ and $$y=2$$. 
+> Since point B has 60 units of education and point A has 20, removal of the public school will decrease education consumption.
 
 
 {: .blue-callout-title }
-> Leontieff Example 2
+> Public vs. Private School Example 2
 >
-> Here is an alternative way to solve problems with Leontieff utility without drawing indifference curves.
+> A family can spend their income on either education or other goods. The diagram below shows the family's budget constraint when only private school options are available, as well as their indifference curves over education and other consumption. 
 >
-> A consumer's utility over $$x$$ and $$y$$ is given by:
+> ![example-4-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_4_setup.png)
 >
-> $$u(x,y) = \min (x, y)$$
+> A public school option is also available which provides 4 units of education for free. 
 >
-> The consumer's income is $$I=120$$.  The price of $$x$$ is $$p_x=10$$ and the price of $$y$$ is $$p_y=20$$. Calculate the optimal choice of $$x$$ and $$y$$.
->
-> *Answer.*
->
-> First note that at the optimal solution, $$x$$ and $$y$$ must be purchased in equal quantities. The total cost to buy both is $$p_x + p_y = 30$$. Since the consumer's income is $$I=120$$, he can buy only $$I/(p_x+p_y) = 40$$ pairs of $$x,y$$. Thus, the optimal choice is $$x=40$$ and $$y=40$$.
-
----
-
-## Quasilinear Utility
-
-A utility function is said to be quasilinear in $$x$$ if it has the following form:
-
-$$u(x,y) = x + v(y)$$
-
-You've already seen examples of quasilinear utility functions, which we worked with in lectures 4-8.  In those examples, the utility function was quasilinear in the consumption of the "numeraire good" which we called $$c$$ at the time.
-
-Quasilinear utility functions have indifference curves are all parallel shifts along the $$x$$ axis:
-
-![cobb-douglas](/CSUN-Econ-310/assets/images/12-exploring-utility-quasilinear.png)
-
-The MRS between $$y$$ and $$x$$ (that is, the amount of $$x$$ the consumer is willing to give up for 1 unit of $$y$$) is:
-
-$$ MRS_{yx} (x,y) = \frac{u_y(x,y)}{u_x(x,y)} = v^\prime(y) $$
-
-If $$x$$ is defined as numeraire consumption (e.g. money left over), then $$v^\prime(y)$$ has an easy interpretation as the consumer's marginal willingness-to-pay for good $$y$$, as measured in dollar units.
-
-Quasilinear utility functions are often used to model consumer choice between a single commodity and a generic measure of "money left over for other goods".
-
----
-
-{: .blue-callout-title }
-> Quasilinear Example
->
-> A consumer has quasilinear utility over $$x$$ and $$y$$:
->
-> $$u(x,y) = x + 20y^{\frac{1}{2}} $$
->
-> The consumer's income is $$I=100$$. The price of $$x$$ is $$p_x=1$$ and the price of $$y$$ is $$p_y = 2$$. 
-> 
-> Find the optimal choice of $$x$$ and $$y$$.
+> 1. On the diagram, label the optimal private school option A and label the public school option B.
+> 2. Which offers higher utility, public or private?
+> 3. Which option will the family choose?
+> 4. If the public school option were removed, would this increase or decrease the amount of education consumed?
 >
 > *Answer.*
 >
-> Step 1. Write down the optimization problem.
+> The optimal private school option is labeled A and the public school option is labeled B.
 >
-> $$\begin{align}
-\max_{x,y} ~ x + 20y^{\frac{1}{2}} ~ ~ \text{ s.t. } ~ ~ x + 2y = 100
-\end{align}$$
+> ![example-4-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_4_solution.png)
 >
-> Step 2. Write down the first order conditions.
+> It can be seen from the diagram that point A has higher utility than point B, so the family will choose the private school option.
 >
-> $$\begin{align}
-1 &= \lambda \\
-10y^{-\frac{1}{2}} &= 2\lambda 
-\end{align}$$
->
-> Step 3. Plug $$\lambda=1$$ into the first order condition for $$y$$.
->
-> $$\begin{align}
-10y^{-\frac{1}{2}} &= 2 \\
-5 &= y^{\frac{1}{2}}  \\
-25 &= y
-\end{align}$$
->
-> Step 4. Plug $$y=25$$ into the budget constraint to get $$x$$.
->
-> $$\begin{align}
-x + 2y &= 100 \\
-x + 2(25) &= 100 \\
-x + 50 &= 100 \\
-x &= 50
-\end{align}$$
->
-> The optimal solution is $$x=50$$ and $$y=25$$.
+> Since the family chooses private school, removing the public school option wouldn't change the amount of education consumed.
 
----
+
+{: .green-callout-title }
+> Public vs. Private School Example 3
+>
+> A family can spend their income on either education or other goods. The diagram below shows the family's budget constraint when only private school options are available, as well as their indifference curves over education and other consumption. 
+>
+> ![example-5-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_5_setup.png)
+>
+> A public school option is also available which provides 20 units of education for free. 
+>
+> 1. On the diagram, label the optimal private school option A and label the public school option B.
+> 2. Which offers higher utility, public or private?
+> 3. Which option will the family choose?
+> 4. If the public school option were removed, would this increase or decrease the amount of education consumed?
+>
+> *Answer.*
+>
+> The optimal private school option is labeled A and the public school option is labeled B.
+>
+> ![example-5-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_5_solution.png)
+>
+> It can be seen from the diagram that point B has higher utility than point A, so the family will choose the public school option.
+>
+> Since point B has 20 units of education and point A has 30, removal of the public school option would actually cause the families to choose more education.
+
+
+{: .purple-callout-title }
+> Economic Insight
+>
+> Public provision of education can lead to an increase or a decrease in the optimal level of education chosen by families. Whether public schools increase or decrease education depends on the families' preferences over education vs. consumption.
 
 
 

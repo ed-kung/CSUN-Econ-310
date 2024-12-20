@@ -144,11 +144,87 @@ and the inverse labor demand function:
 
 $$ w = \frac{1}{2} pA L^{-1/2} ~ ~ ~ ~ \text{(Eq.3)} $$
 
+#### Solution
 
+To find the solution, we follow the following steps:
 
-{: .blue-callout-title }
-> Example: Effect of a productivity shock
->
+Step 1. Use Eq.1 and Eq.2 to plug in for $$p$$ and $$w$$ in Eq.3, and rearrange to put $$q$$ and $$L$$ on the same side:
+
+$$\begin{aligned}
+w &= \frac{1}{2} pAL^{-1/2} ~ ~ ~ ~ & \text{(Eq.3)} \\
+\delta L &= \frac{1}{2} \left(\frac{\alpha}{q}\right) AL^{-1/2} ~ ~ ~ ~ & \text{(Plug in Eq.1 and Eq.2)} \\
+\delta L L^{1/2} &= \frac{1}{2} \left(\frac{\alpha}{q}\right) A ~ ~ ~ ~ & \text{(Multiply both sides by }L^{1/2}\text{)} \\
+\delta L^{3/2} &= \frac{1}{2} \left(\frac{\alpha}{q}\right) A ~ ~ ~ ~ &  \\
+\delta q L^{3/2} &= \frac{1}{2} \alpha A ~ ~ ~ ~ & \text{(Divide both sides by q)} \\
+qL^{3/2} &= \frac{\alpha A}{2\delta} ~ ~ ~ ~ & \text{(Divide both sides by }\delta\text{)}
+\end{aligned}$$
+
+Step 2. Plug $$q = AL^{1/2}$$ into the previous equation and rearrange to solve for $$L$$.
+
+$$\begin{aligned}
+qL^{3/2} &= \frac{\alpha A}{2\delta} ~ ~ ~ ~ & \\
+AL^{1/2} L^{3/2} &= \frac{\alpha A}{2 \delta} ~ ~ ~ ~ & \text{(Plug in }q=AL^{1/2}\text{)} \\
+A L^{2} &= \frac{\alpha A}{2 \delta} ~ ~ ~ ~ & \\
+L^{2} &= \frac{\alpha}{2 \delta} ~ ~ ~ ~ & \text{(Divide both sides by A)} \\
+L &= \sqrt{\frac{\alpha}{2\delta}} ~ ~ ~ ~ & \text{(Eq.L)} 
+\end{aligned}$$
+
+Plugging this formula for $$L$$ into Eq.2, we get:
+
+$$\begin{aligned}
+w &= \delta \sqrt{\frac{\alpha}{2 \delta}}  ~ ~ ~ ~ & \\
+w &= \sqrt{\frac{\alpha \delta}{2}} ~ ~ ~ ~ & \text{(Eq.w)}
+\end{aligned}$$
+
+Using $$q = AL^{1/2}$$, we get:
+
+$$\begin{aligned}
+q &= AL^{1/2} ~ ~ ~ ~ & \\
+q &= A\left(\sqrt{\frac{\alpha}{2 \delta}}\right)^{1/2} ~ ~ ~ ~ & \\
+q &= A \left(\frac{\alpha}{2 \delta}\right)^{1/4} ~ ~ ~ ~ & \text{(Eq.q)} 
+\end{aligned}$$
+
+Lastly, we take this formula for $$q$$ and plug it into Eq.1 to get $$p$$:
+
+$$\begin{aligned}
+p &= \frac{\alpha}{q} ~ ~ ~ ~ & \\
+p &= \frac{\alpha}{A \left( \frac{\alpha}{2\delta} \right)^{1/4} }  ~ ~ ~ ~ & \\
+p &= \frac{\alpha}{A} \left(\frac{\alpha}{2\delta}\right)^{-1/4} ~ ~ ~ ~ & \\ 
+p &= \frac{\alpha^{3/4} (2\delta)^{1/4}}{A} ~ ~ ~ ~ & (\text{Eq.p})
+\end{aligned}$$
+
+### Discussion
+
+We discovered that in equilibrium:
+
+$$\begin{aligned}
+L &= \sqrt{\frac{\alpha}{2\delta}} \\
+w &= \sqrt{\frac{\alpha \delta}{2}} \\
+q &= A \left(\frac{\alpha}{2 \delta}\right)^{1/4} \\
+p &= \frac{\alpha^{3/4} (2\delta)^{1/4}}{A}
+\end{aligned}$$
+
+Using these equations, we can discuss how the equilibrium changes when $$\alpha$$, $$\delta$$, or $$A$$ change.
+
+- If $$\alpha$$ increases (the consumer's desire for the commodity increases):
+    - The equilibrium quantity of labor increases
+    - The equilibrium wage rate increases
+    - The equilibrium quantity of commodity increases
+    - The equilibrium commodity price increases
+
+- If $$\delta$$ increases (the worker's disutility for labor increases):
+    - The equilibrium quantity of labor decreases
+    - The equilibrium wage rate increases
+    - The equilibrium quantity of commodity decreases
+    - The equilibrium commodity price increases
+    
+- If $$A$$ increases (the firm's productivity increases):
+    - The equilibrium quantity of labor *stays the same*
+    - The equilibrium wage rate *stays the same*
+    - The equilibrium quantity of commodity increases
+    - The equilibrium commodity price decreases
+
+Our analysis therefore shows that, for this class of models, a technological shock that increases productivity has *no long run effect* on the labor market. Rather, the benefits to the technology are entirely experienced by the consumers of the commodity market, who can buy more of the commodity at lower price. 
 
 {: .purple-callout-title }
 > Economic Insight
@@ -156,6 +232,7 @@ $$ w = \frac{1}{2} pA L^{-1/2} ~ ~ ~ ~ \text{(Eq.3)} $$
 > Under certain conditions, it's possible for a productivity shock to have *no* long run effects on equilibrium wage rate or employment levels. Instead, the impact is felt primarily in the commodity market, through lower prices and higher quantities. The main beneficiary of the technological shock is therefore the commodity consumers.
 >
 > This insight can explain why productivity shocks have not historically led to people working less while consuming the same amount, but rather it has led to people working about the same amount, but consuming more.
+
 
 
 {: .purple-callout-title }
