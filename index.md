@@ -52,17 +52,17 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 
 	I am generally very lenient and flexible with students who are showing effort. However, if you act unprofessionally, I will not hesitate to call you out on it. Examples of unprofessional behavior include: repeated tardiness, lazy effort on assignments, not paying attention in class, and leaving the class early without notifying me beforehand. Everyone starts with full credit for professionalism (10 pts), but points may be deducted for unprofessional behavior. 
     
-- **Homework Assignments (20%)**
+- **Homework Assignments (25%)**
 
     Weekly homework assignments will generally consist of a problem set, to be submitted in a greenbook or on stapled sheets of paper. Students can elect to work in groups of up to 3 on homework assignments. If you work in a group, your group only has to make one submission for the whole group. For each problem set, only a randomly selected set of questions will be graded.
 	
-- **Writing Assignments (10%)**
+- **Writing Assignments (15%)**
 
 	There will occassionally be a writing assignment, usually consisting of a short essay of about 500-800 words. These assignments must be completed on Packback, an online platform for AI-assisted writing assignments.
 	
-- **Midterm Exams (30%)**
+- **Midterm Exams (20%)**
 
-	There will be two midterm exams, each worth 15% of your grade. These will be multiple choice, in-person exams.
+	There will be two midterm exams, each worth 10% of your grade. These will be multiple choice, in-person exams.
     
 - **Final Exam (20%)**
 
@@ -110,15 +110,20 @@ Final Exam:
 
 ### Prerequisites
 
-Placeholder text
+Econ 160; Grade of C or better in MATH 103, MATH 150A, or MATH 255A; Completion of the lower division writing requirement.
 
 ### Course Overview
 
-Placeholder text
+This is an intermediate level undergraduate course in microeconomic theory. You will learn about the operation of the price system in market-oriented economies. Special emphasis is placed on the mathematical modeling of consumer behavior, business behavior, market organization, production and cost, and economic welfare. You will apply the economic concepts you learn to current issues through a variety of writing assignments.
 
 ### Course Learning Outcomes
 
-Placeholder text
+By successful completion of this course, the student should be able to:
+
+- Write down models of supply and demand and use them to explain the functioning of the price system in competitive markets.
+- Use models of consumer and firm behavior to assess the impacts of economic policies, price changes, and technological changes.
+- Write down models of imperfectly competitive markets and use them to explain the impact of market power on economic welfare.
+- Understand the role of risk, uncertainty, and time preference in the functioning of markets.
 
 ---
 
@@ -126,7 +131,7 @@ Placeholder text
 
 **Course Website**
 
-Most of the required lecture materials are contained on this very website.
+All of the required lecture materials are available for free and contained on this website.
 
 **Packback (Required)**
 
