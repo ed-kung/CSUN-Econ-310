@@ -83,22 +83,22 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 
 | Week | Dates         | Session 1                            | Session 2                                   |  
 | ---: | :------------ | :----------------------------------- | :------------------------------------------ | 
-|    1 | 1/20 - 1/24   | Introduction                         | Econ Review                                 |   
-|    2 | 1/27 - 1/31   | Math Review                          | Single Variable Optimization                |
-|    3 | 2/3 - 2/7     | A Model of Commodity Markets         | A Model of Labor Markets                    |
-|    4 | 2/10 - 2/14   | A General Equilibrium Model          | Application: Productivity Shocks            |
-|    5 | 2/17 - 2/21   | Discussion Session                   | Review                                      |  
-|    6 | 2/24 - 2/28   | **Midterm 1**                        | Discussion Session                          |
-|    7 | 3/3 - 3/7     | Multivariate Optimization            | Constrained Multivariate Optimization       |
-|    8 | 3/10 - 3/14   | Theory of Consumer Choice            | Consumer Choice: Applications               | 
-|    9 | 3/17 - 3/21   | **NO CLASS - SPRING BREAK**          | **NO CLASS - SPRING BREAK**                 |
-|   10 | 3/24 - 3/28   | Labor/Leisure Choice                 | Theory of Production                        |
-|   11 | 3/31 - 4/4    | Discussion Session                   | Review                                      |
-|   12 | 4/7 - 4/11    | **Midterm 2**                        | Discussion Session                          |
-|   13 | 4/14 - 4/18   | Game Theory I                        | Game Theory II                              |
-|   14 | 4/21 - 4/25   | Monopolies                           | Imperfect Competition                       |
-|   15 | 4/28 - 5/2    | Risk and Insurance                   | Saving and Borrowing                        |
-|   16 | 5/5 - 5/9     | Discussion Session                   | Review                                      |
+|    1 | 1/21, 1/23    | Introduction                         | Econ Review                                 |   
+|    2 | 1/28, 1/30    | Math Review                          | Single Variable Optimization                |
+|    3 | 2/4, 2/6      | A Model of Commodity Markets         | A Model of Labor Markets                    |
+|    4 | 2/11, 2/13    | A General Equilibrium Model          | Application: Productivity Shocks            |
+|    5 | 2/18, 2/20    | Discussion Session                   | Review                                      |  
+|    6 | 2/25, 2/278   | **Midterm 1**                        | Discussion Session                          |
+|    7 | 3/4, 3/67     | Multivariate Optimization            | Constrained Multivariate Optimization       |
+|    8 | 3/11, 3/13    | Theory of Consumer Choice            | Consumer Choice: Applications               | 
+|    9 | 3/18, 3/20    | **NO CLASS - SPRING BREAK**          | **NO CLASS - SPRING BREAK**                 |
+|   10 | 3/25, 3/27    | Labor/Leisure Choice                 | Theory of Production                        |
+|   11 | 4/1, 4/3      | Discussion Session                   | Review                                      |
+|   12 | 4/8, 4/10     | **Midterm 2**                        | Discussion Session                          |
+|   13 | 4/15, 4/17    | Game Theory I                        | Game Theory II                              |
+|   14 | 4/22, 4/24    | Monopolies                           | Imperfect Competition                       |
+|   15 | 4/29, 5/1     | Risk and Insurance                   | Saving and Borrowing                        |
+|   16 | 5/6, 5/8      | Discussion Session                   | Review                                      |
 
 Final Exam: 
 
