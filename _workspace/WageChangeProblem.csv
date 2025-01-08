@@ -1,0 +1,173 @@
+x1,w1,x2,w2,y1,y2,I1,I2,wage_inc_or_dec,labor_inc_or_dec
+20,15,15,20,600,900,900,1200,increases,increase
+40,15,30,20,300,600,900,1200,increases,increase
+20,15,10,30,600,1500,900,1800,increases,increase
+20,15,20,30,600,1200,900,1800,increases,neither increase nor decrease
+40,15,20,30,300,1200,900,1800,increases,increase
+40,15,30,30,300,900,900,1800,increases,increase
+40,15,40,30,300,600,900,1800,increases,neither increase nor decrease
+20,15,15,40,600,1800,900,2400,increases,increase
+40,15,15,40,300,1800,900,2400,increases,increase
+40,15,30,40,300,1200,900,2400,increases,increase
+40,15,45,40,300,600,900,2400,increases,decrease
+20,15,20,45,600,1800,900,2700,increases,neither increase nor decrease
+40,15,20,45,300,1800,900,2700,increases,increase
+40,15,40,45,300,900,900,2700,increases,neither increase nor decrease
+40,15,30,50,300,1500,900,3000,increases,increase
+20,15,5,60,600,3300,900,3600,increases,increase
+20,15,10,60,600,3000,900,3600,increases,increase
+20,15,15,60,600,2700,900,3600,increases,increase
+20,15,20,60,600,2400,900,3600,increases,neither increase nor decrease
+20,15,25,60,600,2100,900,3600,increases,decrease
+40,15,5,60,300,3300,900,3600,increases,increase
+40,15,10,60,300,3000,900,3600,increases,increase
+40,15,15,60,300,2700,900,3600,increases,increase
+40,15,20,60,300,2400,900,3600,increases,increase
+40,15,25,60,300,2100,900,3600,increases,increase
+40,15,30,60,300,1800,900,3600,increases,increase
+40,15,35,60,300,1500,900,3600,increases,increase
+40,15,40,60,300,1200,900,3600,increases,neither increase nor decrease
+40,15,45,60,300,900,900,3600,increases,decrease
+15,20,20,15,900,600,1200,900,decreases,decrease
+30,20,40,15,600,300,1200,900,decreases,decrease
+15,20,10,30,900,1500,1200,1800,increases,increase
+30,20,20,30,600,1200,1200,1800,increases,increase
+30,20,30,30,600,900,1200,1800,increases,neither increase nor decrease
+45,20,40,30,300,600,1200,1800,increases,increase
+15,20,15,40,900,1800,1200,2400,increases,neither increase nor decrease
+30,20,15,40,600,1800,1200,2400,increases,increase
+30,20,30,40,600,1200,1200,2400,increases,neither increase nor decrease
+45,20,45,40,300,600,1200,2400,increases,neither increase nor decrease
+30,20,20,45,600,1800,1200,2700,increases,increase
+45,20,40,45,300,900,1200,2700,increases,increase
+30,20,30,50,600,1500,1200,3000,increases,neither increase nor decrease
+45,20,30,50,300,1500,1200,3000,increases,increase
+15,20,5,60,900,3300,1200,3600,increases,increase
+15,20,10,60,900,3000,1200,3600,increases,increase
+15,20,15,60,900,2700,1200,3600,increases,neither increase nor decrease
+30,20,5,60,600,3300,1200,3600,increases,increase
+30,20,10,60,600,3000,1200,3600,increases,increase
+30,20,15,60,600,2700,1200,3600,increases,increase
+30,20,20,60,600,2400,1200,3600,increases,increase
+30,20,25,60,600,2100,1200,3600,increases,increase
+30,20,30,60,600,1800,1200,3600,increases,neither increase nor decrease
+30,20,35,60,600,1500,1200,3600,increases,decrease
+45,20,25,60,300,2100,1200,3600,increases,increase
+45,20,30,60,300,1800,1200,3600,increases,increase
+45,20,35,60,300,1500,1200,3600,increases,increase
+45,20,40,60,300,1200,1200,3600,increases,increase
+45,20,45,60,300,900,1200,3600,increases,neither increase nor decrease
+45,20,50,60,300,600,1200,3600,increases,decrease
+10,30,20,15,1500,600,1800,900,decreases,decrease
+20,30,20,15,1200,600,1800,900,decreases,neither increase nor decrease
+20,30,40,15,1200,300,1800,900,decreases,decrease
+30,30,40,15,900,300,1800,900,decreases,decrease
+40,30,40,15,600,300,1800,900,decreases,neither increase nor decrease
+10,30,15,20,1500,900,1800,1200,decreases,decrease
+20,30,30,20,1200,600,1800,1200,decreases,decrease
+30,30,30,20,900,600,1800,1200,decreases,neither increase nor decrease
+40,30,45,20,600,300,1800,1200,decreases,decrease
+20,30,15,40,1200,1800,1800,2400,increases,increase
+30,30,30,40,900,1200,1800,2400,increases,neither increase nor decrease
+20,30,20,45,1200,1800,1800,2700,increases,neither increase nor decrease
+30,30,20,45,900,1800,1800,2700,increases,increase
+40,30,40,45,600,900,1800,2700,increases,neither increase nor decrease
+30,30,30,50,900,1500,1800,3000,increases,neither increase nor decrease
+10,30,5,60,1500,3300,1800,3600,increases,increase
+10,30,10,60,1500,3000,1800,3600,increases,neither increase nor decrease
+20,30,10,60,1200,3000,1800,3600,increases,increase
+20,30,15,60,1200,2700,1800,3600,increases,increase
+20,30,20,60,1200,2400,1800,3600,increases,neither increase nor decrease
+30,30,15,60,900,2700,1800,3600,increases,increase
+30,30,20,60,900,2400,1800,3600,increases,increase
+30,30,25,60,900,2100,1800,3600,increases,increase
+30,30,30,60,900,1800,1800,3600,increases,neither increase nor decrease
+40,30,30,60,600,1800,1800,3600,increases,increase
+40,30,35,60,600,1500,1800,3600,increases,increase
+40,30,40,60,600,1200,1800,3600,increases,neither increase nor decrease
+50,30,50,60,300,600,1800,3600,increases,neither increase nor decrease
+15,40,20,15,1800,600,2400,900,decreases,decrease
+15,40,40,15,1800,300,2400,900,decreases,decrease
+30,40,40,15,1200,300,2400,900,decreases,decrease
+45,40,40,15,600,300,2400,900,decreases,increase
+15,40,15,20,1800,900,2400,1200,decreases,neither increase nor decrease
+15,40,30,20,1800,600,2400,1200,decreases,decrease
+30,40,30,20,1200,600,2400,1200,decreases,neither increase nor decrease
+45,40,45,20,600,300,2400,1200,decreases,neither increase nor decrease
+15,40,20,30,1800,1200,2400,1800,decreases,decrease
+30,40,30,30,1200,900,2400,1800,decreases,neither increase nor decrease
+30,40,30,50,1200,1500,2400,3000,increases,neither increase nor decrease
+15,40,10,60,1800,3000,2400,3600,increases,increase
+15,40,15,60,1800,2700,2400,3600,increases,neither increase nor decrease
+30,40,25,60,1200,2100,2400,3600,increases,increase
+30,40,30,60,1200,1800,2400,3600,increases,neither increase nor decrease
+45,40,45,60,600,900,2400,3600,increases,neither increase nor decrease
+20,45,20,15,1800,600,2700,900,decreases,neither increase nor decrease
+20,45,40,15,1800,300,2700,900,decreases,decrease
+40,45,40,15,900,300,2700,900,decreases,neither increase nor decrease
+20,45,30,20,1800,600,2700,1200,decreases,decrease
+40,45,45,20,900,300,2700,1200,decreases,decrease
+20,45,20,30,1800,1200,2700,1800,decreases,neither increase nor decrease
+20,45,30,30,1800,900,2700,1800,decreases,decrease
+40,45,40,30,900,600,2700,1800,decreases,neither increase nor decrease
+20,45,15,60,1800,2700,2700,3600,increases,increase
+20,45,20,60,1800,2400,2700,3600,increases,neither increase nor decrease
+40,45,40,60,900,1200,2700,3600,increases,neither increase nor decrease
+30,50,40,15,1500,300,3000,900,decreases,decrease
+30,50,30,20,1500,600,3000,1200,decreases,neither increase nor decrease
+30,50,45,20,1500,300,3000,1200,decreases,decrease
+30,50,30,30,1500,900,3000,1800,decreases,neither increase nor decrease
+30,50,30,40,1500,1200,3000,2400,decreases,neither increase nor decrease
+30,50,30,60,1500,1800,3000,3600,increases,neither increase nor decrease
+5,60,20,15,3300,600,3600,900,decreases,decrease
+5,60,40,15,3300,300,3600,900,decreases,decrease
+10,60,20,15,3000,600,3600,900,decreases,decrease
+10,60,40,15,3000,300,3600,900,decreases,decrease
+15,60,20,15,2700,600,3600,900,decreases,decrease
+15,60,40,15,2700,300,3600,900,decreases,decrease
+20,60,20,15,2400,600,3600,900,decreases,neither increase nor decrease
+20,60,40,15,2400,300,3600,900,decreases,decrease
+25,60,20,15,2100,600,3600,900,decreases,increase
+25,60,40,15,2100,300,3600,900,decreases,decrease
+30,60,40,15,1800,300,3600,900,decreases,decrease
+35,60,40,15,1500,300,3600,900,decreases,decrease
+40,60,40,15,1200,300,3600,900,decreases,neither increase nor decrease
+45,60,40,15,900,300,3600,900,decreases,increase
+5,60,15,20,3300,900,3600,1200,decreases,decrease
+5,60,30,20,3300,600,3600,1200,decreases,decrease
+10,60,15,20,3000,900,3600,1200,decreases,decrease
+10,60,30,20,3000,600,3600,1200,decreases,decrease
+15,60,15,20,2700,900,3600,1200,decreases,neither increase nor decrease
+15,60,30,20,2700,600,3600,1200,decreases,decrease
+20,60,30,20,2400,600,3600,1200,decreases,decrease
+25,60,30,20,2100,600,3600,1200,decreases,decrease
+25,60,45,20,2100,300,3600,1200,decreases,decrease
+30,60,30,20,1800,600,3600,1200,decreases,neither increase nor decrease
+30,60,45,20,1800,300,3600,1200,decreases,decrease
+35,60,30,20,1500,600,3600,1200,decreases,increase
+35,60,45,20,1500,300,3600,1200,decreases,decrease
+40,60,45,20,1200,300,3600,1200,decreases,decrease
+45,60,45,20,900,300,3600,1200,decreases,neither increase nor decrease
+50,60,45,20,600,300,3600,1200,decreases,increase
+5,60,10,30,3300,1500,3600,1800,decreases,decrease
+10,60,10,30,3000,1500,3600,1800,decreases,neither increase nor decrease
+10,60,20,30,3000,1200,3600,1800,decreases,decrease
+15,60,20,30,2700,1200,3600,1800,decreases,decrease
+15,60,30,30,2700,900,3600,1800,decreases,decrease
+20,60,20,30,2400,1200,3600,1800,decreases,neither increase nor decrease
+20,60,30,30,2400,900,3600,1800,decreases,decrease
+25,60,30,30,2100,900,3600,1800,decreases,decrease
+30,60,30,30,1800,900,3600,1800,decreases,neither increase nor decrease
+30,60,40,30,1800,600,3600,1800,decreases,decrease
+35,60,40,30,1500,600,3600,1800,decreases,decrease
+40,60,40,30,1200,600,3600,1800,decreases,neither increase nor decrease
+50,60,50,30,600,300,3600,1800,decreases,neither increase nor decrease
+10,60,15,40,3000,1800,3600,2400,decreases,decrease
+15,60,15,40,2700,1800,3600,2400,decreases,neither increase nor decrease
+25,60,30,40,2100,1200,3600,2400,decreases,decrease
+30,60,30,40,1800,1200,3600,2400,decreases,neither increase nor decrease
+45,60,45,40,900,600,3600,2400,decreases,neither increase nor decrease
+15,60,20,45,2700,1800,3600,2700,decreases,decrease
+20,60,20,45,2400,1800,3600,2700,decreases,neither increase nor decrease
+40,60,40,45,1200,900,3600,2700,decreases,neither increase nor decrease
+30,60,30,50,1800,1500,3600,3000,decreases,neither increase nor decrease
