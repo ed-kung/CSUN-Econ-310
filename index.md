@@ -88,8 +88,8 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 |    3 | 2/4, 2/6      | A Model of Commodity Markets         | A Model of Labor Markets                    |
 |    4 | 2/11, 2/13    | A General Equilibrium Model          | Application: Productivity Shocks            |
 |    5 | 2/18, 2/20    | Discussion Session                   | Review                                      |  
-|    6 | 2/25, 2/278   | **Midterm 1**                        | Discussion Session                          |
-|    7 | 3/4, 3/67     | Multivariate Optimization            | Constrained Multivariate Optimization       |
+|    6 | 2/25, 2/27    | **Midterm 1**                        | Discussion Session                          |
+|    7 | 3/4, 3/6      | Multivariate Optimization            | Constrained Multivariate Optimization       |
 |    8 | 3/11, 3/13    | Theory of Consumer Choice            | Consumer Choice: Applications               | 
 |    9 | 3/18, 3/20    | **NO CLASS - SPRING BREAK**          | **NO CLASS - SPRING BREAK**                 |
 |   10 | 3/25, 3/27    | Labor/Leisure Choice                 | Theory of Production                        |
