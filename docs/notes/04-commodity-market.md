@@ -23,7 +23,7 @@ In equilibrium, the quantity demanded by consumers must equal the quantity suppl
 
 ### Setup
 
-A representative, price-taking consumer decides how many units, \(q_d\), of a commodity to purchase at unit price \(p\). The utility they receive for purchasing \(q_d\) units at price \(p\) is:
+A representative, price-taking consumer decides how many units, $$q_d$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q_d$$ units at price $$p$$ is:
 
 $$ u(q_d) = v(q_d) - pq_d $$
 
@@ -83,7 +83,7 @@ q &= 3 - \frac{1}{3}p ~ ~ ~ ~ & \text{(Divide both sides by 3)}
 
 ### Setup
 
-A representative, price-taking firm decides how many units, \(q_s\), of a commodity to produce and sell at unit price \(p\). The firm's total cost function for producing \(q_s\) units is $$c(q_s)$$.
+A representative, price-taking firm decides how many units, $$q_s$$, of a commodity to produce and sell at unit price $$p$$. The firm's total cost function for producing $$q_s$$ units is $$c(q_s)$$.
 
 ### First order condition
 
@@ -116,7 +116,7 @@ Equation (2) also shows that at the producer's optimal choice, price equals marg
 >
 > $$ c(q) = q + q^2 $$
 >
-> 1. Write down the firm's demand curve.
+> 1. Write down the firm's supply curve.
 >
 > *Answer.*
 >
