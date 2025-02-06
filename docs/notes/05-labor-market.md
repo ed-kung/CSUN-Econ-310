@@ -23,7 +23,7 @@ In equilibrium, the quantity of labor supplied by workers must equal the quantit
 
 ### Setup
 
-A representative, price-taking worker decides how many units, \(L_s\), of labor to supply (e.g. how many hours to work), at a unit wage \(w\). The worker's utility function over working \(L_s\) labor-units at wage \(w\) is:
+A representative, price-taking worker decides how many units, $$L_s$$, of labor to supply (e.g. how many hours to work), at a unit wage $$w$$. The worker's utility function over working $$L_s$$ labor-units at wage $$w$$ is:
 
 $$ u(L_s) = wL_s - d(L_s) $$
 
@@ -82,7 +82,7 @@ w &= 2L^{1/2}
 
 ### Setup
 
-A representative, price-taking firm uses labor to produce and sell a commodity at unit price \(p\). The firm hires labor at a constant wage rate \(w\). If the firm employs \(L_d\) units of labor, it can produce \(f(L_d)\) units of commodity output.
+A representative, price-taking firm uses labor to produce and sell a commodity at unit price $$p$$. The firm hires labor at a constant wage rate $$w$$. If the firm employs $$L_d$$ units of labor, it can produce $$f(L_d)$$ units of commodity output.
 
 We call $$f(L)$$ the firm's **production function**. It shows how many units of output can be produced from $$L$$ units of labor input.
 
