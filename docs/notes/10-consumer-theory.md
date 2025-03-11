@@ -203,6 +203,13 @@ Cobb Douglas also has the interesting property that the proportion of income a c
 
 Because of its flexibility and mathematical convenience, Cobb Douglas is a common choice for modeling consumer utility.
 
+{: .purple-callout-title }
+> Economic Insight
+>
+> If a consumer has a Cobb Douglas utility function, the share of their budget they spend on each good depends only on the parameters of the utility function, and not on the relative prices of the goods.
+
+
+
 ### Linear utility
 
 A linear utility function has the following form:
