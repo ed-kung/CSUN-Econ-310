@@ -97,7 +97,7 @@ f_x(x,y) &= \lambda a \\
 f_y(x,y) &= \lambda b 
 \end{align}$$
 
-There are 3 equations in 3 unknowns. The unknowns are $$x$$, $$y$$, and $$\lambda$$. The equations are the two first order conditions and the constraint, $$ax+bx+c=0$$.
+There are 3 equations in 3 unknowns. The unknowns are $$x$$, $$y$$, and $$\lambda$$. The equations are the two first order conditions and the constraint, $$ax+by-c=0$$.
 
 
 {: .green-callout-title }
