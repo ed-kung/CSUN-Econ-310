@@ -2780,7 +2780,7 @@ A consumer's indifference curves and budget constraint over two goods, \(x\) and
         online_question = question
         answer = x
         online_answer = fr"\(x = {answer:g}\)"
-        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng)
+        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng,must_positive=True)
         question_list.append({
             "question": question,
             "online_question": question,
@@ -2804,7 +2804,7 @@ A consumer's indifference curves and budget constraint over two goods, \(x\) and
         online_question = question
         answer = y
         online_answer = fr"\(y = {answer:g}\)"
-        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng)
+        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng,must_positive=True)
         question_list.append({
             "question": question,
             "online_question": question,
@@ -2955,7 +2955,7 @@ The price of good \(x\) is \(p_x = {px:g}\) and the price of good \(y\) is \(p_y
         online_question = question
         answer = x
         online_answer = fr"\(x = {answer:g}\)"
-        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng)
+        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng,must_positive=True)
         question_list.append({
             "question": question,
             "online_question": question,
@@ -2967,7 +2967,7 @@ The price of good \(x\) is \(p_x = {px:g}\) and the price of good \(y\) is \(p_y
         online_question = question
         answer = y
         online_answer = fr"\(y = {answer:g}\)"
-        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng)
+        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng,must_positive=True)
         question_list.append({
             "question": question,
             "online_question": question,
@@ -3061,7 +3061,7 @@ The price of good \(x\) is \(p_x = {px:g}\) and the price of good \(y\) is \(p_y
         online_question = question
         answer = x
         online_answer = fr"\(x = {answer:g}\)"
-        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng)
+        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng,must_positive=True)
         question_list.append({
             "question": question,
             "online_question": question,
@@ -3073,7 +3073,7 @@ The price of good \(x\) is \(p_x = {px:g}\) and the price of good \(y\) is \(p_y
         online_question = question
         answer = y
         online_answer = fr"\(y = {answer:g}\)"
-        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng)
+        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng,must_positive=True)
         question_list.append({
             "question": question,
             "online_question": question,
@@ -3112,12 +3112,13 @@ class PriceChangeProblem(GenericProblem):
         GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
         params = self.params
         x1, px1, py1, x2, px2, py2, I, xunit, xn = params['x1'], params['px1'], params['py1'], params['x2'], params['px2'], params['py2'], params['I'], params['xunit'], params['xn']
+        yunit = xunit
         y1 = (I - px1*x1)/py1
         y2 = (I - px2*x2)/py2
         bc1 = BudgetConstraint(px1,py1,I)
         bc2 = BudgetConstraint(px2,py2,I)
-        setup_axis = Axis(xn=xn, xunit=xunit, yn=xn, yunit=xunit)
-        solution_axis = Axis(xn=xn, xunit=xunit, yn=xn, yunit=xunit)
+        setup_axis = Axis(xn=xn, xunit=xunit, yn=xn, yunit=yunit)
+        solution_axis = Axis(xn=xn, xunit=xunit, yn=xn, yunit=yunit)
         contours = CESContours(x1,y1,x2,y2,bc1,bc2,setup_axis)
         self.contours = contours
         setup_axis.add(contours)
@@ -3219,6 +3220,54 @@ The prices of the goods are initially \(p_x = {px1:g}\) and \(p_y = {py1:g}\). O
             "answer": answer,
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
+        })
+        question = fr"What is the optimal choice of \(x\) at the initial prices?"
+        online_question = question
+        answer = x1
+        online_answer = fr"\({answer:g}\)"
+        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng,must_positive=True)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the optimal choice of \(y\) at the initial prices?"
+        online_question = question
+        answer = y1
+        online_answer = fr"\({answer:g}\)"
+        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng,must_positive=True)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the optimal choice of \(x\) at the later prices?"
+        online_question = question
+        answer = x2
+        online_answer = fr"\({answer:g}\)"
+        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng,must_positive=True)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the optimal choice of \(y\) at the later prices?"
+        online_question = question
+        answer = y2
+        online_answer = fr"\({answer:g}\)"
+        answers = generate_distractors(answer,delta=yunit,type='add',rng=rng,must_positive=True)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
         self.setup_list = setup_list
         self.question_list = question_list
@@ -3354,6 +3403,18 @@ A public school option is also available which provides {x_public:g} units of ed
             "answer": answer,
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,sol,horz=False,shuffle=False,rng=rng)
+        })
+        question = fr"If the family were to choose private school, how many units of education would it consume?"
+        online_question = question
+        answer = x_private
+        online_answer = fr"\({answer:g}\)"
+        answers = generate_distractors(answer,delta=xunit,type='add',rng=rng,must_positive=True)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
         self.setup_list = setup_list
         self.question_list = question_list
@@ -3524,7 +3585,7 @@ One day, the worker's hourly wage changes to \(w^\prime = {w2:g}\).
         online_question = question
         answer = T - x1
         online_answer = fr"\({answer:g}\) hours"
-        answers = generate_distractors(answer,delta=5,type='add',rng=rng)
+        answers = generate_distractors(answer,delta=5,type='add',rng=rng,must_positive=True)
         question_list.append({
             "question": question,
             "online_question": question,
@@ -3536,7 +3597,7 @@ One day, the worker's hourly wage changes to \(w^\prime = {w2:g}\).
         online_question = question
         answer = T - x2
         online_answer = fr"\({answer:g}\) hours"
-        answers = generate_distractors(answer,delta=5,type='add',rng=rng)
+        answers = generate_distractors(answer,delta=5,type='add',rng=rng,must_positive=True)
         question_list.append({
             "question": question,
             "online_question": question,
@@ -3923,7 +3984,7 @@ The unit price of labor is \(w={w:g}\) and the unit price of capital is \(r={r:g
         online_question = question
         answer = L
         online_answer = fr"\(L = {answer:g}\)"
-        answers = generate_distractors(answer, delta=xunit, type='add')
+        answers = generate_distractors(answer, delta=xunit, type='add', must_positive=True)
         question_list.append({
             "question": question,
             "online_question": online_question,
@@ -3935,7 +3996,7 @@ The unit price of labor is \(w={w:g}\) and the unit price of capital is \(r={r:g
         online_question = question
         answer = K
         online_answer = fr"\(K = {answer:g}\)"
-        answers = generate_distractors(answer, delta=xunit, type='add')
+        answers = generate_distractors(answer, delta=xunit, type='add', must_positive=True)
         question_list.append({
             "question": question,
             "online_question": online_question,
