@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "20. Oligopolies"
+title: "17. Imperfect Competition"
 parent: Lecture Notes
-nav_order: 20
+nav_order: 17
 ---
 
-# Oligopolies
+# Imperfect Competition
 {: .no_toc }
 
 - TOC
@@ -13,7 +13,9 @@ nav_order: 20
 
 ## Background Review
 
-Oligopoly describes a market that is dominated by a small number of firms. It is different from a monopoly because there is more than one firm. It is different from perfect competition because each firm has a degree of influence over pricing in the market.
+In models of perfect competition, we assumed that none of the firms had any influence over the market price. In models of monopoly, we assumed that a single firm has full control over the market price. The reality is usually somewhere in between. In most real world markets, firms have some influence over prices, but not complete control. We call models that sit in between perfect competition and monopoly models of **imperfect competition**.
+
+Imperfect competition often results from markets that are **oligopolies**. An oligopoly describes a market that is dominated by a small number of firms. Because there is more than one firm, no single firm has complete control over market prices. But because the firms are large players in the market, each firm exerts some degree of influence over market pricing.
 
 In an oligopoly, firms make decisions that are dependent on the actions taken by other firms. Game theory is therefore necessary to study the behavior of oligopolistic markets.
 
