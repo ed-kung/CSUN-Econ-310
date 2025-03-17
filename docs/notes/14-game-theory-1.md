@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "19. Game Theory"
+title: "14. Game Theory"
 parent: Lecture Notes
-nav_order: 19
+nav_order: 14
 ---
 
 # Game Theory
