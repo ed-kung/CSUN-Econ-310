@@ -11,3 +11,10 @@ nav_order: 15
 - TOC
 {:toc}
 
+## Tit for Tat Strategies in the Prisoner's Dilemma
+
+coming soon
+
+## The Role of Commitment in Sequential Games
+
+coming soon
