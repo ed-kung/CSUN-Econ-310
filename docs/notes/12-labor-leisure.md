@@ -30,7 +30,7 @@ Although these models can be set up with equations and solved using the principl
 {: .blue-callout-title }
 > Example
 >
-> A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of \(w=30\) dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
+> A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of $$w=30$$ dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
 >
 > ![example](/CSUN-Econ-310/assets/images/graphs/lec12_example_0_setup.png)
 >
