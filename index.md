@@ -102,7 +102,8 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 
 Final Exam: 
 
-- TBD
+- Section 01 (TuTh 10am section): Thursday 5/15 10:15am - 12:15pm @ Bookstein 1123
+- Section 02 (TuTh 1pm section): Tuesday 5/13 12:45pm - 2:45pm @ Bookstein 1123 
 
 ---
 
