@@ -186,7 +186,13 @@ If you are concerned about the possibility that you write too much like AI, you 
 
 **Academic Integrity**
 
-By taking this course, you certify that all work is your own. Plagiarism is not allowed, and you are not allowed to have someone else do any course work in your place unless explicitly allowed by the syllabus. If it is discovered that you have violated academic integrity on any assignment, you will receive a grade of zero for that assignment. Repeated violations of academic integrity may result in a failing grade for the entire course.
+By taking this course, you certify that all work is your own and that you have abided by all the rules of each assignment.
+
+Plagiarism is not allowed, and you are not allowed to have someone else do any course work in your place unless explicitly allowed by the syllabus. 
+
+If you are suspected of violating academic integrity on any assignment, you may be asked to demonstrate your understanding of the material in an oral assessment. Failure to demonstrate and equivalent level of understanding as that which was demonstrated in the suspected assignment may result in a reduced grade for the assignment.
+
+If it is discovered that you have violated academic integrity on any assignment, you may receive a grade of zero for that assignment. Repeated violations of academic integrity may result in a failing grade for the entire course.
 
 **Minimum Attempt Policy**
 
