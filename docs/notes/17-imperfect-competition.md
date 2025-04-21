@@ -300,6 +300,16 @@ p &= A - Q_d \\
 >
 > The Cournot Model encapsulates both monopoly and perfect competition. If $$N=1$$, the Nash equilibrium of the Cournot Model is the same as the market outcome for a profit-maximizing monopolist. Moreover, as $$N \rightarrow \infty$$, the Nash equilibrium price approaches marginal cost, which is what would result from perfect competition.
 
+## Hotelling Model
+
+The Hotelling Model models competition between firms when they can choose their product characteristics. If two firms' products are very similar to each other, the price competition will be fierce and the model will look more like a Bertrand model. If two firms' products are very different to each other, then there will be little price competition and the model will look more like a monopoly.
+
+
+## Stackelberg Model
+
+The Stackelberg Model models **first mover advantage** in Cournot competition. The idea is that if one firm go first, i.e. by being first to market, it can potentially choose a quantity of output that will deter entry by future competitors. However, the level of output it would have to produce is usually *larger* than the monopoly quantity, but lower than the perfectly competitive quantity.
+
+The Stackelberg Model shows that even if a firm *looks like* a monopolist, its actual behavior might be closer to competitive than monopolistic, because the *threat of entry* disciplines its behavior.
 
 
 
