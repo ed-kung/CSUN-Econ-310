@@ -9,7 +9,7 @@ nav_order: 1
 
 ![course logo](assets/images/logo.webp)
 
-## Spring 2025 Syllabus
+## Spring 2026 Syllabus
 {: .no_toc }
 
 ## Table of Contents
@@ -31,42 +31,48 @@ nav_order: 1
 
 ### Lectures
 
-- Section 01: TuTh 10:00am - 11:15am @ Bookstein 1123
-- Section 02: TuTh 1:00pm - 2:15pm @ Bookstein 1123
+- Section 01: MW 10:00am - 11:15am @ Bookstein 1123
+- Section 02: MW 11:30am - 12:45 pm @ Bookstein 1131
 
 ### Office Hours
 
-- TuTh 11:20am - 12:20pm @ Bookstein 4252
+- MW 12:50pm - 1:5pm @ Bookstein 4252
 
 ### Course Organization
 
-This course meets for 2.5 hours a week, in-person. Attendance is checked and required.
+This course meets for two 75 minute lectures a week, in person.
 
 ### Grading
 
-- **Attendance (10%)**
+- **Participation (15%) **
 
-    Attendance in this class will be checked. Everyone starts with full credit (10 pts). You can miss two classes for any reason, without penalty. Every subsequent absence will deduct 1 pt from your attendance score, to a minimum of zero.
+    You are expected to participate in class. You earn participation credit for answering questions, asking questions about the lecture, or offering thoughts and opinions when asked.
 	
-- **Professionalism (10%)**
-
-	I am generally very lenient and flexible with students who are showing effort. However, if you act unprofessionally, I will not hesitate to call you out on it. Examples of unprofessional behavior include: repeated tardiness, lazy effort on assignments, not paying attention in class, and leaving the class early without notifying me beforehand. Everyone starts with full credit for professionalism (10 pts), but points may be deducted for unprofessional behavior. 
-    
-- **Homework Assignments (25%)**
-
-    Weekly homework assignments will generally consist of a problem set, to be submitted in a greenbook or on stapled sheets of paper. Students can elect to work in groups of up to 3 on homework assignments. If you work in a group, your group only has to make one submission for the whole group. For each problem set, only a randomly selected set of questions will be graded.
+	- Each student can earn a maximum of 1 participation credit per lecture.
+	- The first 3 participation credits during the semester are worth 5% of the final grade each.
+	- Participation credits after the first 3 are worth 1% extra credit each, up to a maximum of 5.
 	
-- **Writing Assignments (15%)**
+	You are encouraged to participate regardless of whether you need additional credits.
+	
+- **In-class Assignments (15%) **
+
+    There will be occasional in-class assignments, both announced and unannounced. These could be pop-quizzes, surveys, or other kinds of assignments. If you are absent during an in-class assignment, you will receive a 0 for the assignment if your absence was unexcused, and you will be excused from the assignment if your absence was excused. (See [late and missing assignment policy](#additional-course-policies-and-resources) below). 
+	
+- **Homework Assignments (0%) **
+
+    Each week, a problem set will be assigned. These are for your own review, and will not be collected or graded. However, the questions they contain are very similar to test questions, and thus you should use these assignments as a barometer for your learning.
+	
+- **Writing Assignments (20%) **
 
 	There will occassionally be a writing assignment, usually consisting of a short essay of about 500-800 words. These assignments must be completed on Packback, an online platform for AI-assisted writing assignments.
-	
-- **Midterm Exams (20%)**
-
-	There will be two midterm exams, each worth 10% of your grade. These will be multiple choice, in-person exams.
     
-- **Final Exam (20%)**
+- **Midterm Exams (30%) **
 
-    The final exam will be worth 20% of your grade. It will be a multiple choice, in-person exam.
+    There will be two midterm exams, each worth 15% of your grade. These will be multiple choice, in-person exams.
+	
+- **Final Exam (20%) **
+
+    The final exam will be worth 20% of your grade. It will be a multiple choice, in-person exam. 
 
 - **Grading Scale**
 
@@ -81,29 +87,29 @@ This course meets for 2.5 hours a week, in-person. Attendance is checked and req
 
 ## Tentative Schedule
 
-| Week | Dates         | Session 1                            | Session 2                                   |  
+| Week | Dates         | Monday                               | Wednesday                                   |  
 | ---: | :------------ | :----------------------------------- | :------------------------------------------ | 
-|    1 | 1/21, 1/23    | Introduction                         | Econ Review                                 |   
-|    2 | 1/28, 1/30    | Math Review                          | Single Variable Optimization                |
-|    3 | 2/4, 2/6      | A Model of Commodity Markets         | A Model of Labor Markets                    |
-|    4 | 2/11, 2/13    | A General Equilibrium Model          | Application: Productivity Shocks            |
-|    5 | 2/18, 2/20    | Discussion Session                   | Review                                      |  
-|    6 | 2/25, 2/27    | **Midterm 1**                        | Discussion Session                          |
-|    7 | 3/4, 3/6      | Multivariate Optimization            | Constrained Multivariate Optimization       |
-|    8 | 3/11, 3/13    | Theory of Consumer Choice            | Consumer Choice: Applications               | 
-|    9 | 3/18, 3/20    | **NO CLASS - SPRING BREAK**          | **NO CLASS - SPRING BREAK**                 |
-|   10 | 3/25, 3/27    | Labor/Leisure Choice                 | Theory of Production                        |
-|   11 | 4/1, 4/3      | Discussion Session                   | Review                                      |
-|   12 | 4/8, 4/10     | **Midterm 2**                        | Discussion Session                          |
-|   13 | 4/15, 4/17    | Game Theory I                        | Game Theory II                              |
-|   14 | 4/22, 4/24    | Monopolies                           | Imperfect Competition                       |
-|   15 | 4/29, 5/1     | Risk and Insurance                   | Saving and Borrowing                        |
-|   16 | 5/6, 5/8      | Discussion Session                   | Review                                      |
+|    1 | 1/21          |                                      | Introduction                                |   
+|    2 | 1/26, 1/28    | Math Review                          | Single Variable Optimization                |
+|    3 | 2/2, 2/4      | A Model of Commodity Markets         | A Model of Labor Markets                    |
+|    4 | 2/9, 2/11     | A General Equilibrium Model          | Application: Productivity Shocks            |
+|    5 | 2/16, 2/18    | Review Session                       | **Midterm 1**                               |  
+|    6 | 2/23, 2/25    | *The Calculation Problem*            | Multivariate Optimization                   |
+|    7 | 3/2, 3/4      | Constrained Optimization             | Theory of Consumer Choice                   |
+|    8 | 3/9, 3/11     | Consumer Choice: Applications        | Labor/Leisure Choice                        | 
+|    9 | 3/16, 3/18    | **NO CLASS - SPRING BREAK**          | **NO CLASS - SPRING BREAK**                 |
+|   10 | 3/23, 3/25    | Saving and Borrowing                 | Theory of Production                        |
+|   11 | 3/30, 4/1     | Review                               | **Midterm 2                                 |
+|   12 | 4/6, 4/8      | *Monetary Economics*                 | Monopolies                                  |
+|   13 | 4/13, 4/15    | Price Discrimination                 | Game Theory                                 |
+|   14 | 4/20, 4/22    | Imperfect Competition I              | Repeated Games                              |
+|   15 | 4/27, 4/29    | Imperfect Competition II             | Risk and Insurance                          |
+|   16 | 5/4, 5/6      | Adverse Selection                    | Review                                      |
 
 Final Exam: 
 
-- Section 01 (TuTh 10am section): Thursday 5/15 10:15am - 12:15pm @ Bookstein 1123
-- Section 02 (TuTh 1pm section): Tuesday 5/13 12:45pm - 2:45pm @ Bookstein 1123 
+- Section 01 (MW 10:00am section): TBD
+- Section 02 (MW 11:30am section): TBD
 
 ---
 
@@ -162,7 +168,16 @@ You will need these for exams. You can use off brand, but they need to be compat
 
 ## Exam Policies and Information
 
-Exams will be given in person, on paper. All exams are open book. You can bring any physical materials, including printed notes and workbooks. However, you are not allowed to use any electronic devices except a calculator.
+Exams will be given in person, on paper. For exams, you should bring:
+
+- A no. 2 pencil and eraser
+- A Scantron Form 882 or compatible
+- A calculator of any kind
+- One index card of notes
+- A ruler or straight-edge
+- Your CSUN ID or other photo ID showing name and picture
+
+Other materials, including electronic devices are not allowed during exams. Violation of this policy will result in an immediate 0 on the exam.
 
 ---
 
@@ -178,11 +193,9 @@ Requests for absences, extensions, or late submissions must be submitted by emai
 
 **AI Policy**
 
-You are allowed to use AI in homework assignments to help refine your writing and your thinking. You are not allowed to copy and paste text or code directly from an AI generator.
+You are allowed to use AI for any at-home assignments to help refine your writing and your thinking. However, you are not allowed to directly submit AI generated content, either in part or in whole, and **you must be able to understand and explain any material that you submit**.
 
-If I suspect your work of being copy-pasted from AI, and if that is also corroborated through an AI detection tool, you will receive a reduced grade. You will receive the reduced grade even if you did not actually use AI. This is because "writing too much like AI" is itself a weakness. For example, if your cover letter on a job application looks like it was written by AI, the recruiter may think you are too lazy or disinterested to write the letter yourself.
-
-If you are concerned about the possibility that you write too much like AI, you can run your own work through an AI detector first. 
+If I suspect your submission of being generated by AI, you may be asked to explain your submission via oral examination. If you cannot demonstrate a level of understanding consistent with the submitted work, you will receive a penalty on the assignment (including potentially a zero) and you may be referred to Student Affairs under the academic integrity policy.
 
 **Academic Integrity**
 
@@ -190,15 +203,7 @@ By taking this course, you certify that all work is your own and that you have a
 
 Plagiarism is not allowed, and you are not allowed to have someone else do any course work in your place unless explicitly allowed by the syllabus. 
 
-If you are suspected of violating academic integrity on any assignment, you may be asked to demonstrate your understanding of the material in an oral assessment. Failure to demonstrate and equivalent level of understanding as that which was demonstrated in the suspected assignment may result in a reduced grade for the assignment.
-
-If it is discovered that you have violated academic integrity on any assignment, you may receive a grade of zero for that assignment. Repeated violations of academic integrity may result in a failing grade for the entire course.
-
-**Minimum Attempt Policy**
-
-You must at least attempt to answer every question on an assignment. If you skip a question without attempting an answer, you may receive a grade of zero for the entire assignment.
-
-Why do I have a minimum attempt policy? Because demonstrating effort is important, especially in the workplace. Not even attempting a task is worse than attempting it and getting it wrong. I want to encourage all students to at least make an attempt at all tasks. As Wayne Gretzky said, "You miss 100% of the shots you don't take."
+If it is discovered that you have violated academic integrity on any assignment, you may receive a grade of zero for that assignment. Repeated violations of academic integrity may result in a failing grade for the entire course or a referral to Student Affairs.
 
 **Special Needs**
 
