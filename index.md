@@ -36,7 +36,7 @@ nav_order: 1
 
 ### Office Hours
 
-- MW 12:50pm - 1:5pm @ Bookstein 4252
+- MW 12:50pm - 1:50pm @ Bookstein 4252
 
 ### Course Organization
 
@@ -44,7 +44,7 @@ This course meets for two 75 minute lectures a week, in person.
 
 ### Grading
 
-- **Participation (15%) **
+- **Participation (15%)**
 
     You are expected to participate in class. You earn participation credit for answering questions, asking questions about the lecture, or offering thoughts and opinions when asked.
 	
@@ -54,19 +54,19 @@ This course meets for two 75 minute lectures a week, in person.
 	
 	You are encouraged to participate regardless of whether you need additional credits.
 	
-- **In-class Assignments (15%) **
+- **In-class Assignments (15%)**
 
     There will be occasional in-class assignments, both announced and unannounced. These could be pop-quizzes, surveys, or other kinds of assignments. If you are absent during an in-class assignment, you will receive a 0 for the assignment if your absence was unexcused, and you will be excused from the assignment if your absence was excused. (See [late and missing assignment policy](#additional-course-policies-and-resources) below). 
 	
-- **Homework Assignments (0%) **
+- **Problem Sets (0%)**
 
-    Each week, a problem set will be assigned. These are for your own review, and will not be collected or graded. However, the questions they contain are very similar to test questions, and thus you should use these assignments as a barometer for your learning.
+    For each lecture, a problem set will be assigned. These are for your own review, and will not be collected or graded. However, the questions they contain are very similar to test questions, and thus you should use these assignments as a barometer for your learning.
 	
-- **Writing Assignments (20%) **
+- **Writing Assignments (20%)**
 
 	There will occassionally be a writing assignment, usually consisting of a short essay of about 500-800 words. These assignments must be completed on Packback, an online platform for AI-assisted writing assignments.
     
-- **Midterm Exams (30%) **
+- **Midterm Exams (30%)**
 
     There will be two midterm exams, each worth 15% of your grade. These will be multiple choice, in-person exams.
 	
