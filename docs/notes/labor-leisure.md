@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "12. Labor/Leisure Choice"
+title: "11. Labor/Leisure Choice"
 parent: Lecture Notes
-nav_order: 12
+nav_order: 11
 ---
 
 # Labor/Leisure Choice
@@ -32,7 +32,7 @@ Although these models can be set up with equations and solved using the principl
 >
 > A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of $$w=30$$ dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
 >
-> ![example](/CSUN-Econ-310/assets/images/graphs/lec12_example_0_setup.png)
+> ![example](/CSUN-Econ-310/assets/images/graphs/labor-leisure-example-0-setup.png)
 >
 > 1. Draw the worker's budget constraint and label the optimal point A.
 > 2. How many hours a week does the worker work?
@@ -46,7 +46,7 @@ Although these models can be set up with equations and solved using the principl
 >
 > To draw the budget constraint, we simply connect the $$x$$ and $$y$$ intercepts.
 >
-> ![example](/CSUN-Econ-310/assets/images/graphs/lec12_example_0_solution.png)
+> ![example](/CSUN-Econ-310/assets/images/graphs/labor-leisure-example-0-solution.png)
 >
 > In this example, the worker spends 20 hours per week on leisure, which means he works 40 hours a week and makes a weekly income of 1,200.
 
@@ -59,7 +59,7 @@ The labor/leisure model can be used to help us understand how workers respond to
 >
 > A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of $$w=15$$ dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
 >
-> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_1_setup.png">
+> <img src="/CSUN-Econ-310/assets/images/graphs/labor-leisure-example-1-setup.png">
 > 
 > One day, the worker's hourly wage changes to $$w^\prime = 40$$.
 >
@@ -72,7 +72,7 @@ The labor/leisure model can be used to help us understand how workers respond to
 >
 > The maximum leisure is always 60. The maximum income at the initial wage is $$60\times15=900$$, and the maximum income at the new wage is $$60\times40=2,400$$. Thus, the diagram with both budget constraints shown is:
 >
-> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_1_solution.png">
+> <img src="/CSUN-Econ-310/assets/images/graphs/labor-leisure-example-1-solution.png">
 >
 > At the initial wage, the worker works 40 hours (20 hours leisure). At the new wage, the worker works 45 hours (15 hours leisure).
 >
@@ -83,7 +83,7 @@ The labor/leisure model can be used to help us understand how workers respond to
 >
 > A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of $$w=20$$ dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
 >
-> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_2_setup.png">
+> <img src="/CSUN-Econ-310/assets/images/graphs/labor-leisure-example-2-setup.png">
 > 
 > One day, the worker's hourly wage changes to $$w^\prime = 60$$.
 >
@@ -96,7 +96,7 @@ The labor/leisure model can be used to help us understand how workers respond to
 >
 > The maximum leisure is always 60. The maximum income at the initial wage is $$60\times20=1,200$$, and the maximum income at the new wage is $$60\times60=3,600$$. Thus, the diagram with both budget constraints shown is:
 >
-> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_2_solution.png">
+> <img src="/CSUN-Econ-310/assets/images/graphs/labor-leisure-example-2-solution.png">
 >
 > At the initial wage, the worker works 30 hours (30 hours leisure). At the new wage, the worker works 25 hours (35 hours leisure).
 >
@@ -121,7 +121,7 @@ An income support policy is a policy that gives money to people whose incomes fa
 >
 > A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of $$w=10$$ dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
 > 
-> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_3_setup.png">
+> <img src="/CSUN-Econ-310/assets/images/graphs/labor-leisure-example-3-setup.png">
 > 
 > In addition, the government provides minimum income support of up to $$250$$ dollars a week. That is, if someone earns less than $$250$$ dollars a week, the government supplements their income until it reaches $$250$$ a week.
 > 
@@ -136,7 +136,7 @@ An income support policy is a policy that gives money to people whose incomes fa
 >
 > To draw the budget constraint *with* income support, note that if at any time the person's income goes below $$250$$, it is instead raised to $$250$$. This means that there is an income floor at $$250$$. So draw a horizontal line at $$y=250$$ wherever the original budget constraint is below $$250$$.
 >
-> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_3_solution.png">
+> <img src="/CSUN-Econ-310/assets/images/graphs/labor-leisure-example-3-solution.png">
 >
 > The red line above shows the budget constraint without income support. The optimal point is A, where it is tangent to the indifference curves. At that point, the worker works 20 hours and earns 200 weekly income.
 >
@@ -149,7 +149,7 @@ An income support policy is a policy that gives money to people whose incomes fa
 >
 > A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of $$w=10$$ dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
 > 
-> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_4_setup.png">
+> <img src="/CSUN-Econ-310/assets/images/graphs/labor-leisure-example-4-setup.png">
 > 
 > In addition, the government provides minimum income support of up to $$250$$ dollars a week. That is, if someone earns less than $$250$$ dollars a week, the government supplements their income until it reaches $$250$$ a week.
 > 
@@ -162,7 +162,7 @@ An income support policy is a policy that gives money to people whose incomes fa
 >
 > We can repeat the process as with the previous example. We get the following diagram:
 >
-> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_4_solution.png">
+> <img src="/CSUN-Econ-310/assets/images/graphs/labor-leisure-example-4-solution.png">
 >
 > The setup was the same, the only difference was that this worker has different indifference curves. 
 >
@@ -174,7 +174,7 @@ An income support policy is a policy that gives money to people whose incomes fa
 >
 > A worker has up to 60 hours a week to spend on working or on leisure. If he works, he makes a wage rate of $$w=15$$ dollars per hour. The worker's indifference curves over leisure and income are shown in the diagram below.
 > 
-> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_5_setup.png">
+> <img src="/CSUN-Econ-310/assets/images/graphs/labor-leisure-example-5-setup.png">
 > 
 > In addition, the government provides minimum income support of up to $$150$$ dollars a week. That is, if someone earns less than $$150$$ dollars a week, the government supplements their income until it reaches $$150$$ a week.
 > 
@@ -185,7 +185,7 @@ An income support policy is a policy that gives money to people whose incomes fa
 >
 > *Answer.*
 >
-> <img src="/CSUN-Econ-310/assets/images/graphs/lec12_example_5_solution.png">
+> <img src="/CSUN-Econ-310/assets/images/graphs/labor-leisure-example-5-solution.png">
 >
 > This time, the provision of minimum income support does not change the worker's decision to work. The income support offered is too low, and results in lower utility than if the worker continues his same working hours from before.
 
