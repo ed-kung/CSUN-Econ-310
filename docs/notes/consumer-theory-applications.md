@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "11. Consumer Choice: Applications"
+title: "10. Consumer Choice: Applications"
 parent: Lecture Notes
-nav_order: 11
+nav_order: 10
 ---
 
 # Consumer Choice Theory: Applications
@@ -26,7 +26,7 @@ As a reminder:
 >
 > A consumer with income $$I=60$$ has utility over two goods, $$x$$ and $$y$$, shown by the indifference curves below.
 >
-> ![example-1-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_1_setup.png)
+> ![example-1-setup](/CSUN-Econ-310/assets/images/graphs/consumer-theory-applications-example-1-setup.png)
 >
 > The price of the goods are initially $$p_x=3$$ and $$p_y=1$$. One day, the price of good $$x$$ changes to $$p_x^\prime=1$$.
 >
@@ -39,7 +39,7 @@ As a reminder:
 >
 > The budget constraints and optimal points in both periods will look as follows:
 >
-> ![example-2-solution](/CSUN-Econ-310/assets/images/graphs/lec11_example_1_solution.png)
+> ![example-2-solution](/CSUN-Econ-310/assets/images/graphs/consumer-theory-applications-example-1-solution.png)
 >
 > This shows that consumption of $$x$$ increased and consumption of $$y$$ decreased.
 > 
@@ -50,7 +50,7 @@ As a reminder:
 >
 > A consumer with income $$I=12$$ has utility over two goods, $$x$$ and $$y$$, shown by the indifference curves below.
 >
-> ![example-1-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_2_setup.png)
+> ![example-1-setup](/CSUN-Econ-310/assets/images/graphs/consumer-theory-applications-example-2-setup.png)
 >
 > The price of the goods are initially $$p_x=1$$ and $$p_y=1$$. One day, the price of good $$y$$ changes to $$p_y^\prime=4$$.
 >
@@ -63,7 +63,7 @@ As a reminder:
 >
 > The budget constraints and optimal points in both periods will look as follows:
 >
-> ![example-2-solution](/CSUN-Econ-310/assets/images/graphs/lec11_example_2_solution.png)
+> ![example-2-solution](/CSUN-Econ-310/assets/images/graphs/consumer-theory-applications-example-2-solution.png)
 >
 > This shows that consumption of $$x$$ and $$y$$ both decreased.
 > 
@@ -83,7 +83,7 @@ Consumer choice theory can be used to understand how parents choose between priv
 >
 > A family can spend their income on either education or other goods. The diagram below shows the family's budget constraint when only private school options are available, as well as their indifference curves over education and other consumption. 
 >
-> ![example-3-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_3_setup.png)
+> ![example-3-setup](/CSUN-Econ-310/assets/images/graphs/consumer-theory-applications-example-3-setup.png)
 >
 > A public school option is also available which provides 60 units of education for free. 
 >
@@ -96,7 +96,7 @@ Consumer choice theory can be used to understand how parents choose between priv
 >
 > The optimal private school option is labeled A and the public school option is labeled B.
 >
-> ![example-3-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_3_solution.png)
+> ![example-3-setup](/CSUN-Econ-310/assets/images/graphs/consumer-theory-applications-example-3-solution.png)
 >
 > It can be seen from the diagram that point B has higher utility than point A, so the family will choose the public school option.
 >
@@ -108,7 +108,7 @@ Consumer choice theory can be used to understand how parents choose between priv
 >
 > A family can spend their income on either education or other goods. The diagram below shows the family's budget constraint when only private school options are available, as well as their indifference curves over education and other consumption. 
 >
-> ![example-4-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_4_setup.png)
+> ![example-4-setup](/CSUN-Econ-310/assets/images/graphs/consumer-theory-applications-example-4-setup.png)
 >
 > A public school option is also available which provides 4 units of education for free. 
 >
@@ -121,7 +121,7 @@ Consumer choice theory can be used to understand how parents choose between priv
 >
 > The optimal private school option is labeled A and the public school option is labeled B.
 >
-> ![example-4-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_4_solution.png)
+> ![example-4-setup](/CSUN-Econ-310/assets/images/graphs/consumer-theory-applications-example-4-solution.png)
 >
 > It can be seen from the diagram that point A has higher utility than point B, so the family will choose the private school option.
 >
@@ -133,7 +133,7 @@ Consumer choice theory can be used to understand how parents choose between priv
 >
 > A family can spend their income on either education or other goods. The diagram below shows the family's budget constraint when only private school options are available, as well as their indifference curves over education and other consumption. 
 >
-> ![example-5-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_5_setup.png)
+> ![example-5-setup](/CSUN-Econ-310/assets/images/graphs/consumer-theory-applications-example-5-setup.png)
 >
 > A public school option is also available which provides 20 units of education for free. 
 >
@@ -146,7 +146,7 @@ Consumer choice theory can be used to understand how parents choose between priv
 >
 > The optimal private school option is labeled A and the public school option is labeled B.
 >
-> ![example-5-setup](/CSUN-Econ-310/assets/images/graphs/lec11_example_5_solution.png)
+> ![example-5-setup](/CSUN-Econ-310/assets/images/graphs/consumer-theory-applications-example-5-solution.png)
 >
 > It can be seen from the diagram that point B has higher utility than point A, so the family will choose the public school option.
 >
