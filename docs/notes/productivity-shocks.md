@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "7. Productivity Shocks"
+title: "6. Productivity Shocks"
 parent: Lecture Notes
-nav_order: 7
+nav_order: 6
 ---
 
 # Application: Productivity Shocks
@@ -35,7 +35,7 @@ In the labor market, the increase in firm productivity should increase labor dem
 
 Based on these effects, we'd predict an increase in the equilibrium wage and a decrease in the equilibrium commodity price.
 
-![first_order](/CSUN-Econ-310/assets/images/graphs/lec07_1st_order.png)
+![first_order](/CSUN-Econ-310/assets/images/graphs/productivity-shocks-lec-1st-order.png)
 
 ### Second order effects
 
@@ -45,7 +45,7 @@ We call these "second order effects" because they happen as a response to the pr
 
 These second order effects run counter to the first order effects.
 
-![second_order](/CSUN-Econ-310/assets/images/graphs/lec07_2nd_order.png)
+![second_order](/CSUN-Econ-310/assets/images/graphs/productivity-shocks-lec-2nd-order.png)
 
 ### Third order effects... ?
 

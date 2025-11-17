@@ -1,8 +1,8 @@
 ---
 layout: default
-title: 6. General Equilibrium
+title: 5. General Equilibrium
 parent: Lecture Notes
-nav_order: 6
+nav_order: 5
 ---
 
 # A General Equilibrium Model of the Economy

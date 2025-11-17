@@ -1,8 +1,8 @@
 ---
 layout: default
-title: 5. Labor Market
+title: 4. Labor Market
 parent: Lecture Notes
-nav_order: 5
+nav_order: 4
 ---
 
 # A Model of Labor Markets

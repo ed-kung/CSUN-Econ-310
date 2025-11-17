@@ -1,8 +1,8 @@
 ---
 layout: default
-title: 3. Single Variable Optimization
+title: 2. Single Variable Optimization
 parent: Lecture Notes
-nav_order: 3
+nav_order: 2
 ---
 
 # Single Variable Optimization
@@ -15,7 +15,7 @@ nav_order: 3
 
 Suppose you're given an arbitrary function, $$f(x)$$. The function has the following graph:
 
-![graphical-intuition](/CSUN-Econ-310/assets/images/02-single-variable-optimization-intuition.png)
+![graphical-intuition](/CSUN-Econ-310/assets/images/single-variable-optimization-intuition.png)
 
 What value of $$x$$ maximizes $$f(x)$$?  $$f(x)$$ is maximized at the value of $$x$$ where the *slope* of the function is flat. 
 
@@ -43,14 +43,14 @@ When a line is *just touching* a function at $$x$$, we say that the line is **ta
 >
 >The diagram below shows how to calculate the slope of the function at $$x=2$$.
 > 
->![slope-calculation](/CSUN-Econ-310/assets/images/02-single-variable-optimization-slope.png)
+>![slope-calculation](/CSUN-Econ-310/assets/images/single-variable-optimization-slope.png)
 
 {: .green-callout-title }
 > Example 2
 >
 > For the same function, we calculate slope at $$x=2.6$$ (the maximum) and see that it's zero.
 >
->![slope-at-maximum](/CSUN-Econ-310/assets/images/02-single-variable-optimization-slope-at-max.png)
+>![slope-at-maximum](/CSUN-Econ-310/assets/images/single-variable-optimization-slope-at-max.png)
 
 ## Derivatives of functions
 
@@ -63,9 +63,9 @@ By convention, we notate the derivative of $$f(x)$$ as $$f^\prime(x)$$ or $$\fra
 >
 > The graphs below show the function $$f(x)$$ and its derivative, $$f^\prime(x)$$. The derivative shows the slope of $$f(x)$$ at each value of $$x$$. Notice how the slope is positive when $$x<2.6$$, zero when $$x=2.6$$, and negative when $$x>2.6$$.
 >
->![graphical-intuition](/CSUN-Econ-310/assets/images/02-single-variable-optimization-intuition.png)
+>![graphical-intuition](/CSUN-Econ-310/assets/images/single-variable-optimization-intuition.png)
 >
->![derivative](/CSUN-Econ-310/assets/images/02-single-variable-optimization-derivative.png)
+>![derivative](/CSUN-Econ-310/assets/images/single-variable-optimization-derivative.png)
 
 ## Derivative rules
 

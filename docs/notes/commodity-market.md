@@ -1,8 +1,8 @@
 ---
 layout: default
-title: 4. Commodity Market
+title: 3. Commodity Market
 parent: Lecture Notes
-nav_order: 4
+nav_order: 3
 ---
 
 # A Model of Commodity Markets
@@ -288,7 +288,7 @@ p &= \frac{9}{q_d}
 >
 > Step 3. Write down the firm's first order condition.
 >
-> $$ p - q &= 0
+> $$ p - q = 0 $$
 >
 > Step 4. Rearrange the first order condition to write $$p$$ as a function of quantity supplied.
 >

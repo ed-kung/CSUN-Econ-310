@@ -1,8 +1,8 @@
 ---
 layout: default
-title: 2. Math Review
+title: 1. Math Review
 parent: Lecture Notes
-nav_order: 2
+nav_order: 1
 ---
 
 # Math Review
@@ -53,17 +53,17 @@ Functions can be visualized using graphs. A graph simply plots the different inp
 {: .blue-callout-title }
 > Example 4
 >
-> ![Graph of x^2](/CSUN-Econ-310/assets/images/01-math-review-xsquared.png)
+> ![Graph of x^2](/CSUN-Econ-310/assets/images/math-review-xsquared.png)
 
 {: .green-callout-title }
 > Example 5
 >
-> ![Graph of sqrt(x)](/CSUN-Econ-310/assets/images/01-math-review-sqrtx.png)
+> ![Graph of sqrt(x)](/CSUN-Econ-310/assets/images/math-review-sqrtx.png)
 
 {: .yellow-callout-title }
 > Example 6
 >
-> ![Graph of x^0.5 y^0.5](/CSUN-Econ-310/assets/images/01-math-review-sqrtxy.png)
+> ![Graph of x^0.5 y^0.5](/CSUN-Econ-310/assets/images/math-review-sqrtxy.png)
 
 ## Supply and demand curves as functions
 
@@ -92,7 +92,7 @@ The market is in equilibrium when $$q_d = q_s$$. Thus, the price that equilibrat
 >
 > The graph below illustrates.
 >
-> ![supply-demand-01](/CSUN-Econ-310/assets/images/01-math-review-supply-demand-01.png)
+> ![supply-demand-01](/CSUN-Econ-310/assets/images/math-review-supply-demand-01.png)
 
 ## Working with exponents
 
@@ -131,7 +131,7 @@ q_d &= q_s & \\
 >
 > These supply and demand curves are plotted in the graph below.
 >
-> ![supply-demand-02](/CSUN-Econ-310/assets/images/01-math-review-supply-demand-02.png)
+> ![supply-demand-02](/CSUN-Econ-310/assets/images/math-review-supply-demand-02.png)
 
 ## Working with logs
 
