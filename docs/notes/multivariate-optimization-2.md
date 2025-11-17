@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "9. Constrained Multivariate Optimization"
+title: "8. Constrained Multivariate Optimization"
 parent: Lecture Notes
-nav_order: 9
+nav_order: 8
 ---
 
 # Constrained Multivariate Optimization
@@ -61,7 +61,7 @@ As it turns out, the maximum point lies on the contour which *just touches* the 
 >
 > $$ x + y = 12 $$
 >
-> ![example-1](/CSUN-Econ-310/assets/images/10-multivariate-optimization-2-example-1.png)
+> ![example-1](/CSUN-Econ-310/assets/images/multivariate-optimization-2-example-1.png)
 > 
 > Find the maximum of $$f(x,y)$$ that lies on the constraint.
 >
@@ -170,7 +170,7 @@ y &= \frac{z}{x}
 >
 > By plotting the constraint and the contour lines together, we get:
 > 
-> ![example-2](/CSUN-Econ-310/assets/images/10-multivariate-optimization-2-example-2.png)
+> ![example-2](/CSUN-Econ-310/assets/images/multivariate-optimization-2-example-2.png)
 >
 > We can see that the maximum occurs at $$x=6$$, $$y=3$$, and $$z=18$$.
 

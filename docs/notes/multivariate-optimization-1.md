@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "8. Unconstrained Multivariate Optimization"
+title: "7. Unconstrained Multivariate Optimization"
 parent: Lecture Notes
-nav_order: 8
+nav_order: 7
 ---
 
 # Unconstrained Multivariate Optimization
@@ -44,8 +44,8 @@ One way to find the peak is to look at a contour map. A contour map shows lines 
 >
 > Look at the following two-dimensional function and its associated contour plot.
 >
-> ![surface-1](/CSUN-Econ-310/assets/images/09-multivariate-optimization-1-surface-1.png)
-> ![contour-1](/CSUN-Econ-310/assets/images/09-multivariate-optimization-1-contour-1.png)
+> ![surface-1](/CSUN-Econ-310/assets/images/multivariate-optimization-1-surface-1.png)
+> ![contour-1](/CSUN-Econ-310/assets/images/multivariate-optimization-1-contour-1.png)
 >
 > Find the $$x$$ and $$y$$ coordinates for the maximum of this function. What is the maximum?
 >
@@ -82,7 +82,7 @@ y &= \frac{z^2}{x} &
 > 
 > We can use this equation to plot the contour lines for various levels of $$z$$, as shown below.
 >
-> ![contour-2](/CSUN-Econ-310/assets/images/09-multivariate-optimization-1-contour-2.png)
+> ![contour-2](/CSUN-Econ-310/assets/images/multivariate-optimization-1-contour-2.png)
 
 
 ## Partial derivatives
@@ -98,15 +98,15 @@ Let's call $$f_x(x,y)$$ the partial derivative of $$f(x,y)$$ with respect to $$x
 >
 > Imagine you are traveling from left to right along the black line (at $$y=6$$), shown below:
 >
-> ![partial-x-contour](/CSUN-Econ-310/assets/images/09-multivariate-optimization-1-partial-x-contour.png)
+> ![partial-x-contour](/CSUN-Econ-310/assets/images/multivariate-optimization-1-partial-x-contour.png)
 >
 > Your elevation at each level of $$x$$ is like this:
 >
-> ![partial-x-slice](/CSUN-Econ-310/assets/images/09-multivariate-optimization-1-partial-x-slice.png)
+> ![partial-x-slice](/CSUN-Econ-310/assets/images/multivariate-optimization-1-partial-x-slice.png)
 >
 > And the slope at each $$x$$ for that particular slice of elevation is:
 >
-> ![partial-x-deriv](/CSUN-Econ-310/assets/images/09-multivariate-optimization-1-partial-x-deriv.png)
+> ![partial-x-deriv](/CSUN-Econ-310/assets/images/multivariate-optimization-1-partial-x-deriv.png)
 >
 > The partial derivative of $$f(x,y)$$ with respect to $$x$$ can be interpreted as the slope of the elevation sliced at a particular value of $$y$$.
 
@@ -124,15 +124,15 @@ Let's call $$f_y(x,y)$$ the partial derivative of $$f(x,y)$$ with respect to $$y
 >
 > Imagine you are traveling from south to north along the black line (at $$x=3$$), shown below:
 >
-> ![partial-y-contour](/CSUN-Econ-310/assets/images/09-multivariate-optimization-1-partial-y-contour.png)
+> ![partial-y-contour](/CSUN-Econ-310/assets/images/multivariate-optimization-1-partial-y-contour.png)
 >
 > Your elevation at each level of $$y$$ is like this:
 >
-> ![partial-y-slice](/CSUN-Econ-310/assets/images/09-multivariate-optimization-1-partial-y-slice.png)
+> ![partial-y-slice](/CSUN-Econ-310/assets/images/multivariate-optimization-1-partial-y-slice.png)
 >
 > And the slope at each $$y$$ for that particular slice of elevation is:
 >
-> ![partial-y-deriv](/CSUN-Econ-310/assets/images/09-multivariate-optimization-1-partial-y-deriv.png)
+> ![partial-y-deriv](/CSUN-Econ-310/assets/images/multivariate-optimization-1-partial-y-deriv.png)
 >
 > The partial derivative of $$f(x,y)$$ with respect to $$y$$ can be interpreted as the slope of the elevation sliced at a particular value of $$x$$.
 
@@ -277,7 +277,7 @@ f(24,12) &= 12x + xy - 0.5x^2 - y^2 \\
 >
 > If you were to graph the contour lines of this function, you'd get:
 >
-> ![contour-3](/CSUN-Econ-310/assets/images/09-multivariate-optimization-1-contour-3.png)
+> ![contour-3](/CSUN-Econ-310/assets/images/multivariate-optimization-1-contour-3.png)
 
 
 

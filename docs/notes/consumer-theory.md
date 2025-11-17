@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "10. Theory of Consumer Choice"
+title: "9. Theory of Consumer Choice"
 parent: Lecture Notes
-nav_order: 10
+nav_order: 9
 ---
 
 # Theory of Consumer Choice
@@ -125,7 +125,7 @@ y &= 25
 
 The general consumer choice problem can be represented graphically as follows:
 
-![graphical-representation](/CSUN-Econ-310/assets/images/11-consumer-theory-graph-1.png)
+![graphical-representation](/CSUN-Econ-310/assets/images/consumer-theory-graph-1.png)
 
 ### The budget constraint
 
@@ -167,7 +167,7 @@ At the utility maximizing point, the budget line is just tangent to an indiffere
 >
 > The consumer's utility function is represented by the indifference curves shown in the diagram below.
 >
-> ![example-cb-setup](/CSUN-Econ-310/assets/images/graphs/lec10_cb_setup.png)
+> ![example-cb-setup](/CSUN-Econ-310/assets/images/graphs/consumer-theory-cb-setup.png)
 >
 > Draw the budget line and find the optimal consumption of $$x$$ and $$y$$.
 >
@@ -175,7 +175,7 @@ At the utility maximizing point, the budget line is just tangent to an indiffere
 >
 > To x-intercept of the budget line is $$I/p_x = 90/2 = 45$$. The y-intercept of the budget line is $$I/p_y = 90/3 = 30$$. The optimal point occurs on the indifference curve that just touches the budget line, which is marked by point "A" on the diagram below. The optimal consumption is $$x=15$$ and $$y=20$$.
 >
-> ![example-cb-solution](/CSUN-Econ-310/assets/images/graphs/lec10_cb_solution.png)
+> ![example-cb-solution](/CSUN-Econ-310/assets/images/graphs/consumer-theory-cb-solution.png)
 
 ## Types of utility functions
 
@@ -191,7 +191,7 @@ where $$a>0$$ and $$b>0$$.
 
 A Cobb Douglas utility function has indifference curves that look like:
 
-![cobb-douglas](/CSUN-Econ-310/assets/images/graphs/lec10_cb_example.png)
+![cobb-douglas](/CSUN-Econ-310/assets/images/graphs/consumer-theory-cb-example.png)
 
 The MRS between $$x$$ and $$y$$ in a Cobb Douglas utility function is:
 
@@ -220,7 +220,7 @@ where $$a>0$$ and $$b>0$$.
 
 The indifference curves will be straight lines:
 
-![linear-utility](/CSUN-Econ-310/assets/images/graphs/lec10_subs_setup.png)
+![linear-utility](/CSUN-Econ-310/assets/images/graphs/consumer-theory-subs-setup.png)
 
 The MRS between $$x$$ and $$y$$ is:
 
@@ -240,7 +240,7 @@ For example, consider your decision to choose between Exxon gasoline and Shell g
 > Linear Utility Example
 >
 > A consumer's utility over $$x$$ and $$y$$ is represented by the indifference curves below.
-> ![linear-utility-example-setup](/CSUN-Econ-310/assets/images/graphs/lec10_subs_setup.png)
+> ![linear-utility-example-setup](/CSUN-Econ-310/assets/images/graphs/consumer-theory-subs-setup.png)
 >
 > The consumer has an income of $$120$$. The price of $$x$$ is $$p_x = 3$$ and the price of $$y$$ is $$p_y = 2$$. 
 >
@@ -250,7 +250,7 @@ For example, consider your decision to choose between Exxon gasoline and Shell g
 >
 > To plot the budget line, simply draw a straight line between the x and y intercepts. The x-intercept is $$I/p_x=40$$ and the y-intercept is $$I/p_y=60$$.
 >
-> ![linear-utility-example-solution](/CSUN-Econ-310/assets/images/graphs/lec10_subs_solution.png)
+> ![linear-utility-example-solution](/CSUN-Econ-310/assets/images/graphs/consumer-theory-subs-solution.png)
 >
 > The optimal point is the point on the budget line that touches the highest indifference curve. That occurs at $$x=0$$ and $$y=60$$. 
 
@@ -262,7 +262,7 @@ $$ u(x,y) = \min(x,y) $$
 
 The indifference curves will be right angles:
 
-![leontieff-utility](/CSUN-Econ-310/assets/images/graphs/lec10_leontieff_setup.png)
+![leontieff-utility](/CSUN-Econ-310/assets/images/graphs/consumer-theory-leontieff-setup.png)
 
 The MRS of a Leontieff utility function is tricky to define mathematically. It is either zero or infinity depending on the location.
 
@@ -276,7 +276,7 @@ Leontieff utility functions are used to model goods that require one another in 
 > Leontieff Utility Example
 >
 > A consumer's utility over $$x$$ and $$y$$ is represented by the indifference curves below.
-> ![linear-utility-example-setup](/CSUN-Econ-310/assets/images/graphs/lec10_leontieff_setup.png)
+> ![linear-utility-example-setup](/CSUN-Econ-310/assets/images/graphs/consumer-theory-leontieff-setup.png)
 >
 > The consumer has an income of $$24$$. The price of $$x$$ is $$p_x = 4$$ and the price of $$y$$ is $$p_y = 2$$. 
 >
@@ -286,7 +286,7 @@ Leontieff utility functions are used to model goods that require one another in 
 >
 > To plot the budget line, simply draw a straight line between the x and y intercepts. The x-intercept is $$I/p_x=6$$ and the y-intercept is $$I/p_y=12$$.
 >
-> ![linear-utility-example-solution](/CSUN-Econ-310/assets/images/graphs/lec10_leontieff_solution.png)
+> ![linear-utility-example-solution](/CSUN-Econ-310/assets/images/graphs/consumer-theory-leontieff-solution.png)
 >
 > The optimal point is the point on the budget line that touches the highest indifference curve. That occurs at $$x=4$$ and $$y=4$$. 
 
