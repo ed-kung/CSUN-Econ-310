@@ -7,8 +7,8 @@ from pyscript import window, document, when
 @when("click", "#button")
 def generate_problem():
     
-    wk = document.getElementById("dropdown").value
-    filename = f"{wk}_practice.json"
+    lec = document.getElementById("dropdown").value
+    filename = f"{lec}_practice.json"
     
     if os.path.exists(filename):
         with open(filename, 'r') as f:

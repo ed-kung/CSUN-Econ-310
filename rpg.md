@@ -14,24 +14,23 @@ python: pyscript
 <label for="dropdown">Generate problem from lecture:</label>
 
 <select id="dropdown">
-    <option value="lec01">1. Econ Review</option>
-	<option value="lec02">2. Math Review</option>
-	<option value="lec03">3. Single Variable Optimization</option>
-	<option value="lec04">4. Commodity Market Models</option>
-	<option value="lec05">5. Labor Market Models</option>
-	<option value="lec06">6. General Equilibrium Models</option>
-	<option value="lec07">7. Productivity Growth</option>
-	<option value="lec08">8. Multivariate Optimization</option>
-	<option value="lec09">9. Constrained Multivariate Optimization</option>
-	<option value="lec10">10. Consumer Choice Theory</option>
-	<option value="lec11">11. Consumer Choice Applications</option>
-	<option value="lec12">12. Labor-Leisure Choice</option>
-	<option value="lec13">13. Theory of Production</option>
-	<option value="lec14">14. Game Theory I</option>
-	<option value="lec16">16. Monopolies</option>
-	<option value="lec17">17. Imperfect Competition</option>
-	<option value="lec18">18. Risk and Uncertainty</option>
-	<option value="lec19">19. Consumption and Savings</option>
+	<option value="math-review">Math Review</option>
+	<option value="single-variable-optimization">Single Variable Optimization</option>
+	<option value="commodity-market">Commodity Market Models</option>
+	<option value="labor-market">Labor Market Models</option>
+	<option value="general-equilibrium">General Equilibrium Models</option>
+	<option value="productivity-shocks">Application: Productivity Shocks</option>
+	<option value="multivariate-optimization-1">Multivariate Optimization</option>
+	<option value="multivariate-optimization-2">Constrained Multivariate Optimization</option>
+	<option value="consumer-theory">Consumer Choice Theory</option>
+	<option value="consumer-theory-applications">Consumer Choice: Applications</option>
+	<option value="labor-leisure">Labor/Leisure Choice</option>
+	<option value="consumption-savings">Consumption and Savings</option>
+	<option value="production-theory">Theory of Production</option>
+	<option value="monopolies">Monopolies</option>
+	<option value="game-theory-1">Game Theory</option>
+	<option value="imperfect-competition-1">Imperfect Competition I</option>
+	<option value="risk-and-uncertainty">Risk and Uncertainty</option>
 </select>
 
 <button id="button" pys-onClick="generate_problem">Generate</button>
