@@ -8,7 +8,7 @@ from pyscript import window, document, when
 def generate_problem():
     
     lec = document.getElementById("dropdown").value
-    filename = f"{lec}_practice.json"
+    filename = f"{lec}-practice.json"
     
     if os.path.exists(filename):
         with open(filename, 'r') as f:
