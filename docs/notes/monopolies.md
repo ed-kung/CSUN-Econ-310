@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "16. Monopolies"
+title: "14. Monopolies"
 parent: Lecture Notes
-nav_order: 16
+nav_order: 14
 ---
 
 # Monopolies

@@ -218,7 +218,7 @@ K &= 2.0744
 
 Cost minimization can be represented graphically by an **isoquant** and **isocost curves**, as illustrated below.
 
-![cost-minimization](/CSUN-Econ-310/assets/images/13-cost-minimization.png)
+![cost-minimization](/CSUN-Econ-310/assets/images/cost-minimization.png)
 
 The curved black line is called an **isoquant**. It represents the combinations of $$L$$ and $$K$$ that can be combined to produce one unit of output. It is our *constraint* in the cost minimization problem.
 
@@ -231,7 +231,7 @@ The choice of $$L$$ and $$K$$ that minimizes costs is the lowest point on the hi
 >
 > A firm has a constant returns to scale production function. Its unit isoquant and isocost curves are shown in the diagram below.
 >
-> ![cost-minimization](/CSUN-Econ-310/assets/images/13-cost-minimization-example.png)
+> ![cost-minimization](/CSUN-Econ-310/assets/images/cost-minimization-example.png)
 >
 > The unit price of labor is $$w=5$$ and the unit price of capital is $$r=2$$.
 >

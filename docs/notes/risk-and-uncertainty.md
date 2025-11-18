@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "18. Risk and Uncertainty"
+title: "20. Risk and Uncertainty"
 parent: Lecture Notes
-nav_order: 18
+nav_order: 20
 ---
 
 # Risk and Uncertainty
@@ -198,13 +198,13 @@ E[u(X)] &= 0.95 \sqrt{1,000} + 0.05 \sqrt{800} = 31.4559
 
 A concave function has a curvature which bends it towards zero, i.e. in an "inverse-U" shape:
 
-![concave-utility](/CSUN-Econ-310/assets/images/21-risk-and-uncertainty-concave-utility.png)
+![concave-utility](/CSUN-Econ-310/assets/images/risk-and-uncertainty-concave-utility.png)
 
 **Theorem.** If a person's utility function $$u(X)$$ over a random variable $$X$$ is concave, then the person is risk averse.
 
 *Proof.* We won't do a full proof, but we can make an argument by looking at the diagram below.
 
-![risk-aversion-proof](/CSUN-Econ-310/assets/images/21-risk-and-uncertainty-risk-aversion-proof.png)
+![risk-aversion-proof](/CSUN-Econ-310/assets/images/risk-and-uncertainty-risk-aversion-proof.png)
 
 In this example, $$X$$ can take one of two values: $$x_1$$ and $$x_2$$.  The point $$(E[X], E[u(X)])$$ will always lie on the red line, which is formed by the straight line between points $$(x_1, u(x_1))$$ and $$(x_2, u(x_2))$$.
 

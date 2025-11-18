@@ -98,7 +98,7 @@ This course meets for two 75 minute lectures a week, in person.
 |    7 | 3/2, 3/4      | Constrained Optimization             | Theory of Consumer Choice                   |
 |    8 | 3/9, 3/11     | Consumer Choice: Applications        | Labor/Leisure Choice                        | 
 |    9 | 3/16, 3/18    | **NO CLASS - SPRING BREAK**          | **NO CLASS - SPRING BREAK**                 |
-|   10 | 3/23, 3/25    | Saving and Borrowing                 | Theory of Production                        |
+|   10 | 3/23, 3/25    | Consumption and Saving               | Theory of Production                        |
 |   11 | 3/30, 4/1     | Review                               | **Midterm 2                                 |
 |   12 | 4/6, 4/8      | *Monetary Economics*                 | Monopolies                                  |
 |   13 | 4/13, 4/15    | Price Discrimination                 | Game Theory                                 |

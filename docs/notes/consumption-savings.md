@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "19. Consumption and Savings"
+title: "12. Consumption and Savings"
 parent: Lecture Notes
-nav_order: 19
+nav_order: 12
 ---
 
 # Consumption and Savings

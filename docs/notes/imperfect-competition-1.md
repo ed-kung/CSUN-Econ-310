@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "17. Imperfect Competition"
+title: "17. Imperfect Competition I"
 parent: Lecture Notes
 nav_order: 17
 ---
 
-# Imperfect Competition
+# Imperfect Competition I
 {: .no_toc }
 
 - TOC
