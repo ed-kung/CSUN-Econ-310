@@ -256,5 +256,19 @@ U &= wL - \tfrac{4}{3}L^{3/2} \\
 &= 83.1384
 \end{aligned}$$
 
+## Big Picture Review
+
+- We model a labor market with two main groups of actors: workers and firms. (Workers are the labor suppliers and firms are the labor demanders.)
+- Workers take the market wage as given, and choose how many units of labor to supply (i.e. how many hours to work, how hard to work, etc) in order to maximize their utility.
+    - Worker utility is modeled as earnings minus the "disutility of work", i.e. workers get some negative utility from working.
+- Firms take the market wage as given, and choose how many units of labor to consume (i.e. how many workers to hire, for how long, etc) in order to maximize their profit.
+    - A firm's profit is equal to its revenue minus its cost.
+    - Their revenue is equal to price times quantity produced, and quantity produced is determined by how much labor they use. The relationship between labor used and output is known as the "production function". 
+    - There is a direct relationship between a firm's production function and its cost function (it's two ways of looking at the same thing).
+- The key drivers of a worker's decision making is their disutility of work and the wage.
+- The key drivers of a firm's decision making is their production function and the wage.
+- The labor supply curve arises out of the first order condition of the worker's optimization problem.
+- The labor demand curve arises out of the first order condition of the firm's optimization problem.
+- In equilibrium, the wage adjusts such that the quantity of labor supplied matches the quantity of labor demanded.
 
 

@@ -330,3 +330,16 @@ PS &= pq - \tfrac{1}{2}q^2 \\
 &= 4.5
 \end{aligned}$$
 
+## Big Picture Review
+
+- We model a commodity market with two main groups of actors: consumers and producers (or firms).
+- Consumers take the market price as given, and choose how many units of the commodity to purchase to maximize their utility.
+    - Their utility is modeled by something called the "utility function." It represents the benefits, psychological or otherwise, that the consumer derives from purchasing the good.
+- Producers take the market price as given, and choose how many units of the commodity to produce to maximize their profit.
+    - A firm's profit is equal to its revenue minus its cost.
+    - The cost function determines how much it costs the firm to produce any given amount of output. 
+- The key drivers of a consumer's decision making is their utility function and the price.
+- The key drivers of a firm's decision making is their cost function and the price.
+- The demand curve arises out of the first order condition of the consumer's optimization problem.
+- The supply curve arises out of the first order condition of the producer's optimization problem.
+- In equilibrium, the price adjusts such that the quantity produced matches the quantity consumed.
