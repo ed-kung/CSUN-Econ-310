@@ -246,3 +246,11 @@ Our analysis therefore shows that, for this class of models, a technological sho
 >
 > 3. If we have estimates of the model parameters, the model lets us make more precise, quantitative predictions about outcomes.
 
+
+## Big Picture Review
+
+- We used a general equilibrium model of commodity and labor markets to investigate the impact of a change in labor productivity.
+- "Labor productivity" refers to the amount of output that a single unit of labor can produce.
+- A change in labor productivity is modeled as a change in the firm's production function.
+- The firm's production function is driven by the technology it has available. Technological improvements will result in a change in the firm's production function.
+- Under certain model specifications, a change in labor productivity can result in no change in equilibrium wages or quantity of labor supplied, but instead results in a decrease in commodity prices and an increase in equilibrium commodity output. 

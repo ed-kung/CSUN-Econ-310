@@ -206,3 +206,15 @@ U_c &= 20.9859 \\
 U_w &= 4 \\
 \Pi &= 8
 \end{aligned}$$
+
+## Big Picture Review
+
+- "General equilibrium" refers to models in which the equilibrium of multiple interrelated markets are simultaneously determined.
+- We studied a general equilibrium model of interrelated commodity and labor markets.
+- The firm sits between the two markets. It is the producer in the commodity market, but the demander in the labor market.
+- We made a simplification by disconnecting the workers from the consumers. In a more complex model, we could model them as the same people.
+- The key "exogenous" factors driving this model are:
+    - The consumers' utility function over the commodity
+    - The firms' production function
+    - The workers' disutility over work
+- In general equilibrium, the commodity price and the wage are determined such that both the commodity market and the labor market are simultaneously in equilibrium.

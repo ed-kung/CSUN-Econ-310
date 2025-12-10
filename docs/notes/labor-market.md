@@ -265,6 +265,7 @@ U &= wL - \tfrac{4}{3}L^{3/2} \\
     - A firm's profit is equal to its revenue minus its cost.
     - Their revenue is equal to price times quantity produced, and quantity produced is determined by how much labor they use. The relationship between labor used and output is known as the "production function". 
     - There is a direct relationship between a firm's production function and its cost function (it's two ways of looking at the same thing).
+    - In this simple model, the only input that the firm uses is labor. We ignore the role of capital, energy, and other inputs.
 - The key drivers of a worker's decision making is their disutility of work and the wage.
 - The key drivers of a firm's decision making is their production function and the wage.
 - The labor supply curve arises out of the first order condition of the worker's optimization problem.

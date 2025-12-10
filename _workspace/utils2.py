@@ -1866,7 +1866,7 @@ class LogOptimizationProblem(GenericProblem):
 
         setup_list = []
         setup = fr"""
-$$f(x) = {PTerm(a, '\ln(x)', 1)} - {PolyEq([b, c], 'x', [1, 0])}$$
+$$f(x) = {PTerm(a, '\\ln(x)', 1)} - {PolyEq([b, c], 'x', [1, 0])}$$
 """
         online_setup = setup
         setup_list.append({
