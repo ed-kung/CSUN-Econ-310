@@ -1778,7 +1778,142 @@ $$f(x) = {PolyEq([a,-0.5*b,c],'x',[1,2,0])}$$
         })
         self.setup_list = setup_list
         self.question_list = question_list
+
+
+class ExponentialOptimizationProblem(GenericProblem):
+    # f(x) = ax^p - bx + c
+    def __init__(self, params=None, rng=rng, name='exponential_optimization_problem'):
+        default_params = {'a':1,'p':0.5,'b':1,'c':0}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        a, p, b, c = params['a'], params['p'], params['b'], params['c']
+        assert a>0 and b>0 and p>0 and p<1
+        x = (b/(a*p))**(1/(p-1))
+        f = a*x**p - b*x + c
+        self.sol = {'x':x, 'f':f}
         
+        foc =             fr"\(f^\prime(x) = {PolyEq([a*p,  -b],'x',[p-1,0])} \)"
+        foc_distractor1 = fr"\(f^\prime(x) = {PolyEq([a/p,  -b],'x',[p-1,0])} \)"
+        foc_distractor2 = fr"\(f^\prime(x) = {PolyEq([a,    -b],'x',[p-1,0])} \)"
+        foc_distractor3 = fr"\(f^\prime(x) = {PolyEq([a,     b],'x',[p,0])} \)"
+
+        setup_list = []
+        setup = fr"""
+$$f(x) = {PolyEq([a,-b,c],'x',[p,1,0])}$$
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"What is the first derivative of \(f(x)\)?"
+        online_question = question
+        answer = foc
+        online_answer = answer
+        answers = [foc, foc_distractor1, foc_distractor2, foc_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = fr"What is the value of \(x\) that maximizes \(f(x)\)?"
+        online_question = question
+        answer = x
+        online_answer = fr"\(x = {x:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the maximum value of \(f(x)\)?"
+        online_question = question
+        answer = f
+        online_answer = fr"\(f(x) = {f:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+
+
+class LogOptimizationProblem(GenericProblem):
+    # f(x) = aln(x) - bx + c
+    def __init__(self, params=None, rng=rng, name='log_optimization_problem'):
+        default_params = {'a':1,'b':1,'c':0}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        a, b, c = params['a'], params['b'], params['c']
+        assert a>0 and b>0
+        x = a/b
+        f = a*np.log(x) - b*x + c
+        self.sol = {'x':x, 'f':f}
+        
+        foc =             fr"\(f^\prime(x) = \frac{{{a:.0f}}}{{x}} - {b:.0f} \)"
+        foc_distractor1 = fr"\(f^\prime(x) = {PTerm(a,'x',1)} - {b:.0f} \)"
+        foc_distractor2 = fr"\(f^\prime(x) = \frac{{{a:.0f}}}{{x}} + {b:.0f} \)"
+        foc_distractor3 = fr"\(f^\prime(x) = \frac{{{2*a:.0f}}}{{x}} - {b:.0f} \)"
+
+        setup_list = []
+        setup = fr"""
+$$f(x) = {PTerm(a, '\ln(x)', 1)} - {PolyEq([b, c], 'x', [1, 0])}$$
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"What is the first derivative of \(f(x)\)?"
+        online_question = question
+        answer = foc
+        online_answer = answer
+        answers = [foc, foc_distractor1, foc_distractor2, foc_distractor3]
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=True,rng=rng)
+        })
+        question = fr"What is the value of \(x\) that maximizes \(f(x)\)?"
+        online_question = question
+        answer = x
+        online_answer = fr"\(x = {x:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        question = fr"What is the maximum value of \(f(x)\)?"
+        online_question = question
+        answer = f
+        online_answer = fr"\(f(x) = {f:g}\)"
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+
+
 class LinearCommodityMarketProblem(GenericProblem):
     # u = ac*q - 0.5*bcq^2 - pq
     # pi = p*q - af*q - 0.5*bf*q^2
@@ -4707,6 +4842,8 @@ PROBLEM_TYPES = {
     'LogConsumerProblem': LogConsumerProblem,
     'QuadraticCostFirmProblem': QuadraticCostFirmProblem,
     'QuadraticOptimizationProblem': QuadraticOptimizationProblem,
+    'ExponentialOptimizationProblem': ExponentialOptimizationProblem,
+    'LogOptimizationProblem': LogOptimizationProblem,
     'LinearCommodityMarketProblem': LinearCommodityMarketProblem,
     'ExponentialCommodityMarketProblem': ExponentialCommodityMarketProblem,
     'WorkerProblem': WorkerProblem,
