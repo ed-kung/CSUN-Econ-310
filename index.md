@@ -54,25 +54,21 @@ This course meets for two 75 minute lectures a week, in person.
 	
 	You are encouraged to participate regardless of whether you need additional credits.
 	
-- **In-class Assignments (15%)**
-
-    There will be occasional in-class assignments, both announced and unannounced. These could be pop-quizzes, surveys, or other kinds of assignments. If you are absent during an in-class assignment, you will receive a 0 for the assignment if your absence was unexcused, and you will be excused from the assignment if your absence was excused. (See [late and missing assignment policy](#additional-course-policies-and-resources) below). 
-	
 - **Problem Sets (0%)**
 
-    For each lecture, a problem set will be assigned. These are for your own review, and will not be collected or graded. However, the questions they contain are very similar to test questions, and thus you should use these assignments as a barometer for your learning.
+    For each lecture, a problem set will be assigned. They will not be collected or graded; however, it is **strongly encouraged** that you complete these assignments as they are the best way to master the material.
 	
-- **Writing Assignments (20%)**
+- **Writing Assignments (25%)**
 
 	There will occassionally be a writing assignment, usually consisting of a short essay of about 500-800 words. These assignments must be completed on Packback, an online platform for AI-assisted writing assignments.
     
-- **Midterm Exams (30%)**
+- **Midterm Exams (35%)**
 
-    There will be two midterm exams, each worth 15% of your grade. These will be multiple choice, in-person exams.
+    There will be two midterm exams, each worth 17.5% of your grade. These will be multiple choice, in-person exams.
 	
-- **Final Exam (20%)**
+- **Final Exam (25%)**
 
-    The final exam will be worth 20% of your grade. It will be a multiple choice, in-person exam. 
+    The final exam will be worth 25% of your grade. It will be a multiple choice, in-person exam. 
 
 - **Grading Scale**
 
@@ -173,7 +169,7 @@ Exams will be given in person, on paper. For exams, you should bring:
 - A no. 2 pencil and eraser
 - A Scantron Form 882 or compatible
 - A calculator of any kind
-- One index card of notes
+- One sheet of paper of notes, front and back allowed (maximum size: 8"x11")
 - A ruler or straight-edge
 - Your CSUN ID or other photo ID showing name and picture
 
