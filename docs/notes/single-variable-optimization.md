@@ -251,4 +251,33 @@ b &= 2cx \\
 > (Check the simplification yourself)
 
 
+## Relationship to marginal analysis
+
+The derivative of a function can also be thought of as the "marginal" of that function.  For example, the derivative of a firm's cost function is its marginal cost function. This works because the slope of the function tells us how the $$y$$ variable changes when $$x$$ changes by a small amount, which is equivalent to the definition of "marginal" that we use in economics.
+
+You may have learned in Econ 160 that utility is maximized when marginal benefit equals marginal cost (or equivalently, that profit is maximized when marginal revenue equals marginal cost).  Optimization theory tells us why.
+
+Let
+
+$$u(x) = b(x) - c(x)$$
+
+be a utility function, which equals a benefit function minus a cost function. 
+
+The first order condition is:
+
+$$u^\prime(x) = b^\prime(x) - c^\prime(x) = 0$$
+
+We can re-arrange that to:
+
+$$b^\prime(x) = c^\prime(x)$$
+
+In other words, the utility function is maximized at the $$x$$ for which $$b^\prime(x) = c^\prime(x)$$; or in other words, when marginal benefit equals marginal cost.
+
+
+## Big Picture Review
+
+- The derivative of a function measures its slope at any given point.
+- For a function $$f(x)$$, we write its derivative as $$f^\prime(x)$$.
+- At the maximum of a function, the derivative is equal to zero ($$f^\prime(x)=0$$). We call this the **first order condition**.
+- The first order condition also explains why utility is maximized when marginal benefit equals marginal cost, and why profit is maximized when marginal revenue equals marginal cost.
 
