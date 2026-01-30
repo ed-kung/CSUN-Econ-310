@@ -72,9 +72,9 @@ This course meets for two 75 minute lectures a week, in person.
 
 - **Grading Scale**
 
-    |  A     |  A-   |  B+   |  B    |  B-   |  C+   |  C    |  C-   |  D    |  F   |
-    | ------ | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ---- |
-    | 100-93 | 92-90 | 89-87 | 86-83 | 82-80 | 79-77 | 76-73 | 72-70 | 69-60 | 59-0 |
+    |  A     |  A-   |  B+   |  B    |  B-   |  C+   |  C    |  D    |  F   |
+    | ------ | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ---- |
+    | 100-93 | 92-90 | 89-87 | 86-83 | 82-80 | 79-77 | 76-70 | 69-60 | 59-0 |
 
 	Your scores will be rounded up to the nearest integer. Depending on the performance of the class, a curve may or may not be applied before assigning letter grades.
 
