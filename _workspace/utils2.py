@@ -1865,8 +1865,9 @@ class LogOptimizationProblem(GenericProblem):
         foc_distractor3 = fr"\(f^\prime(x) = \frac{{{2*a:.0f}}}{{x}} - {b:.0f} \)"
 
         setup_list = []
+        temparg = '\\ln(x)'
         setup = fr"""
-$$f(x) = {PTerm(a, '\\ln(x)', 1)} - {PolyEq([b, c], 'x', [1, 0])}$$
+$$f(x) = {PTerm(a, temparg, 1)} - {PolyEq([b, c], 'x', [1, 0])}$$
 """
         online_setup = setup
         setup_list.append({
