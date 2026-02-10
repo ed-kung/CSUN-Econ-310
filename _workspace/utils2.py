@@ -2235,7 +2235,7 @@ class ExponentialProductionFirmProblem(GenericProblem):
             "online_setup": online_setup
         })
         question_list = []
-        question = fr"Write down the inverse labor demand curve in terms of \(p\) and \(L\)."
+        question = fr"Write down the inverse labor demand curve."
         online_question = question
         answer = demand_curve
         online_answer = answer
@@ -2309,6 +2309,8 @@ class ExponentialLaborMarketProblem(GenericProblem):
         L = labor_market.eq['q']
         U = worker.utility_at(w, L)
         profit = firm.profit_at(p,w,L)
+        firm_problem = ExponentialProductionFirmProblem(params={'A':A,'k':kf,'w':w,'p':p}, rng=rng)
+        worker_problem = WorkerProblem(params={'d':d,'k':kw,'w':w}, rng=rng)
         self.sol = {'w':w, 'L':L, 'U':U, 'profit':profit}
         setup_list = []
         setup = fr"""
@@ -2378,6 +2380,8 @@ The current commodity price is \(p={p:g}\).
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
         })
+        question_list.append(worker_problem.question_list[0])
+        question_list.append(firm_problem.question_list[0])
         self.setup_list = setup_list
         self.question_list = question_list
     def check_solution(self):
