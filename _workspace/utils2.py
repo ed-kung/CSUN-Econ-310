@@ -1722,7 +1722,7 @@ class QuadraticOptimizationProblem(GenericProblem):
         params = self.params
         a, b, c = params['a'], params['b'], params['c']
         x = a/b
-        f = a*x - 0.5*x**2 + c
+        f = a*x - 0.5*b*x**2 + c
         self.sol = {'x':x, 'f':f}
         
         foc =             fr"\(f^\prime(x) = {PolyEq([a,    -b],'x',[0,1])} \)"
