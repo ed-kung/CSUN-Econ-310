@@ -187,6 +187,8 @@ My preferred form of communication is in-person after class or at office hours, 
 
 Requests for absences, extensions, or late submissions must be submitted by email with accompanying documentation. Only unanticipated family and medical emergencies, or other extraordinary events, will be considered valid reasons. Events that could have reasonably been anticipated, such as heavy academic workload, busy work schedule, or friends' birthday parties, will not be accepted as valid reasons.
 
+I generally do not give makeups for the midterms. If you have a valid reason for missing a midterm, you will be excused from the midterm. The weight of the midterm for your final grade will be allocated to the final exam.
+
 **AI Policy**
 
 You are allowed to use AI for any at-home assignments to help refine your writing and your thinking. However, you are not allowed to directly submit AI generated content, either in part or in whole, and **you must be able to understand and explain any material that you submit**.
