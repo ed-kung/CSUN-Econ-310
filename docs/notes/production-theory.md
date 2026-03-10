@@ -27,6 +27,52 @@ $$ \max_{L,K} ~ pf(L,K) - wL - rK $$
 
 That is, the firm chooses how much labor $$L$$ and capital $$K$$ to employ in order to maximize its profits.
 
+### First order conditions
+
+The first order conditions for a maximum are:
+
+$$\begin{align}
+pf_L(L, K) - w = 0 \\
+pf_K(L, K) - r = 0 
+\end{align}$$
+
+which can be rearranged to:
+
+$$\begin{align}
+w = pf_L(L, K) ~ ~ ~ ~ (1) \\
+r = pf_K(L, K) ~ ~ ~ ~ (2)
+\end{align}$$
+
+Equation (1) says that at the firm's optimum, the wage rate is equal to the marginal revenue product of labor. Equation (2) says that at the firm's optimum, the price of capital is equal to the marginal revenue product of capital. These relations should be familiar to us by now.
+
+If we divide equations (1) and (2), we get:
+
+$$
+\frac{ f_L (L, K) }{ f_K (L, K) } = \frac{w}{r} ~ ~ ~ ~ (3)
+$$ 
+
+The left hand side of equation (3) is the ratio of the marginal product of labor to the marginal product of capital. We call that the **marginal rate of technical substitution.**
+
+{: .purple-callout-title }
+> Definition
+>
+> The **marginal rate of technical substitution** (or MRTS) between two factor inputs is the ratio of the marginal product of those two inputs.
+
+Equation (3) says that at the firm's optimum, the marginal rate of technical substitution between labor and capital must equal the ratio of the wage rate to the price of capital.  
+
+Intuitively, you can think of it like this: the MRTS is the rate at which the firm can substitute labor for capital in its own production process while keeping the same amount of output. The ratio of wage to capital price is the rate at which the firm can substitute labor for capital in the market. If the two do not match, then the firm can produce the same amount of output at lower cost, i.e.
+
+- If the wage rate is too high relative to the price of capital, the firm hires less labor and deploys more capital while maintaining output, thus lowering costs.
+- If the wage rate is too low relative to the price of capital, the firms hires more labor and deploys less capital while maintaining output, thus lowering costs.
+
+Thus, the firm's optimum is achieved only when the two ratios are equal.
+
+{: .purple-callout-title }
+> Economic Insight
+>
+> Firm behavior implies that in any economic equilibrium, the ratio of any two factor input prices must equal the marginal rate of technical substitution between those two factors.
+
+
 ## Returns to Scale
 
 An important aspect of the production function is its **returns to scale**. "Returns to scale" asks the question: if all inputs are scaled up or down by an equal factor, how does that affect the commodity output?
@@ -62,6 +108,11 @@ An important aspect of the production function is its **returns to scale**. "Ret
 > A firm increases its labor input by 8% and its capital input by 3%. Its output increases by 5%. Does the firm has constant, increasing, or decreasing returns to scale?
 >
 > *Answer.* Unknown. The definition of returns to scale only applies when both inputs are scaled up or down by equal amounts.
+
+Why is the concept of returns to scale important? It closely relates to the **average total cost curve** (ATC) you might have learned in your Microeconomic Principles classes.
+
+- If a firm's production function has increasing returns to scale, its average total cost is decreasing in output, and we say it has **economies of scale**. 
+- If a firm's production function has decreasing reurns to scale, its average total cost is increasing in output, and we say it has **diseconomies of scale**.
 
 ## Cobb Douglas Production Functions
 
@@ -104,34 +155,11 @@ f(\alpha L, \alpha K) &= A(\alpha L)^{a} (\alpha K)^{b} \\
 >
 > $$ f(L, K) = L^{1/2} K^{1/4} $$
 >
-> 1. Does the firm exhibit increasing, decreasing, or constant returns to scale?
-> 2. Suppose the firm reduces both its labor and capital input by 50%. This would cause the firm's output to decrease by a factor of what?
-> 3. Suppose the firm reduces is labor input by 50% without changing its capital input. This would cause the firm's output to decrease by a factor of what?
+> Does the firm exhibit increasing, decreasing, or constant returns to scale?
 >
 > *Answer.* 
 >
-> 1. $$a=1/2$$ and $$b=1/4$$, so $$a+b = 3/4$$. The firm exhibits decreasing returns to scale.
->
-> 2. 
-> $$\begin{align}
-f( 0.5 L, 0.5 K) &= (0.5 L)^{1/2} (0.5 K)^{1/4} \\
-&= (0.5)^{1/2} L^{1/2} (0.5)^{1/4} K^{1/4} \\
-&= (0.5)^{3/4} L^{1/2} K^{1/4} \\
-&= (0.5)^{3/4} f(L, K) \\
-&= 0.595 f(L, K)
-\end{align}$$
->
->     A 50% reduction in both labor and capital reduces output by 40.5%.
->
-> 3. 
-> $$\begin{align}
-f( 0.5L, K) &= (0.5 L)^{1/2} K^{1/4} \\
-&= (0.5)^{1/2} L^{1/2} K^{1/4} \\
-&= (0.5)^{1/2} f(L, K) \\
-&= 0.707 f(L, K)
-\end{align}$$
->
->     A 50% reduction in labor without a change in capital reduces output by 29.3%.
+> Since $$a = 1/2$$ and $$b = 1/4$$, $$a + b = 3/4 < 1$$, so the firm has decreasing returns to scale.
 
 ## Cost Minimization
 
