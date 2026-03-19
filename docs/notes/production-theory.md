@@ -73,6 +73,97 @@ Thus, the firm's optimum is achieved only when the two ratios are equal.
 > Firm behavior implies that in any economic equilibrium, the ratio of any two factor input prices must equal the marginal rate of technical substitution between those two factors.
 
 
+## Returns to Scale
+
+An important aspect of the production function is its **returns to scale**. "Returns to scale" asks the question: if all inputs are scaled up or down by an equal factor, how does that affect the commodity output?
+
+- If scaling all inputs up or down by $$X\%$$ results in a $$X\%$$ change in output, then we say that the production function has **constant returns to scale**.
+- If scaling all inputs up or down by $$X\%$$ results in a smaller than $$X\%$$ change in output, then we say that the production function has **decreasing returns to scale**.
+- If scaling all inputs up or down by $$X\%$$ results in a larger than $$X\%$$ change in output, then we say that the production function has **increasing returns to scale**.
+
+{: .blue-callout-title }
+> Example
+>
+> A firm increases its labor and capital inputs by 10%. Its output increases by 8%. Does the firm has constant, increasing, or decreasing returns to scale?
+>
+> *Answer.* Decreasing returns to scale.
+
+{: .green-callout-title }
+> Example
+>
+> A firm decreases its labor and capital inputs by 5%. Its output decreases by 10%. Does the firm has constant, increasing, or decreasing returns to scale?
+>
+> *Answer.* Increasing returns to scale.
+
+{: .yellow-callout-title }
+> Example
+>
+> A firm increases its labor and capital inputs by 7%. Its output increases by 7%. Does the firm has constant, increasing, or decreasing returns to scale?
+>
+> *Answer.* Constant returns to scale.
+
+{: .blue-callout-title }
+> Example
+>
+> A firm increases its labor input by 8% and its capital input by 3%. Its output increases by 5%. Does the firm has constant, increasing, or decreasing returns to scale?
+>
+> *Answer.* Unknown. The definition of returns to scale only applies when both inputs are scaled up or down by equal amounts.
+
+Why is the concept of returns to scale important? It closely relates to the **average total cost curve** (ATC) you might have learned in your Microeconomic Principles classes.
+
+- If a firm's production function has increasing returns to scale, its average total cost is decreasing in output, and we say it has **economies of scale**. 
+- If a firm's production function has decreasing reurns to scale, its average total cost is increasing in output, and we say it has **diseconomies of scale**.
+- If a firm's production function has constant returns to scale, its average total cost and its marginal cost curve is *constant*, which implies an elastic supply curve.
+
+Whether a firm's production function exhibits constant, increasing, or decreasing returns to scale therefore has important implications for its economic performance and on the 
+
+## Cobb Douglas Production Functions
+
+A commonly used model of the production function is the **Cobb Douglas** production function. A Cobb Douglas production function has the following form:
+
+$$ f(L,K) = AL^{a} K^{b} $$
+
+The Cobb Douglas production function is governed by three parameters, $$A$$, $$a$$, and $$b$$: 
+
+- $$A$$, called the **total factor productivity**, controls how productive the firm is *overall*.
+- $$a$$ controls the relative importance of labor in the production process.
+- $$b$$ controls the relative importance of capital in the production process.
+
+An interesting feature of the Cobb Douglas production function is that you can tell whether it has constant, increasing, or decreasing returns to scale simply by looking at $$a$$ and $$b$$.
+
+- If $$a + b = 1$$, then the Cobb Douglas production function has constant returns to scale.
+- If $$a + b < 1$$, then the Cobb Douglas production function has decreasing returns to scale.
+- If $$a + b > 1$$, then the Cobb Douglas production function has increasing returns to scale.
+
+{: .purple-callout-title }
+> Proof
+>
+> Suppose both $$K$$ and $$L$$ are scaled by a factor of $$\alpha>1$$.
+>
+> $$\begin{align}
+f(\alpha L, \alpha K) &= A(\alpha L)^{a} (\alpha K)^{b} \\
+&= A \alpha^a L^a \alpha^b K^b \\
+&= \alpha^{a+b} A L^a K^b \\
+&= \alpha^{a+b} f(L, K)
+\end{align}$$
+>
+> - If $$a+b=1$$, then $$f(\alpha L, \alpha K) = \alpha f(L, K)$$. That is, the production is scaled by exactly $$\alpha$$, so the firm has constant returns to scale.
+> - If $$a+b<1$$, then $$f(\alpha L, \alpha K) < \alpha f(L, K)$$, so production is scaled by less than $$\alpha$$, and the firm has decreasing returns to scale.
+> - If $$a+b>1$$, then $$f(\alpha L, \alpha K) > \alpha f(L, K)$$, so production is scaled by more than $$\alpha$$, and the firm has increasing returns to scale.
+
+{: .green-callout-title }
+> Example
+>
+> A firm uses labor $$L$$ and capital $$K$$ to produce a commodity output. The production function is:
+>
+> $$ f(L, K) = L^{1/2} K^{1/4} $$
+>
+> Does the firm exhibit increasing, decreasing, or constant returns to scale?
+>
+> *Answer.* 
+>
+> Since $$a = 1/2$$ and $$b = 1/4$$, $$a + b = 3/4 < 1$$, so the firm has decreasing returns to scale.
+
 ## Cost Minimization
 
 A useful, alternative formulation to the profit maximization problem is the **cost minimization problem**. The cost minimization problem is especially useful when analyzing firms that have constant returns to scale. The idea behind cost minimization is to ask: what is the minimum cost for me to produce 1 unit of output? 
@@ -93,13 +184,6 @@ r &= \lambda f_K(L, K)
 \end{align}$$
 
 The two first order conditions and the constraint $$f(L,K)=1$$ gives us three equations in three unknowns: $$L$$, $$K$$, and $$\lambda$$. The system can thus be solved for the optimal combination of labor and capital to use to produce one unit of output, as well as the cost to produce one unit.
-
-The two first order conditions also give us some economic insight: when firms are behaving optimally, the wage rate will be proportional to the marginal product of labor ($$f_L(L,K)$$), and the price of capital will be proportional to the marginal product of capital ($$f_K(L,K)$$).
-
-{: .purple-callout-title }
-> Economic Insight
->
-> When firms are behaving optimally, the wage rate will be proportional to the marginal product of labor and the price of capital will be proportional to the marginal product of capital.
 
 {: .yellow-callout-title }
 > Example
