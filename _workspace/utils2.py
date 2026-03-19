@@ -3885,18 +3885,19 @@ In addition, the government provides minimum income support of up to \({ymin:g}\
         })
         question = fr"With income support, how many hours per week does the worker work?"
         online_question = question
-        if work=='yes': answer = fr'{T-x:g}'
-        elif work=='no': answer = fr'{0:g}'
-        else: answer = 'not enough information'
+        if work=='yes': answer = T-x
+        elif work=='no': answer = 0
+        else: raise ValueError("Invalid solution for work")
         online_answer = fr"{answer} hours"
-        answers = [fr'{0:g}', fr'{T-x:g}', fr'{60:g}', 'not enough information']
+        distractors = [x for x in range(0, 65, 5) if (x!=answer)]
+        answers = [answer] + np.random.choice(distractors, size=3, replace=False).tolist()
         sol = answers.index(answer)
         question_list.append({
             "question": question,
             "online_question": online_question,
             "answer": answer,
             "online_answer": online_answer,
-            "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
+            "MCQ": MCQ(question,answers,sol,horz=True,sort=True,rng=rng)
         })
         question = fr"With income support, how much income per week does the worker get?"
         online_question = question
@@ -3915,7 +3916,7 @@ In addition, the government provides minimum income support of up to \({ymin:g}\
         online_question = question
         answer = income_inc_or_dec
         online_answer = answer
-        answers = ['increase', 'decrease', 'neither increase nor decrease', 'not enough information']
+        answers = ['increase', 'decrease', 'neither increase nor decrease']
         sol = answers.index(answer)
         question_list.append({
             "question": question,
