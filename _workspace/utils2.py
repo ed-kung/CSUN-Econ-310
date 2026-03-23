@@ -2665,7 +2665,7 @@ class LinearContourProblem(GenericProblem):
         question_list = []
         question = fr"Write an equation describing the contour line for \(f(x,y)=z\)."
         online_question = question
-        answer = fr"\(y = {PolyEq([1/b,-a/b],'z',[0,1])}\)"
+        answer = fr"\(y = {PTerm(1/b, 'z', 1)} - {PTerm(a/b, 'x', 1)}\)"
         online_answer = answer
         question_list.append({
             "question": question,
