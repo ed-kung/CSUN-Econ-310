@@ -19,5 +19,6 @@ packages = ["numpy", "pandas"]
 "/CSUN-Econ-310/assets/data/production-theory-practice.json" = ""
 "/CSUN-Econ-310/assets/data/game-theory-1-practice.json" = ""
 "/CSUN-Econ-310/assets/data/monopolies-practice.json" = ""
+"/CSUN-Econ-310/assets/data/price-discrimination-practice.json" = ""
 "/CSUN-Econ-310/assets/data/imperfect-competition-1-practice.json" = ""
 "/CSUN-Econ-310/assets/data/risk-and-uncertainty-practice.json" = ""

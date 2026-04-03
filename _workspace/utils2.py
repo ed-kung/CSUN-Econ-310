@@ -920,10 +920,13 @@ class PriceDiscrimination:
     def __init__(self, demand1, demand2, c=1):
         monopoly1 = Monopoly(demand1, f=0, a=c, b=0)
         monopoly2 = Monopoly(demand2, f=0, a=c, b=0)
-        demand_both = LinearDemand(
-            a = (demand1.a/demand1.b + demand2.a/demand2.b),
-            b = (1/demand1.b + 1/demand2.b)
-        )
+        a1 = demand1.a
+        b1 = demand1.b
+        a2 = demand2.a
+        b2 = demand2.b
+        gamma = (a1/b1 + a2/b2)/(1/b1+1/b2)
+        delta = 1/(1/b1 + 1/b2)
+        demand_both = LinearDemand(a=gamma, b=delta)
         monopoly_both = Monopoly(demand_both, f=0, a=c, b=0)
         self.demand1 = demand1
         self.demand2 = demand2
@@ -4476,7 +4479,127 @@ $$ q = {consumer.demand.print()} $$
         if self.sol['p_eff']<=0: return False
         if self.sol['profit']<=0: return False
         return True
-        
+    
+class PriceDiscriminationProblem(GenericProblem):
+    # pA = alphaA - betaA*qA
+    # pB = alphaB - betaB*qB
+    # c(q) = c*q
+    def __init__(self, params=None, rng=rng, name="price_discrimination_problem"):
+        default_params = {'alphaA':12,'betaA':1,'alphaB':10,'betaB':1,'c':1}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        alphaA, betaA, alphaB, betaB, c = params['alphaA'], params['betaA'], params['alphaB'], params['betaB'], params['c']
+        demandA = LinearDemand(a=alphaA, b=betaA)
+        demandB = LinearDemand(a=alphaB, b=betaB)
+        pdmodel = PriceDiscrimination(demandA, demandB, c)
+        self.pdmodel = pdmodel
+        qA = pdmodel.monopoly1.sol['q']
+        pA = pdmodel.monopoly1.sol['p']
+        profitA = pdmodel.monopoly1.sol['profit']
+        qB = pdmodel.monopoly2.sol['q']
+        pB = pdmodel.monopoly2.sol['p']
+        profitB = pdmodel.monopoly2.sol['profit']
+        profit_pd = profitA + profitB
+        q_nopd = pdmodel.monopoly_both.sol['q']
+        p_nopd = pdmodel.monopoly_both.sol['p']
+        qA_nopd = demandA.eval_at_p(p_nopd)
+        qB_nopd = demandB.eval_at_p(p_nopd)
+        profit_nopd = pdmodel.monopoly_both.sol['profit']
+        self.sol = {
+            'qA': qA,
+            'pA': pA,
+            'profitA': profitA,
+            'qB': qB,
+            'pB': pB,
+            'profitB': profitB,
+            'profit_pd': profit_pd,
+            'q_nopd': q_nopd,
+            'p_nopd': p_nopd,
+            'qA_nopd': qA_nopd,
+            'qB_nopd': qB_nopd,
+            'profit_nopd': profit_nopd
+        }
+        setup_list = []
+        setup = fr"""
+There are two types of consumers in the market, type A and type B. The demand curve for type A consumers is given by:
+$$ q_A = {demandA.print()} $$
+The demand curve for type B consumers is given by:
+$$ q_B = {demandB.print()} $$
+{pdmodel.setup()}
+"""
+        online_setup = setup
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = "Calculate the profit maximizing price for type A consumers under third degree price discrimination."
+        answer = pA
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(p_A = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the profit maximizing price for type B consumers under third degree price discrimination."
+        answer = pB
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(p_B = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the monopolist's total profit under third degree price discrimination."
+        answer = profit_pd
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"Profit (with price discrimination) = \({answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the price that the monopolist would charge if it were not able to price discriminate."
+        answer = p_nopd
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"\(p = {answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        question = "Calculate the monopolist's profit if it were not able to price discriminate."
+        answer = profit_nopd
+        answers = generate_distractors(answer,rng=rng)
+        question_list.append({
+            "question": question,
+            "online_question": question,
+            "answer": answer,
+            "online_answer": fr"Profit (without price discrimination) = \({answer:g}\)",
+            "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        if self.sol['pA']<=0: return False
+        if self.sol['pB']<=0: return False
+        if self.sol['p_nopd']<=0: return False
+        if self.sol['qA']<=0: return False
+        if self.sol['qB']<=0: return False
+        if self.sol['qA_nopd']<=0: return False
+        if self.sol['qB_nopd']<=0: return False
+        if self.sol['profitA']<=0: return False
+        if self.sol['profitB']<=0: return False
+        if self.sol['profit_pd']<=0: return False
+        if self.sol['profit_nopd']<=0: return False
+        if self.sol['profit_pd']<self.sol['profit_nopd']: return False
+        return True
+
 class Cournot2Problem(GenericProblem):
     def __init__(self, params=None, rng=rng, name='cournot2_problem'):
         default_params = {'alpha':12,'beta':1,'a1':0,'b1':1,'a2':0,'b2':1}
@@ -4898,6 +5021,7 @@ PROBLEM_TYPES = {
     'TechnicalChangeProblem': TechnicalChangeProblem,
     'NormalFormProblem': NormalFormProblem,
     'MonopolyProblem': MonopolyProblem,
+    'PriceDiscriminationProblem': PriceDiscriminationProblem,
     'Cournot2Problem': Cournot2Problem,
     'CournotNProblem': CournotNProblem,
     'ExpectedValueProblem': ExpectedValueProblem,

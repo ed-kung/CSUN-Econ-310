@@ -28,6 +28,7 @@ python: pyscript
 	<option value="consumption-savings">Consumption and Savings</option>
 	<option value="production-theory">Theory of Production</option>
 	<option value="monopolies">Monopolies</option>
+	<option value="price-discrimination">Price Discrimination</option>
 	<option value="game-theory-1">Game Theory</option>
 	<option value="imperfect-competition-1">Imperfect Competition I</option>
 	<option value="risk-and-uncertainty">Risk and Uncertainty</option>
