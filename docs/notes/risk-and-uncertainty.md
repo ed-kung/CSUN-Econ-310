@@ -1,8 +1,8 @@
 ---
 layout: default
-title: "20. Risk and Uncertainty"
+title: "18. Risk and Uncertainty"
 parent: Lecture Notes
-nav_order: 20
+nav_order: 18
 ---
 
 # Risk and Uncertainty
