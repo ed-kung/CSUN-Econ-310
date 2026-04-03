@@ -90,17 +90,17 @@ This course meets for two 75 minute lectures a week, in person.
 |    3 | 2/2, 2/4      | A Model of Commodity Markets         | A Model of Labor Markets                    |
 |    4 | 2/9, 2/11     | A General Equilibrium Model          | Application: Productivity Shocks            |
 |    5 | 2/16, 2/18    | Review Session                       | **Midterm 1**                               |  
-|    6 | 2/23, 2/25    | *The Calculation Problem*            | Multivariate Optimization                   |
+|    6 | 2/23, 2/25    | *Midterm 1 Review*                   | Multivariate Optimization                   |
 |    7 | 3/2, 3/4      | Constrained Optimization             | Theory of Consumer Choice                   |
 |    8 | 3/9, 3/11     | Consumer Choice: Applications        | Labor/Leisure Choice                        | 
 |    9 | 3/16, 3/18    | **NO CLASS - SPRING BREAK**          | **NO CLASS - SPRING BREAK**                 |
 |   10 | 3/23, 3/25    | Consumption and Saving               | Theory of Production                        |
 |   11 | 3/30, 4/1     | Review                               | **Midterm 2**                               |
-|   12 | 4/6, 4/8      | *Monetary Economics*                 | Monopolies                                  |
-|   13 | 4/13, 4/15    | Price Discrimination                 | Game Theory                                 |
-|   14 | 4/20, 4/22    | Imperfect Competition I              | Repeated Games                              |
-|   15 | 4/27, 4/29    | Imperfect Competition II             | Risk and Insurance                          |
-|   16 | 5/4, 5/6      | Adverse Selection                    | Review                                      |
+|   12 | 4/6, 4/8      | *Midterm 2 Review*                   | *Discussion*                                |
+|   13 | 4/13, 4/15    | Monopolies                           | Price Discrimination                        |
+|   14 | 4/20, 4/22    | Game Theory                          | Fun with Game Theory                        |
+|   15 | 4/27, 4/29    | Imperfect Competition                | Risk and Insurance                          |
+|   16 | 5/4, 5/6      | *Discussion*                         | Review                                      |
 
 Final Exam: 
 
