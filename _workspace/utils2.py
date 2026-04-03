@@ -914,6 +914,31 @@ The market is supplied by a single monopolist, who can produce \(q\) units of th
 $$ c(q) = {self.print_cost_function()} $$
 """
 
+class PriceDiscrimination:
+    # c(q) = cq
+    # demand1 and demand2 are of class LinearDemand
+    def __init__(self, demand1, demand2, c=1):
+        monopoly1 = Monopoly(demand1, f=0, a=c, b=0)
+        monopoly2 = Monopoly(demand2, f=0, a=c, b=0)
+        demand_both = LinearDemand(
+            a = (demand1.a/demand1.b + demand2.a/demand2.b),
+            b = (1/demand1.b + 1/demand2.b)
+        )
+        monopoly_both = Monopoly(demand_both, f=0, a=c, b=0)
+        self.demand1 = demand1
+        self.demand2 = demand2
+        self.c = c
+        self.monopoly1 = monopoly1
+        self.monopoly2 = monopoly2
+        self.demand_both = demand_both
+        self.monopoly_both = monopoly_both
+    def setup(self):
+        return fr"""
+The market is supplied by a single monopolist, who can practice third degree price discrimination. The monopoly can produce \(q\) units of the commodity at a total cost of:
+$$ c(q) = {self.monopoly1.print_cost_function()} $$
+"""
+
+
 class Cournot2:
     def __init__(self, firm1, firm2, demand):
         a1 = firm1.a
