@@ -32,7 +32,7 @@ nav_order: 1
 ### Lectures
 
 - Section 01: MW 10:00am - 11:15am @ Bookstein 1123
-- Section 02: MW 11:30am - 12:45 pm @ Bookstein 1131
+- Section 04: MW 11:30am - 12:45 pm @ Bookstein 1131
 
 ### Office Hours
 
@@ -104,8 +104,8 @@ This course meets for two 75 minute lectures a week, in person.
 
 Final Exam: 
 
-- Section 01 (MW 10:00am section): TBD
-- Section 02 (MW 11:30am section): TBD
+- Section 01 (MW 10:00am section): Monday 5/11/2026, 10:15AM - 12:15PM @ Bookstein 1123
+- Section 04 (MW 11:30am section): Wednesday 5/13/2026, 10:15AM - 12:15PM @ Bookstein 1131
 
 ---
 
@@ -187,7 +187,7 @@ My preferred form of communication is in-person after class or at office hours, 
 
 Requests for absences, extensions, or late submissions must be submitted by email with accompanying documentation. Only unanticipated family and medical emergencies, or other extraordinary events, will be considered valid reasons. Events that could have reasonably been anticipated, such as heavy academic workload, busy work schedule, or friends' birthday parties, will not be accepted as valid reasons.
 
-I generally do not give makeups for the midterms. If you have a valid reason for missing a midterm, you will be excused from the midterm. The weight of the midterm for your final grade will be allocated to the final exam.
+No makeups will be given for the midterms. If you have a valid reason for missing a midterm, you will be excused from the midterm. The weight of the midterm for your final grade will be allocated to the final exam.
 
 **AI Policy**
 
