@@ -1039,7 +1039,7 @@ class Savings:
         Y, beta, p = self.Y, self.beta, self.p
         return fr"""
 An individual lives for two periods. In period 1, they earn an income of \(Y={Y:,g}\). In period 2, they earn no income. In order to consume in period 2, they must buy bonds in period 1. One bond pays \(\$1\) in period 2, and can be purchased for price \(p={p:g}\) in period 1. The individual's objective is to maximize the present value of their utility:
-$$u(c_1,c_2) = \ln c_1 + \beta \ln c_2$$
+$$\ln c_1 + \beta \ln c_2$$
 where \(c_1\) is consumption period 1, \(c_2\) is consumption in period 2, and \(\beta={beta:g}\) is the individual's subjective time discount factor.
 """
 
