@@ -3555,12 +3555,12 @@ A public school option is also available which provides {x_public:g} units of ed
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,sol,horz=True,shuffle=False,rng=rng)
         })
-        question = fr"If the public school option were removed, would this increase or decrease the amount of education consumed?"
+        question = fr"Does the availability of the public school option increase or decrease the amount of education consumed, relative to only private options?"
         online_question = question
         if choice=='private': answer="neither increase nor decrease"
         elif choice=='unknown': answer="not enough information"
-        elif x_private>xchoice: answer="increase"
-        elif x_private<xchoice: answer="decrease"
+        elif x_private>xchoice: answer="decrease"
+        elif x_private<xchoice: answer="increase"
         else: answer="neither increase nor decrease"
         online_answer = answer
         answers = ["increase", "decrease", "neither increase nor decrease", "not enough information"]
@@ -3911,7 +3911,7 @@ In addition, the government provides minimum income support of up to \({ymin:g}\
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,sol,horz=True,sort=True,numerical=True,rng=rng)
         })
-        question = fr"With income support, how many hours per week does the worker work?"
+        question = fr"With the availability of income support, how many hours per week does the worker work?"
         online_question = question
         if work=='yes': answer = T-x
         elif work=='no': answer = 0
@@ -3927,7 +3927,7 @@ In addition, the government provides minimum income support of up to \({ymin:g}\
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,sol,horz=True,sort=True,rng=rng)
         })
-        question = fr"With income support, how much income per week does the worker get?"
+        question = fr"With the availability of income support, how much income per week does the worker get?"
         online_question = question
         answer = y_choice
         online_answer = fr"{answer:,g} dollars"
@@ -3940,7 +3940,7 @@ In addition, the government provides minimum income support of up to \({ymin:g}\
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,sol,horz=True,sort=True,numerical=True,rng=rng)
         })
-        question = fr"Does the income support policy increase or decrease the worker's actual income?"
+        question = fr"Does the availability of the income support policy increase or decrease the worker's actual income?"
         online_question = question
         answer = income_inc_or_dec
         online_answer = answer

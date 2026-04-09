@@ -127,8 +127,8 @@ An income support policy is a policy that gives money to people whose incomes fa
 > 
 > 1. Draw the budget constraint without income support and label the optimal point A.
 > 2. Draw the budget constraint with income support and label the optimal point B.
-> 3. Does the income support policy increase or decrease hours worked?
-> 4. Does the income support policy increase or decrease the worker's income?
+> 3. Does the availability of the income support policy increase or decrease hours worked?
+> 4. Does the availability of the income support policy increase or decrease the worker's income?
 >
 > *Answer.*
 >
@@ -155,8 +155,8 @@ An income support policy is a policy that gives money to people whose incomes fa
 > 
 > 1. Draw the budget constraint without income support and label the optimal point A.
 > 2. Draw the budget constraint with income support and label the optimal point B.
-> 3. Does the income support policy increase or decrease hours worked?
-> 4. Does the income support policy increase or decrease the worker's income?
+> 3. Does the availability of the income support policy increase or decrease hours worked?
+> 4. Does the availability of the income support policy increase or decrease the worker's income?
 >
 > *Answer.*
 >
@@ -180,8 +180,8 @@ An income support policy is a policy that gives money to people whose incomes fa
 > 
 > 1. Draw the budget constraint without income support and label the optimal point A.
 > 2. Draw the budget constraint with income support and label the optimal point B.
-> 3. Does the income support policy increase or decrease hours worked?
-> 4. Does the income support policy increase or decrease the worker's income?
+> 3. Does the availability of the income support policy increase or decrease hours worked?
+> 4. Does the availability of the income support policy increase or decrease the worker's income?
 >
 > *Answer.*
 >

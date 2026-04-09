@@ -90,7 +90,7 @@ Consumer choice theory can be used to understand how parents choose between priv
 > 1. On the diagram, label the optimal private school option A and label the public school option B.
 > 2. Which offers higher utility, public or private?
 > 3. Which option will the family choose?
-> 4. If the public school option were removed, would this increase or decrease the amount of education consumed?
+> 4. When the public school option is introduced, does this increase or decrease the amount of education consumed?
 >
 > *Answer.*
 >
@@ -100,7 +100,7 @@ Consumer choice theory can be used to understand how parents choose between priv
 >
 > It can be seen from the diagram that point B has higher utility than point A, so the family will choose the public school option.
 >
-> Since point B has 60 units of education and point A has 20, removal of the public school will decrease education consumption.
+> Since point B has 60 units of education and point A has 20, introduction of the public school option increases education consumption.
 
 
 {: .blue-callout-title }
@@ -115,7 +115,7 @@ Consumer choice theory can be used to understand how parents choose between priv
 > 1. On the diagram, label the optimal private school option A and label the public school option B.
 > 2. Which offers higher utility, public or private?
 > 3. Which option will the family choose?
-> 4. If the public school option were removed, would this increase or decrease the amount of education consumed?
+> 4. When the public school option is introduced, does this increase or decrease the amount of education consumed?
 >
 > *Answer.*
 >
@@ -125,7 +125,7 @@ Consumer choice theory can be used to understand how parents choose between priv
 >
 > It can be seen from the diagram that point A has higher utility than point B, so the family will choose the private school option.
 >
-> Since the family chooses private school, removing the public school option wouldn't change the amount of education consumed.
+> Since the family chooses private school regardless, introduction of the public school option doesn't change the amount of education consumed.
 
 
 {: .green-callout-title }
@@ -140,7 +140,7 @@ Consumer choice theory can be used to understand how parents choose between priv
 > 1. On the diagram, label the optimal private school option A and label the public school option B.
 > 2. Which offers higher utility, public or private?
 > 3. Which option will the family choose?
-> 4. If the public school option were removed, would this increase or decrease the amount of education consumed?
+> 4. When the public school option is introduced, does this increase or decrease the amount of education consumed?
 >
 > *Answer.*
 >
@@ -150,7 +150,7 @@ Consumer choice theory can be used to understand how parents choose between priv
 >
 > It can be seen from the diagram that point B has higher utility than point A, so the family will choose the public school option.
 >
-> Since point B has 20 units of education and point A has 30, removal of the public school option would actually cause the families to choose more education.
+> Since point B has 20 units of education and point A has 30, introduction of the public school option actually decreases education consumption.
 
 
 {: .purple-callout-title }
