@@ -174,8 +174,8 @@ The equation also lets us solve for the equilibrium mathematically.  $$v^\prime(
 > 1. Write down the consumer's demand curve.
 > 2. Write down the producer's supply curve.
 > 3. Calculate the equilibrium price and quantity.
-> 4. Calcualte the consumer surplus in equilibrium (i.e. the consumer's utility.)
-> 5. Calculate the producer surplus in equilibrium (i.e. the producer's profit.)
+> 4. Calcualte the consumer utility in equilibrium.
+> 5. Calculate the firm profit in equilibrium.
 >
 > *Answer.*
 >
@@ -215,17 +215,17 @@ q_d &= 3 - \tfrac{1}{3}p \\
 >
 > So the equilibrium price and quantity are $$p=4.2$$, $$q=1.6$$.
 >
-> **Calculate the consumer surplus.**
+> **Calculate the consumer utility.**
 >
 > To do this, just plug $$p$$ and $$q$$ into the utility function.
 >
 > $$\begin{aligned}
-u &= 9q - \tfrac{3}{2}q^2 - pq \\
+U &= 9q - \tfrac{3}{2}q^2 - pq \\
 &= 9(1.6) - \tfrac{3}{2}(1.6)^2 - (4.2)(1.6) \\
 &= 3.84
 \end{aligned}$$
 >
-> **Calculate the producer surplus.**
+> **Calculate the firm profit.**
 >
 > To do this, just plug $$p$$ and $$q$$ into the profit function.
 >
@@ -235,7 +235,7 @@ u &= 9q - \tfrac{3}{2}q^2 - pq \\
 &= 2.56
 \end{aligned}$$
 >
-> Note that if you had drawn the supply and demand curves and calculated the consumer and producer surpluses graphically, you'd get the same answers.
+> Note that if you had drawn the supply and demand curves and calculated the consumer and producer surpluses using triangles, you'd find that the consumer surplus equals the consumer utility, and that the producer surplus equals the firm profit. In most circumstances, they reflect the same concepts.
 
 {: .blue-callout-title }
 > Example: Another commodity market equilibrium
@@ -251,8 +251,8 @@ u &= 9q - \tfrac{3}{2}q^2 - pq \\
 > 1. Write down the consumer's inverse demand curve. (The inverse demand curve simply writes $$p$$ in terms of $$q$$.)
 > 2. Write down the producer's inverse supply curve.
 > 3. Calculate the equilibrium price and quantity.
-> 4. Calcualte the consumer surplus in equilibrium (i.e. the consumer's utility.)
-> 5. Calculate the producer surplus in equilibrium (i.e. the producer's profit.)
+> 4. Calcualte the consumer utility in equilibrium.
+> 5. Calculate the firm profit in equilibrium.
 >
 > *Answer.*
 >
@@ -314,18 +314,18 @@ p &= q_s ~ ~ ~ ~ & \text{(inverse supply curve)} \\
 >
 > So the equilibrium price and quantity are $$p=3$$, $$q=3$$.
 >
-> **Calculate the producer and consumer surplus in equilibrium.**
+> **Calculate the consumer utility and firm profit.**
 >
-> To get consumer surplus, plug $$p$$ and $$q$$ into the consumer's utility function. To get producer surplus, plug $$p$$ and $$q$$ into the producer's profit function.
+> To get consumer utility, plug $$p$$ and $$q$$ into the consumer's utility function. To get firm profit, plug $$p$$ and $$q$$ into the profit function.
 >
 > $$\begin{aligned}
-CS &= 9\ln q - pq \\
+U &= 9\ln q - pq \\
 &= 9\ln(3) - 3\times3 \\
 &= 0.8875
 \end{aligned}$$
 >
 > $$\begin{aligned}
-PS &= pq - \tfrac{1}{2}q^2 \\
+\Pi &= pq - \tfrac{1}{2}q^2 \\
 &= 3\times3 - \tfrac{1}{2}(3)^2 \\
 &= 4.5
 \end{aligned}$$

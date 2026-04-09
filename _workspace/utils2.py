@@ -2003,10 +2003,10 @@ class LinearCommodityMarketProblem(GenericProblem):
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
         })
-        question = "Calculate the consumer surplus (i.e. utility) in equilibrium."
+        question = "Calculate the consumer utility in equilibrium."
         online_question = question
         answer = U
-        online_answer = fr"\(CS = {answer:g}\)"
+        online_answer = fr"\(U = {answer:g}\)"
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
             "question": question,
@@ -2015,10 +2015,10 @@ class LinearCommodityMarketProblem(GenericProblem):
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
         })
-        question = "Calculate the producer surplus (i.e. profit) in equilibrium."
+        question = "Calculate the firm profit in equilibrium."
         online_question = question
         answer = profit
-        online_answer = fr"\(PS = {answer:g}\)"
+        online_answer = fr"\(\Pi = {answer:g}\)"
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
             "question": question,
@@ -2098,10 +2098,10 @@ class ExponentialCommodityMarketProblem(GenericProblem):
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
         })
-        question = "Calculate the consumer surplus (i.e. utility) in equilibrium."
+        question = "Calculate the consumer utility in equilibrium."
         online_question = question
         answer = U
-        online_answer = fr"\(CS = {answer:g}\)"
+        online_answer = fr"\(U = {answer:g}\)"
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
             "question": question,
@@ -2110,10 +2110,10 @@ class ExponentialCommodityMarketProblem(GenericProblem):
             "online_answer": online_answer,
             "MCQ": MCQ(question,answers,0,shuffle=False,sort=True,horz=True,numerical=True,rng=rng)
         })
-        question = "Calculate the producer surplus (i.e. profit) in equilibrium."
+        question = "Calculate the firm profit in equilibrium."
         online_question = question
         answer = profit
-        online_answer = fr"\(PS = {answer:g}\)"
+        online_answer = fr"\(\Pi = {answer:g}\)"
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
             "question": question,
@@ -4410,14 +4410,14 @@ $$ q = {consumer.demand.print()} $$
             "online_answer": fr"\(\Pi = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = "Calculate the consumer surplus (i.e. consumer's utility)."
+        question = "Calculate the consumer utility."
         answer = monopoly.sol['CS']
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
             "question": question,
             "online_question": question,
             "answer": answer,
-            "online_answer": fr"\(CS = {answer:g}\)",
+            "online_answer": fr"\(U = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
         question = "What quantity would a benevolent social planner choose, in order to maximize total surplus?"
@@ -4450,14 +4450,14 @@ $$ q = {consumer.demand.print()} $$
             "online_answer": fr"\(\Pi_e = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = "Calculate the consumer surplus (i.e. utility) under the benevolent social planner's choices."
+        question = "Calculate the consumer utility under the benevolent social planner's choices."
         answer = monopoly.sol['CS_eff']
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
             "question": question,
             "online_question": question,
             "answer": answer,
-            "online_answer": fr"\(CS_e = {answer:g}\)",
+            "online_answer": fr"\(U_e = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
         question = "Calculate the deadweight loss caused by monopolistic behavior."
