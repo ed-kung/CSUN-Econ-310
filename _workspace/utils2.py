@@ -4473,10 +4473,10 @@ $$ q = {consumer.demand.print()} $$
         self.setup_list = setup_list
         self.question_list = question_list
     def check_solution(self):
-        if not is_divisible(self.sol['q'],1): return False
-        if not is_divisible(self.sol['p'],1): return False
-        if not is_divisible(self.sol['q_eff'],1): return False
-        if not is_divisible(self.sol['p_eff'],1): return False
+        if not is_divisible(self.sol['q'],0.5): return False
+        if not is_divisible(self.sol['p'],0.5): return False
+        if not is_divisible(self.sol['q_eff'],0.5): return False
+        if not is_divisible(self.sol['p_eff'],0.5): return False
         if self.sol['q']<=0: return False
         if self.sol['p']<=0: return False
         if self.sol['q_eff']<=0: return False
