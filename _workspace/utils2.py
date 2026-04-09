@@ -4410,7 +4410,7 @@ $$ q = {consumer.demand.print()} $$
             "online_answer": fr"\(\Pi = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = "Calculate the consumer's utility."
+        question = "Calculate the consumer surplus (i.e. consumer's utility)."
         answer = monopoly.sol['CS']
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
@@ -4450,7 +4450,7 @@ $$ q = {consumer.demand.print()} $$
             "online_answer": fr"\(\Pi_e = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = "Calculate the consumer's utility under the benevolent social planner's choices."
+        question = "Calculate the consumer surplus (i.e. utility) under the benevolent social planner's choices."
         answer = monopoly.sol['CS_eff']
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
