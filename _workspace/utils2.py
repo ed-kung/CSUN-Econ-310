@@ -4355,6 +4355,8 @@ class MonopolyProblem(GenericProblem):
         self.consumer = consumer
         self.monopoly = monopoly
         self.sol = monopoly.sol.copy()
+
+        # --- Setups
         setup_list = []
         setup = fr"""
 Price-taking consumers in the market for a commodity have a demand curve given by:
@@ -4375,6 +4377,8 @@ $$ q = {consumer.demand.print()} $$
             "setup": setup,
             "online_setup": online_setup
         })
+
+        # --- Questions
         question_list = []
         question = "Calculate the profit maximizing price."
         answer = monopoly.sol['p']
@@ -4406,7 +4410,7 @@ $$ q = {consumer.demand.print()} $$
             "online_answer": fr"\(\Pi = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = "Calculate the consumer surplus."
+        question = "Calculate the consumer's utility."
         answer = monopoly.sol['CS']
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
@@ -4416,7 +4420,7 @@ $$ q = {consumer.demand.print()} $$
             "online_answer": fr"\(CS = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = "What is the efficient quantity that would maximize total surplus?"
+        question = "What quantity would a benevolent social planner choose, in order to maximize total surplus?"
         answer = monopoly.sol['q_eff']
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
@@ -4426,7 +4430,7 @@ $$ q = {consumer.demand.print()} $$
             "online_answer": fr"\(q_e = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = "What is the efficient price level?"
+        question = "What price would a benevolent social planner choose? (Assume the planner chooses price quantity pairs on the demand curve.)"
         answer = monopoly.sol['p_eff']
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
@@ -4436,7 +4440,7 @@ $$ q = {consumer.demand.print()} $$
             "online_answer": fr"\(p_e = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = "Calculate the monopolist's profit at the efficient outcome."
+        question = "Calculate the monopolist's profit under the benevolent social planner's choices."
         answer = monopoly.sol['profit_eff']
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
@@ -4446,7 +4450,7 @@ $$ q = {consumer.demand.print()} $$
             "online_answer": fr"\(\Pi_e = {answer:g}\)",
             "MCQ": MCQ(question,answers,0,horz=True,shuffle=False,sort=True,numerical=True,rng=rng)
         })
-        question = "Calculate the consumer surplus at the efficient outcome."
+        question = "Calculate the consumer's utility under the benevolent social planner's choices."
         answer = monopoly.sol['CS_eff']
         answers = generate_distractors(answer,rng=rng)
         question_list.append({
