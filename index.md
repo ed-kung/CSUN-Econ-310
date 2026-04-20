@@ -98,9 +98,9 @@ This course meets for two 75 minute lectures a week, in person.
 |   11 | 3/30, 4/1     | Review                               | **Midterm 2**                               |
 |   12 | 4/6, 4/8      | *Midterm 2 Review*                   | *Discussion*                                |
 |   13 | 4/13, 4/15    | Monopolies                           | Price Discrimination                        |
-|   14 | 4/20, 4/22    | Game Theory                          | Fun with Game Theory                        |
-|   15 | 4/27, 4/29    | Imperfect Competition                | Risk and Insurance                          |
-|   16 | 5/4, 5/6      | *Discussion*                         | Review                                      |
+|   14 | 4/20, 4/22    | Game Theory                          | Game Theory                                 |
+|   15 | 4/27, 4/29    | Game Theory                          | Imperfect Competition                       |
+|   16 | 5/4, 5/6      | Risk and Insurance                   | Review                                      |
 
 Final Exam: 
 
