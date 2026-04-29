@@ -217,7 +217,7 @@ class Axis:
     def add(self, *args):
         for obj in args:
             self.objects.append(obj)
-    def get_figax(self, alpha=0.4, saveas=None):
+    def get_figax(self, alpha=0.6, saveas=None):
         fig, ax = plt.subplots()
         ax.set_xticks(np.arange(0, self.xmax, self.xunit))
         ax.set_yticks(np.arange(0, self.ymax, self.yunit))
@@ -235,7 +235,7 @@ class Axis:
         if saveas is not None:
             plt.savefig(saveas, bbox_inches='tight')
         return fig, ax
-    def draw(self, alpha=0.4, legend=None, saveas=None):
+    def draw(self, alpha=0.6, legend=None, saveas=None):
         fig, ax = self.get_figax(alpha=alpha)
         for obj in self.objects:
             xg = np.arange(0, self.xmax, self.xunit/10)
@@ -468,7 +468,7 @@ class LinearSupply:
     # q = (1/b)*p - (a/b)
     def __init__(self, a=0, b=1,linewidth=1,color='black',label='_nolegend_',linestyle='solid'):
         assert a>=0
-        assert b>0
+        assert b>=0
         self.a = a
         self.b = b
         self.line = Line(b,a,linewidth=linewidth,color=color,label=label,linestyle=linestyle)
