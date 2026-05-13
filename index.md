@@ -9,7 +9,7 @@ nav_order: 1
 
 ![course logo](assets/images/logo.webp)
 
-## Spring 2026 Syllabus
+## Fall 2026 Syllabus
 {: .no_toc }
 
 ## Table of Contents
@@ -31,8 +31,8 @@ nav_order: 1
 
 ### Lectures
 
-- Section 01: MW 10:00am - 11:15am @ Bookstein 1123
-- Section 04: MW 11:30am - 12:45 pm @ Bookstein 1131
+- Section 02: MW 11:30am - 12:45pm @ Bookstein 1131
+- Section 05: M 7:00pm - 9:45pm @ Bookstein 1123
 
 ### Office Hours
 
@@ -40,7 +40,7 @@ nav_order: 1
 
 ### Course Organization
 
-This course meets for two 75 minute lectures a week, in person.
+This course meets for two lectures a week, in person.
 
 ### Grading
 
@@ -53,10 +53,8 @@ This course meets for two 75 minute lectures a week, in person.
 	- Participation credits after the first 3 are worth 1% extra credit each, up to a maximum of 5.
 	
 	You are encouraged to participate regardless of whether you need additional credits.
-	
-- **Problem Sets (0%)**
 
-    For each lecture, a problem set will be assigned. They will not be collected or graded; however, it is **strongly encouraged** that you complete these assignments as they are the best way to master the material.
+    If your final exam score is higher than your participation score, your participation score will be replaced by your final exam score.
 	
 - **Writing Assignments (25%)**
 
@@ -83,29 +81,29 @@ This course meets for two 75 minute lectures a week, in person.
 
 ## Tentative Schedule
 
-| Week | Dates         | Monday                               | Wednesday                                   |  
+| Week | Dates         | Lecture 1                            | Lecture 2                                   |  
 | ---: | :------------ | :----------------------------------- | :------------------------------------------ | 
-|    1 | 1/21          |                                      | Introduction                                |   
-|    2 | 1/26, 1/28    | Math Review                          | Single Variable Optimization                |
-|    3 | 2/2, 2/4      | A Model of Commodity Markets         | A Model of Labor Markets                    |
-|    4 | 2/9, 2/11     | A General Equilibrium Model          | Application: Productivity Shocks            |
-|    5 | 2/16, 2/18    | Review Session                       | **Midterm 1**                               |  
-|    6 | 2/23, 2/25    | *Midterm 1 Review*                   | Multivariate Optimization                   |
-|    7 | 3/2, 3/4      | Constrained Optimization             | Theory of Consumer Choice                   |
-|    8 | 3/9, 3/11     | Consumer Choice: Applications        | Labor/Leisure Choice                        | 
-|    9 | 3/16, 3/18    | **NO CLASS - SPRING BREAK**          | **NO CLASS - SPRING BREAK**                 |
-|   10 | 3/23, 3/25    | Consumption and Saving               | Theory of Production                        |
-|   11 | 3/30, 4/1     | Review                               | **Midterm 2**                               |
-|   12 | 4/6, 4/8      | *Midterm 2 Review*                   | *Discussion*                                |
-|   13 | 4/13, 4/15    | Monopolies                           | Price Discrimination                        |
-|   14 | 4/20, 4/22    | Game Theory                          | Game Theory                                 |
-|   15 | 4/27, 4/29    | Game Theory                          | Imperfect Competition                       |
-|   16 | 5/4, 5/6      | Risk and Insurance                   | Review                                      |
+|    1 | 8/24, 8/26    | Introduction                         | Math Review                                 |   
+|    2 | 8/31, 9/2     | Single Variable Optimization         | Model of Commodity Markets                  |
+|    3 | 9/7, 9/9      | **NO CLASS - LABOR DAY**             | **NO CLASS**                                |
+|    4 | 9/14, 9/16    | Model of Labor Markets               | General Equilibrium                         |
+|    5 | 9/21, 9/23    | Application: Productivity Shocks     | *Review Session*                            |
+|    6 | 9/28, 9/30    | **MIDTERM 1**                        | *Midterm 1 Review*                          |
+|    7 | 10/5, 10/7    | Multivariate Optimization            | Constrained Optimization                    |
+|    8 | 10/12, 10/14  | Theory of Consumer Choice            | Consumer Choice: Applications               |
+|    9 | 10/19, 10/21  | Labor/Leisure Choice                 | Theory of Production                        |
+|   10 | 10/26, 10/28  | Consumption/Savings Choice           | *Review Session*                            |
+|   11 | 11/2, 11/4    | **MIDTERM 2**                        | *Midterm 2 Review*                          |
+|   12 | 11/9, 11/11   | Monopolies                           | **NO CLASS - VETERANS DAY**                 |
+|   13 | 11/16, 11/18  | Price Discrimination                 | Game Theory I                               |
+|   14 | 11/23, 11/25  | Game Theory II                       | **NO CLASS - HAPPY THANKSGIVING**           |
+|   15 | 11/30, 12/2   | Game Theory III                      | Imperfect Competition I                     |
+|   16 | 12/7, 12/9    | Imperfect Competition II             | *Review Session*                            |    
 
 Final Exam: 
 
-- Section 01 (MW 10:00am section): Monday 5/11/2026, 10:15AM - 12:15PM @ Bookstein 1123
-- Section 04 (MW 11:30am section): Wednesday 5/13/2026, 10:15AM - 12:15PM @ Bookstein 1131
+- Section 02 (MW 11:30am section): TBD
+- Section 05 (M 7:00pm section): TBD
 
 ---
 
