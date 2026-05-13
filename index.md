@@ -36,7 +36,7 @@ nav_order: 1
 
 ### Office Hours
 
-- MW 12:50pm - 1:50pm @ Bookstein 4252
+- MW 10:25am - 11:25am @ Bookstein 4252
 
 ### Course Organization
 
