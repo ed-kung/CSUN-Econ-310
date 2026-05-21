@@ -56,13 +56,13 @@ This course meets for two lectures a week, in person.
 	- The first 3 participation credits during the semester are worth 5% of the final grade each.
 	- Participation credits after the first 3 are worth 1% extra credit each, up to a maximum of 5.
 	
-	You are encouraged to participate regardless of whether you need additional credits.
+    You are encouraged to participate regardless of whether you need additional credits.
 
     If your final exam score is higher than your participation score, your participation score will be replaced by your final exam score.
 	
 - **Writing Assignments (20%)**
 
-	There will occassionally be a writing assignment, usually consisting of a short essay of about 500-800 words. These assignments must be completed on Packback, an online platform for AI-assisted writing assignments.
+    There will occassionally be a writing assignment, usually consisting of a short essay of about 500-800 words. These assignments must be completed on Packback, an online platform for AI-assisted writing assignments.
     
 - **Midterm Exams (35%)**
 
@@ -78,7 +78,7 @@ This course meets for two lectures a week, in person.
     | ------ | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ---- |
     | 100-93 | 92-90 | 89-87 | 86-83 | 82-80 | 79-77 | 76-70 | 69-60 | 59-0 |
 
-	Your scores will be rounded up to the nearest integer. Depending on the performance of the class, a curve may or may not be applied before assigning letter grades.
+    Your scores will be rounded up to the nearest integer. Depending on the performance of the class, a curve may or may not be applied before assigning letter grades.
 
 
 ---
