@@ -57,6 +57,8 @@ This course meets for two lectures a week, in person.
 	- Participation credits after the first 3 are worth 1% extra credit each, up to a maximum of 5.
 	
     You are encouraged to participate regardless of whether you need additional credits.
+	
+	You may also earn participation credit by submitting a note card at the end of class with your name on it, and a question or reflection about that day's class. Participation via note card is not eligible for extra credit.
 
     If your final exam score is higher than your participation score, your participation score will be replaced by your final exam score.
 	
