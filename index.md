@@ -44,10 +44,6 @@ This course meets for two lectures a week, in person.
 
 ### Grading
 
-- **Attendance (5%)**
-    
-	Everyone starts with full credit. Attendance will only be checked if the classroom looks half empty. Those not present when attendance is checked will lose 1 attendance point (out of 5 total).
-
 - **Participation (15%)**
 
     You are expected to participate in class. You earn participation credit for answering questions, asking questions about the lecture, or offering thoughts and opinions when asked.
@@ -62,7 +58,7 @@ This course meets for two lectures a week, in person.
 
     If your final exam score is higher than your participation score, your participation score will be replaced by your final exam score.
 	
-- **Writing Assignments (20%)**
+- **Writing Assignments (25%)**
 
     There will occassionally be a writing assignment, usually consisting of a short essay of about 500-800 words. These assignments must be completed on Packback, an online platform for AI-assisted writing assignments.
     
