@@ -44,31 +44,25 @@ This course meets for two lectures a week, in person.
 
 ### Grading
 
-- **Participation (15%)**
+- **Attendance (10%)**
+    
+	Everyone starts with full credit. Attendance will be checked randomly or if the classroom looks half empty. Those not present when attendance is checked will lose 1 attendance point (out of 10 total).
 
-    You are expected to participate in class. You earn participation credit for answering questions, asking questions about the lecture, or offering thoughts and opinions when asked.
-	
-	- Each student can earn a maximum of 1 participation credit per lecture.
-	- The first 3 participation credits during the semester are worth 5% of the final grade each.
-	- Participation credits after the first 3 are worth 1% extra credit each, up to a maximum of 5.
-	
-    You are encouraged to participate regardless of whether you need additional credits.
-	
-	You may also earn participation credit by submitting a note card at the end of class with your name on it, and a question or reflection about that day's class. Participation via note card is not eligible for extra credit.
-
-    If your final exam score is higher than your participation score, your participation score will be replaced by your final exam score.
-	
 - **Writing Assignments (25%)**
 
     There will occassionally be a writing assignment, usually consisting of a short essay of about 500-800 words. These assignments must be completed on Packback, an online platform for AI-assisted writing assignments.
     
-- **Midterm Exams (35%)**
+- **Midterm Exams (40%)**
 
-    There will be two midterm exams, each worth 17.5% of your grade. These will be multiple choice, in-person exams.
+    There will be two midterm exams, each worth 20% of your grade. These will be multiple choice, in-person exams.
 	
 - **Final Exam (25%)**
 
     The final exam will be worth 25% of your grade. It will be a multiple choice, in-person exam. 
+	
+- **Participation Extra Credit (5%)**
+
+    You can earn extra credit (up to 5 points) for contributing interesting or insightful questions or comments during class. Maximum of 1 point per lecture.
 
 - **Grading Scale**
 
