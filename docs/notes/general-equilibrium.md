@@ -81,7 +81,7 @@ $$ q_d = q_s = q ~ ~ ~ ~ (\text{Eq.4}) $$
 
 $$ L_d = L_s = L ~ ~ ~ ~ (\text{Eq.5}) $$
 
-$$ q = f(L) ~ ~ ~ ~ (\text{Eq.6}) $$
+$$ q_s = f(L_d) ~ ~ ~ ~ (\text{Eq.6}) $$
 
 - Equation (4) is what we call the **commodity market clearing condition**. It says that the quantity of commodity demanded must equal the quantity of commodity supplied.
 
@@ -103,17 +103,17 @@ Since there are 6 equations in 6 unknowns, the system can be solved to find the 
 {: .blue-callout-title }
 > Example: General equilibrium 
 >
-> A representative, price-taking consumer decides how many units, $$q$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q$$ units at price $$p$$ is:
+> A representative, price-taking consumer decides how many units, $$q_d$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q_d$$ units at price $$p$$ is:
 >
-> $$ u(q) = 16 \ln q - pq $$
+> $$ u(q_d) = 16 \ln q_d - pq_d $$
 >
-> A representative, price-taking worker decides how many units, $$L$$, of labor to supply at unit wage $$w$$. The worker's utility function over working $$L$$ labor-units at wage $$w$$ is:
+> A representative, price-taking worker decides how many units, $$L_s$$, of labor to supply at unit wage $$w$$. The worker's utility function over working $$L_s$$ labor-units at wage $$w$$ is:
 >
-> $$ u(L) = wL - \frac{1}{2} L^2 $$
+> $$ u(L_s) = wL_s - \frac{1}{2} L_s^2 $$
 >
-> A representative, price-taking firm uses labor to produce and sell a commodity at unit price $$p$$. The firm hires labor at a constant wage rate $$w$$. If the firm employs $$L$$ units of labor, it can produce $$f(L)$$ units of commodity output, where:
+> A representative, price-taking firm uses labor to produce and sell a commodity at unit price $$p$$. The firm hires labor at a constant wage rate $$w$$. If the firm employs $$L_d$$ units of labor, it can produce $$f(L_d)$$ units of commodity output, where:
 >
-> $$ f(L) = 6L^{1/2} $$
+> $$ f(L_d) = 6L_d^{1/2} $$
 >
 > 1. Calculate the equilibrium quantity of labor, $$L$$.
 > 2. Calculate the equilibrium quantity of commodity, $$q$$.
@@ -129,77 +129,97 @@ Since there are 6 equations in 6 unknowns, the system can be solved to find the 
 >
 > The consumer's optimization problem is:
 >
-> $$ \max_{q} ~ 16 \ln q - pq $$
+> $$ \max_{q_d} ~ 16 \ln q_d - pq_d $$
 >
 > And their first order condition is:
 >
-> $$ \frac{16}{q} - p = 0 $$
+> $$ \frac{16}{q_d} - p = 0 $$
 >
 > Which gives an inverse demand curve:
 >
-> $$ p = \frac{16}{q} ~ ~ ~ ~ \text{(Eq.1)}$$
+> $$ p = \frac{16}{q_d} ~ ~ ~ ~ \text{(Eq.1)}$$
 >
 > Step 2. Find the worker's inverse labor supply curve and label it Eq.2.
 >
 > The worker's optimization problem is:
 >
-> $$ \max_{L} ~ wL - \frac{1}{2}L^2 $$
+> $$ \max_{L_s} ~ wL_s - \frac{1}{2}L_s^2 $$
 >
 > And the first order condition is:
 >
-> $$ w - L = 0$$
+> $$ w - L_s = 0$$
 >
 > Which gives an inverse labor supply curve:
 >
-> $$ w = L ~ ~ ~ ~ \text{(Eq.2)}$$
+> $$ w = L_s ~ ~ ~ ~ \text{(Eq.2)}$$
 >
 > Step 3. Find the firm's inverse labor demand curve and label it Eq.3.
 >
 > The firm's optimization problem is:
 >
-> $$ \max_{L} ~ 6pL^{1/2} - wL $$
+> $$ \max_{L_d} ~ 6pL_d^{1/2} - wL_d $$
 >
 > And the first order condition is:
 >
-> $$ 3pL^{-1/2} - w = 0 $$
+> $$ 3pL_d^{-1/2} - w = 0 $$
 >
 > Which gives an inverse labor demand curve:
 >
-> $$ w = 3pL^{-1/2} ~ ~ ~ ~ \text{(Eq.3)} $$
+> $$ w = 3pL_d^{-1/2} ~ ~ ~ ~ \text{(Eq.3)} $$
 >
-> Step 4. Use Eq.1 and Eq.2 to plug in for $$w$$ and $$p$$ in Eq.3. You'll get an equation in terms of $$L$$ and $$q$$.
+> Step 4. Write down the commodity market clearing condition, labor market clearing condition, and feasibility condition.
 >
-> $$\begin{aligned}
-w &= 3pL^{-1/2} & \\
-L &= 3\left(\frac{16}{q}\right)L^{-1/2} & \\
-L &= \frac{48}{q} L^{-1/2} & \\
-L^{3/2} &= \frac{48}{q} ~ ~ ~ ~ & \text{(Multiply both sides by }L^{1/2}\text{)} \\
-qL^{3/2} &= 48 ~ ~ ~ ~ & \text{(Multiply both sides by q)}
-\end{aligned}$$
+> $$\begin{align}
+L_d = L_s = L ~ ~ ~ ~ & \text{(Eq.4)}  \\
+q_d = q_s = q ~ ~ ~ ~ & \text{(Eq.5)}  \\
+q_s = 6L_d^{1/2} ~ ~ ~ ~ & \text{(Eq.6)} 
+\end{align}$$
 >
-> Step 5. Use $$q = f(L) = 6L^{1/2}$$ to plug in for $$q$$ in the above equation. Then solve for $$L$$.
+> Step 5. Replace $$q_d$$ and $$q_s$$ with simply $$q$$, and $$L_d$$, $$L_s$$ with $$L$$ in equations 1, 2, 3, and 6:
 >
-> $$\begin{aligned}
-qL^{3/2} &= 48 & \\
-6L^{1/2} L^{3/2} &= 48 & \\
-L^{2} &= 8 & \\
-L &= \sqrt{8}  & \\
-&= 2.8284 &
-\end{aligned}$$
+> $$\begin{align}
+p = \frac{16}{q} ~ ~ ~ ~ & \text{(Eq.1)} \\
+w = L ~ ~ ~ ~ & \text{(Eq.2)} \\
+w = 3pL^{-1/2} ~ ~ ~ ~ & \text{(Eq.3)} \\
+q = 6L^{1/2} ~ ~ ~ ~ & \text{(Eq.6)} 
+\end{align}$$
+> 
+> Step 6. Combine equations 2 and 3:
 >
-> Step 6. Plug $$L$$ into the $$f(L)$$ to get $$q$$.
+> $$ L = 3pL^{-1/2} $$
 >
-> $$ q = f(L) = 6L^{1/2} = 10.0908 $$
+> Step 7. Use equation 1 to substitute for $$p$$:
 >
-> Step 7. Plug $$L$$ into the inverse labor supply curve to get $$w$$.
+> $$\begin{align}
+L &= 3 \left( \frac{16}{q} \right) L^{-1/2} \\
+L  &= \left(\frac{48}{q} \right) L^{-1/2}
+\end{align}$$
+>
+> Step 8. Use equation 6 to sbustitute for $$q$$ and solve for $$L$$:
+>
+> $$\begin{align}
+L &= \left( \frac{48}{6L^{1/2}} \right) L^{-1/2} \\
+L &= \left( \frac{8}{L^{1/2}} \right) L^{-1/2} \\
+L &= \frac{8}{L^{1/2} L^{1/2}} \\
+L &= \frac{8}{L} \\
+L^2 &= 8 \\
+L &= \sqrt{8} \\
+L &= 2.8284
+\end{align}$$
+>
+> Step 9. Plug $$L$$ into equation 6 to get $$q$$.
+>
+> $$ q = 6L^{1/2} = 10.0908 $$
+>
+> Step 10. Plug $$L$$ into equation 2 to get $$w$$.
 >
 > $$ w = L = 2.8284 $$
 >
-> Step 8. Plug $$q$$ into the inverse commodity demand curve to get $$p$$.
+> Step 11. Plug $$q$$ into equation 1 to get $$p$$.
 >
 > $$ p = \frac{16}{q} = 1.58561$$
 >
-> Step 9. Plug $$L, q, w, p$$ into the consumer utility, worker utility, and firm profit functiosn to calculate the utilities and profits.
+> Step 12. Plug $$L, q, w, p$$ into the consumer utility, worker utility, and firm profit functiosn to calculate the utilities and profits.
 >
 > $$\begin{aligned}
 U_c &= 20.9859 \\

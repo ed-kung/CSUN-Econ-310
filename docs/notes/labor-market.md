@@ -57,24 +57,24 @@ Equation (1) shows that at the worker's optimal choice, the wage rate equals the
 {: .blue-callout-title }
 > Example: Deriving a labor supply function
 >
-> A representative, price-taking worker decides how many units, $$L$$, of labor to supply (e.g. how many hours to work), at a unit wage $$w$$. The worker's utility function over working $$L$$ labor-units at wage $$w$$ is:
+> A representative, price-taking worker decides how many units, $$L_s$$, of labor to supply (e.g. how many hours to work), at a unit wage $$w$$. The worker's utility function over working $$L_s$$ labor-units at wage $$w$$ is:
 >
-> $$ u(L) = wL - \frac{4}{3} L^{3/2} $$
+> $$ u(L_s) = wL_s - \frac{4}{3} L_s^{3/2} $$
 >
-> 1. Write down the worker's inverse labor supply curve. ($$w$$ in terms of $$L$$)
+> 1. Write down the worker's inverse labor supply curve. ($$w$$ in terms of $$L_s$$)
 >
 > *Answer.*
 >
 > Step 1. Write down the worker's optimization problem.
 >
-> $$ \max_{L} ~ wL - \frac{4}{3}L^{3/2} $$
+> $$ \max_{L_s} ~ wL_s - \frac{4}{3}L_s^{3/2} $$
 >
-> Step 2. Write down the worker's first order condition and rearrange it to get $$w$$ in terms of $$L$$.
+> Step 2. Write down the worker's first order condition and rearrange it to get $$w$$ in terms of $$L_s$$.
 >
 > $$\begin{aligned}
-w - \left(\tfrac{3}{2}\right)\left(\tfrac{4}{3}\right) L^{1/2} &= 0  \\
-w - 2L^{1/2} &= 0 \\
-w &= 2L^{1/2} 
+w - \left(\tfrac{3}{2}\right)\left(\tfrac{4}{3}\right) L_s^{1/2} &= 0  \\
+w - 2L_s^{1/2} &= 0 \\
+w &= 2L_s^{1/2} 
 \end{aligned}$$
 
 
@@ -84,7 +84,7 @@ w &= 2L^{1/2}
 
 A representative, price-taking firm uses labor to produce and sell a commodity at unit price $$p$$. The firm hires labor at a constant wage rate $$w$$. If the firm employs $$L_d$$ units of labor, it can produce $$f(L_d)$$ units of commodity output.
 
-We call $$f(L)$$ the firm's **production function**. It shows how many units of output can be produced from $$L$$ units of labor input.
+We call $$f(L_d)$$ the firm's **production function**. It shows how many units of output can be produced from $$L_d$$ units of labor input.
 
 ### First order condition
 
@@ -118,9 +118,9 @@ Equation (2) also shows that at the firm's optimal choice, the wage rate equals 
 {: .green-callout-title }
 > Example: Deriving a labor demand function
 >
-> A representative, price-taking firm uses labor to produce and sell a commodity at unit price $$p=3$$. The firm hires labor at a constant wage rate $$w$$. If the firm employs $$L$$ units of labor, it can produce $$f(L)$$ units of commodity output, where:
+> A representative, price-taking firm uses labor to produce and sell a commodity at unit price $$p=3$$. The firm hires labor at a constant wage rate $$w$$. If the firm employs $$L_d$$ units of labor, it can produce $$f(L_d)$$ units of commodity output, where:
 >
-> $$ f(L) = 16L^{1/2} $$
+> $$ f(L_d) = 16L_d^{1/2} $$
 >
 > 1. Write down the firm's inverse labor demand curve. 
 >
@@ -129,80 +129,82 @@ Equation (2) also shows that at the firm's optimal choice, the wage rate equals 
 > Step 1. Write down the firm's profit function.
 >
 > $$\begin{aligned}
-\Pi(q) &= \text{Revenue} - \text{Cost} \\
-&= 3\times16L^{1/2} - wL \\
-&= 48 L^{1/2} - wL 
+\Pi(L_d) &= \text{Revenue} - \text{Cost} \\
+&= 3\times16L_d^{1/2} - wL_d \\
+&= 48 L_d^{1/2} - wL_d 
 \end{aligned}$$
 >
 > Step 2. Write down the firm's optimization problem.
 >
-> $$ \max_{L} ~ 48L^{1/2} - wL $$
+> $$ \max_{L_d} ~ 48L_d^{1/2} - wL_d $$
 >
-> Step 3. Write down the firm's first order condition and rearrange it to write $$w$$ in terms of $$L$$.
+> Step 3. Write down the firm's first order condition and rearrange it to write $$w$$ in terms of $$L_d$$.
 >
 > $$\begin{aligned}
-24L^{-1/2} - w &= 0 \\
-w &= 24L^{-1/2}
+24L_d^{-1/2} - w &= 0 \\
+w &= 24L_d^{-1/2}
 \end{aligned}$$
 
 
 ### Cost minimization
 
-What is the relationship between a firm's production function, $$f(L)$$, and its cost function, $$c(q)$$?  Deriving the cost function from the production function is known as the **cost minimization problem**:
+What is the relationship between a firm's production function, $$f(L_d)$$, and its cost function, $$c(q_s)$$?  Deriving the cost function from the production function is known as the **cost minimization problem**:
 
-$$ c(q) = \min_{L} ~ wL ~ \text{ where } ~ q = f(L) $$
+$$ c(q_s) = \min_{L_d} ~ wL_d ~ \text{ where } ~ q_s = f(L_d) $$
 
-In other words, $$c(q)$$ is the minimum labor cost ($$wL$$) necessary to produce $$q$$ units of output.
+In other words, $$c(q_s)$$ is the minimum labor cost ($$wL_d$$) necessary to produce $$q_s$$ units of output.
 
-Since there's a 1:1 mapping between $$q$$ and $$L$$, the cost function is equal to:
+Since there's a 1:1 mapping between $$q_s$$ and $$L_d$$, the cost function is equal to:
 
-$$c(q) = w f^{-1}(q) $$
+$$c(q_s) = w f^{-1}(q_s) $$
 
 {: .yellow-callout-title }
 > Example: Deriving a cost function
 >
 > Derive the cost function for the firm in the previous example, with a production function of:
 >
-> $$ f(L) = 16L^{1/2} $$
+> $$ f(L_d) = 16L_d^{1/2} $$
 >
 > *Answer.*
 >
-> Step 1. Use the production function to find out how much labor would be needed to produce $$q$$ units of output.
+> Step 1. Use the production function to find out how much labor would be needed to produce $$q_s$$ units of output.
 >
 > $$\begin{aligned}
-q &= 16L^{1/2}  ~ ~ ~ ~ & \text{(Write down the relationship between L and q)} \\
-\frac{q}{16} &= L^{1/2} ~ ~ ~ ~ & \text{(Divide both sides by 16)}\\
-L &= \left(\frac{q}{16}\right)^2 ~ ~ ~ ~ & \text{(Square both sides)}
+q_s &= 16L_d^{1/2}  ~ ~ ~ ~ & \text{(Write down the relationship between L_d and q_s)} \\
+\frac{q_s}{16} &= L_d^{1/2} ~ ~ ~ ~ & \text{(Divide both sides by 16)}\\
+L_d &= \left(\frac{q_s}{16}\right)^2 ~ ~ ~ ~ & \text{(Square both sides)}
 \end{aligned}$$
 >
-> Step 2. The total cost is simply $$wL$$, so the firm's cost function is:
+> Step 2. The total cost is simply $$wL_d$$, so the firm's cost function is:
 >
-> $$c(q) = w\left(\frac{q}{16}\right)^2 $$
+> $$c(q_s) = w\left(\frac{q_s}{16}\right)^2 $$
 
 ## Market equilibrium 
 
-In equilibrium, $$L_d = L_s = L$$. By combining equations (1) and (2) and the equilibrium condition, we get:
+In equilibrium, the quantity of labor supplied must equal the quantity of labor demanded. That is, $$L_s = L_d$$. This equation is called the "labor market clearing condition".
 
-$$ p f^\prime(L_d) = w = d^\prime(L_s) $$
+We now have the following three equations:
 
-or:
+$$\begin{align}
+w = d^\prime(L_s) ~ ~ ~ ~ ~ ~ & \text{Worker's First Order Condition} \\
+w = pf^\prime(L_d) ~ ~ ~ ~ ~ ~ & \text{Firm's First Order Condition} \\
+L_d = L_s ~ ~ ~ ~ ~ ~& \text{Labor Market Clearing Condition} 
+\end{align}$$
 
-$$ p f^\prime(L) = d^\prime(L) $$
+The first equation is the labor supply equation and it comes from the worker's optimizing behavior. The second equation is the labor demand equation and it comes from the firm's optimizing behavior. The third equation is the market clearing condition.
 
-This equation shows us that in the equilibrium of a labor market, the firm's marginal revenue product of labor equals the worker's marginal disutility of labor.
-
-The equation also lets us solve for the equilibrium mathematically.  $$pf^\prime(L) = d^\prime(L)$$ gives us a single equation with a single unknown variable, which we can solve for $$L$$. To then solve for $$w$$, we simply plug that value of $$L$$ into either the worker's labor supply curve or the firm's labor demand curve.
+Together, these equations give us three equations in three unknowns ($$w$$, $$L_d$$, $$L_s$$). We can solve the system of equations to find the equilibrium wage rate and quantity of labor.
 
 {: .blue-callout-title }
 > Example: Labor market equilibrium
 >
-> A representative, price-taking worker decides how many units, $$L$$, of labor to supply (e.g. how many hours to work), at a unit wage $$w$$. The worker's utility function over working $$L$$ labor-units at wage $$w$$ is:
+> A representative, price-taking worker decides how many units, $$L_s$$, of labor to supply (e.g. how many hours to work), at a unit wage $$w$$. The worker's utility function over working $$L_s$$ labor-units at wage $$w$$ is:
 >
-> $$ u(L) = wL - \frac{4}{3} L^{3/2} $$
+> $$ u(L_s) = wL_s - \frac{4}{3} L_s^{3/2} $$
 >
-> A representative, price-taking firm uses labor to produce and sell a commodity at unit price $$p=3$$. The firm hires labor at a constant wage rate $$w$$. If the firm employs $$L$$ units of labor, it can produce $$f(L)$$ units of commodity output, where:
+> A representative, price-taking firm uses labor to produce and sell a commodity at unit price $$p=3$$. The firm hires labor at a constant wage rate $$w$$. If the firm employs $$L_d$$ units of labor, it can produce $$f(L_d)$$ units of commodity output, where:
 >
-> $$ f(L) = 16L^{1/2} $$
+> $$ f(L_d) = 16L_d^{1/2} $$
 >
 > 1. Write down the inverse labor supply curve.
 > 2. Write down the inverse labor demand curve.
@@ -217,8 +219,8 @@ The equation also lets us solve for the equilibrium mathematically.  $$pf^\prime
 > Since this problem's setup is the same as the above two examples, we already did this part.
 >
 > $$\begin{aligned}
-w &= 2L^{1/2} ~ ~ ~ ~ & \text{(Labor supply)} \\
-w &= 24L^{-1/2} ~ ~ ~ ~ & \text{(Labor demand)}
+w &= 2L_s^{1/2} ~ ~ ~ ~ & \text{(Labor supply)} \\
+w &= 24L_d^{-1/2} ~ ~ ~ ~ & \text{(Labor demand)}
 \end{aligned}$$
 >
 > **Calculate the equilibrium wage and quantity of labor.**
