@@ -146,6 +146,20 @@ $$ w = \frac{1}{2} pA L_d^{-1/2} ~ ~ ~ ~ \text{(Eq.3)} $$
 
 #### Solution
 
+First, let's write down all the necessary equations:
+
+$$\begin{align}
+p = \frac{\alpha}{q_d} ~ ~ ~ ~ & \text{(Eq.1)} \\
+w = \delta L_s ~ ~ ~ ~ & \text{(Eq.2)} \\
+w = \frac{1}{2}pAL_d^{-1/2} ~ ~ ~ ~ & \text{(Eq.3)} \\
+L_s = L_d = L ~ ~ ~ ~ & \text{(Eq.4)} \\
+q_s = q_d = q ~ ~ ~ ~ & \text{(Eq.5)} \\
+q_s = AL_d^{1/2} ~ ~ ~ ~ & \text{(Eq.6)} 
+\end{align}$$
+
+
+#### Solution
+
 To find the solution, we follow the following steps:
 
 Step 1. Use Eq.1 and Eq.2 to plug in for $$p$$ and $$w$$ in Eq.3, and rearrange to put $$q$$ and $$L$$ on the same side:
