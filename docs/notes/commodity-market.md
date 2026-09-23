@@ -53,9 +53,9 @@ Equation (1) shows that at the consumer's optimal choice, price equals marginal 
 {: .blue-callout-title }
 > Example: Deriving a demand curve
 > 
-> A representative, price-taking consumer decides how many units, $$q$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q$$ units at price $$p$$ is:
+> A representative, price-taking consumer decides how many units, $$q_d$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q_d$$ units at price $$p$$ is:
 >
-> $$ u(q) = 9q - \frac{3}{2} q^2 - pq $$
+> $$ u(q_d) = 9q_d - \frac{3}{2} q_d^2 - pq_d $$
 >
 > 1. Write down the consumer's demand curve.
 >
@@ -63,21 +63,21 @@ Equation (1) shows that at the consumer's optimal choice, price equals marginal 
 >
 > Step 1. Write down the consumer's optimization problem.
 >
-> $$ \max_{q} ~ 9q - \frac{3}{2}q^2 - pq $$
+> $$ \max_{q_d} ~ 9q_d - \frac{3}{2}q_d^2 - pq_d $$
 >
 > Step 2. Write down the consumer's first order condition.
 >
-> $$ 9 - 3q - p = 0 $$
+> $$ 9 - 3q_d - p = 0 $$
 >
 > Step 3. Rearrange the first order condition so that we write the quantity demanded in terms of $$p$$.
 >
 > $$\begin{aligned}
-9 - 3q - p &= 0 & \\
-3q &= 9 - p ~ ~ ~ ~ & \text{(Add 3q to both sides)} \\
-q &= 3 - \frac{1}{3}p ~ ~ ~ ~ & \text{(Divide both sides by 3)}
+9 - 3q_d - p &= 0 & \\
+3q_d &= 9 - p ~ ~ ~ ~ & \text{(Add 3q_d to both sides)} \\
+q_d &= \frac{9-p}{3} ~ ~ ~ ~ & \text{(Divide both sides by 3)}
 \end{aligned}$$
 >
-> So $$q_d = 3 - \frac{1}{3}p$$ is the consumer's demand curve.
+> So $$q_d = \frac{9-p}{3}$$ is the consumer's demand curve.
 
 ## Firms
 
@@ -112,9 +112,9 @@ Equation (2) also shows that at the producer's optimal choice, price equals marg
 {: .green-callout-title }
 > Example: Deriving a supply curve
 > 
-> A representative, price-taking firm decides how many units, $$q$$, of a commodity to produce and sell at unit price $$p$$. The firm's total cost function for producing $$q$$ units is:
+> A representative, price-taking firm decides how many units, $$q_s$$, of a commodity to produce and sell at unit price $$p$$. The firm's total cost function for producing $$q_s$$ units is:
 >
-> $$ c(q) = q + q^2 $$
+> $$ c(q_s) = q_s + q_s^2 $$
 >
 > 1. Write down the firm's supply curve.
 >
@@ -123,53 +123,58 @@ Equation (2) also shows that at the producer's optimal choice, price equals marg
 > Step 1. Write down the firm's profit function.
 >
 > $$\begin{aligned}
-\Pi(q) &= \text{Revenue} - \text{Cost} \\
-&= pq - c(q) \\
-&= pq - q - q^2 
+\Pi(q_s) &= \text{Revenue} - \text{Cost} \\
+&= pq_s - c(q_s) \\
+&= pq_s - (q_s + q_s^2) \\
+&= pq_s - q_s - q_s^2 
 \end{aligned}$$
 >
 > Step 2. Write down the firm's optimization problem.
 >
-> $$ \max_{q} ~ pq - q - q^2 $$
+> $$ \max_{q_s} ~ pq_s - q_s - q_s^2 $$
 >
 > Step 3. Write down the firm's first order condition.
 >
-> $$ p - 1 - 2q = 0 $$
+> $$ p - 1 - 2q_s = 0 $$
 >
-> Step 4. Rearrange the first order condition to write $$q$$ in terms of $$p$$.
+> Step 4. Rearrange the first order condition to write $$q_s$$ in terms of $$p$$.
 >
 > $$\begin{aligned}
-p - 1 - 2q &= 0 \\
-2q &= p - 1 \\
-q &= \frac{1}{2}p - \frac{1}{2}
+p - 1 - 2q_s &= 0 \\
+2q_s &= p - 1 \\
+q_s &= \frac{p-1}{2}
 \end{aligned}$$
 >
-> So $$q_s = \frac{1}{2}p - \frac{1}{2} $$ is the producer's supply curve.
+> So $$q_s = \frac{p-1}{2} $$ is the producer's supply curve.
 
 ## Market equilibrium 
 
-In equilibrium, $$q_d = q_s = q$$. By combining equations (1) and (2) and the equilibrium condition, we get:
+In equilibrium, quantity supplied has to equal quantity demanded. That is, $$q_s$$ must equal $$q_d$$.
 
-$$ v^\prime(q_d) = p = c^\prime(q_s) $$
+This equation, $$q_d = q_s$$, is called the "market clearing condition". It ensures that there is no excess supply or demand in the market which would put downward or upward pressure on prices.
 
-or:
+We now have the following three equations:
 
-$$ v^\prime(q) = c^\prime(q) $$
+$$\begin{align}
+p = v^\prime(q_d) ~ ~ ~ ~ ~ ~ & \text{Consumer's First Order Condition} \\
+p = c^\prime(q_s) ~ ~ ~ ~ ~ ~ & \text{Firm's First Order Condition} \\
+q_d = q_s ~ ~ ~ ~ ~ ~& \text{Market Clearing Condition} 
+\end{align}$$
 
-This equation shows us that in the equilibrium, marginal benefit of the consumers equals marginal cost of the firms.
+The first equation is the demand equation, and it comes out of the consumer's optimizing behavior. The second equation is the supply equation, and it comes out of the firm's optimizing behavior. The third equation is the market clearing condition.
 
-The equation also lets us solve for the equilibrium mathematically.  $$v^\prime(q) = c^\prime(q)$$ gives us a single equation with a single unknown variable, which we can solve for $$q$$. To then solve for $$p$$, we simply plug that value of $$q$$ into either the consumer's demand curve or the firm's supply curve.
+Together, these equations give us three equations in three unknowns ($$p$$, $$q_d$$, $$q_s$$). We can solve the system of equations to find the equilibrium price and quantity in the market.
 
 {: .yellow-callout-title }
 > Example: Commodity market equilibrium
 > 
-> A representative, price-taking consumer decides how many units, $$q$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q$$ units at price $$p$$ is:
+> A representative, price-taking consumer decides how many units, $$q_d$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q_d$$ units at price $$p$$ is:
 >
-> $$ u(q) = 9q - \frac{3}{2} q^2 - pq $$
+> $$ u(q_d) = 9q_d - \frac{3}{2} q_d^2 - pq_d $$
 > 
-> A representative, price-taking firm decides how many units, $$q$$, of a commodity to produce and sell at unit price $$p$$. The firm's total cost function for producing $$q$$ units is:
+> A representative, price-taking firm decides how many units, $$q_s$$, of a commodity to produce and sell at unit price $$p$$. The firm's total cost function for producing $$q_s$$ units is:
 >
-> $$ c(q) = q + q^2 $$
+> $$ c(q) = q_s + q_s^2 $$
 >
 > 1. Write down the consumer's demand curve.
 > 2. Write down the producer's supply curve.
@@ -189,7 +194,7 @@ The equation also lets us solve for the equilibrium mathematically.  $$v^\prime(
 >
 > We did this too.
 >
-> $$q_s = \frac{1}{2}p - \frac{1}{2}$$
+> $$q_s = \frac{1}{2} (p - 1) $$
 >
 > **Calculate the equilibrium price and quantity.**
 >
@@ -197,19 +202,19 @@ The equation also lets us solve for the equilibrium mathematically.  $$v^\prime(
 >
 > $$\begin{aligned}
 q_s &= q_d & \\
-\tfrac{1}{2}p - \tfrac{1}{2} &= 3 - \tfrac{1}{3}p & \\
-\tfrac{1}{2}p + \tfrac{1}{3}p &= 3 + \tfrac{1}{2} & \\
-\left( \tfrac{1}{2} + \tfrac{1}{3} \right) p &= 3.5 & \\
-\tfrac{5}{6}p &= 3.5 & \\
-p &= \tfrac{6}{5} \times 3.5 & \\
-p &= 4.2 &
+\frac{p-1}{2} &= \frac{9-p}{3} \\
+3(p-1) &= 2(9-p) \\
+3p - 3 &= 18 - 2p \\
+5p &= 21 \\
+p &= 21/5 \\
+p &= 4.2
 \end{aligned}$$
 >
 > Then, plug $$p=4.2$$ into either the supply or demand curve to get $$q$$.
 >
 > $$\begin{aligned}
-q_d &= 3 - \tfrac{1}{3}p \\
-    &= 3 - \tfrac{1}{3}\times 4.2 \\
+q_d &= \frac{9-p}{3} \\
+    &= \frac{9-4.2}{3} \\
 	&= 1.6
 \end{aligned}$$
 >
@@ -237,18 +242,20 @@ U &= 9q - \tfrac{3}{2}q^2 - pq \\
 >
 > Note that if you had drawn the supply and demand curves and calculated the consumer and producer surpluses using triangles, you'd find that the consumer surplus equals the consumer utility, and that the producer surplus equals the firm profit. In most circumstances, they reflect the same concepts.
 
+
+
 {: .blue-callout-title }
 > Example: Another commodity market equilibrium
 > 
-> A representative, price-taking consumer decides how many units, $$q$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q$$ units at price $$p$$ is:
+> A representative, price-taking consumer decides how many units, $$q_d$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q_d$$ units at price $$p$$ is:
 >
-> $$ u(q) = 9 \ln q - pq $$
+> $$ u(q_d) = 9 \ln q_d - pq_d $$
 > 
-> A representative, price-taking firm decides how many units, $$q$$, of a commodity to produce and sell at unit price $$p$$. The firm's total cost function for producing $$q$$ units is:
+> A representative, price-taking firm decides how many units, $$q_s$$, of a commodity to produce and sell at unit price $$p$$. The firm's total cost function for producing $$q_s$$ units is:
 >
-> $$ c(q) = \frac{1}{2} q^2 $$
+> $$ c(q) = \frac{1}{2} q_s^2 $$
 >
-> 1. Write down the consumer's inverse demand curve. (The inverse demand curve simply writes $$p$$ in terms of $$q$$.)
+> 1. Write down the consumer's inverse demand curve. (The inverse demand curve simply writes $$p$$ in terms of $$q_d$$.)
 > 2. Write down the producer's inverse supply curve.
 > 3. Calculate the equilibrium price and quantity.
 > 4. Calcualte the consumer utility in equilibrium.
@@ -260,11 +267,11 @@ U &= 9q - \tfrac{3}{2}q^2 - pq \\
 >
 > Step 1. Write down the consumer's optimization problem.
 >
-> $$ \max_{q} ~ 9 \ln q - pq $$
+> $$ \max_{q_d} ~ 9 \ln q_d - pq_d $$
 >
 > Step 2. Write down the consumer's first order condition.
 >
-> $$ \frac{9}{q} - p = 0 $$
+> $$ \frac{9}{q_d} - p = 0 $$
 >
 > Step 3. Rearrange the first order condition to write $$p$$ as a function of quantity demanded.
 >
@@ -278,17 +285,17 @@ p &= \frac{9}{q_d}
 > Step 1. Write down the firm's profit function.
 >
 > $$\begin{aligned}
-\Pi(q) &= pq - c(q) \\
-&= pq - \frac{1}{2}q^2 
+\Pi(q_s) &= pq_s - c(q_s) \\
+&= pq_s - \frac{1}{2}q_s^2 
 \end{aligned}$$
 >
 > Step 2. Write down the firm's optimization problem.
 >
-> $$ \max_{q} ~ pq - \frac{1}{2}q^2 $$
+> $$ \max_{q_s} ~ pq_s - \frac{1}{2}q_s^2 $$
 >
 > Step 3. Write down the firm's first order condition.
 >
-> $$ p - q = 0 $$
+> $$ p - q_s = 0 $$
 >
 > Step 4. Rearrange the first order condition to write $$p$$ as a function of quantity supplied.
 >
@@ -329,6 +336,25 @@ U &= 9\ln q - pq \\
 &= 3\times3 - \tfrac{1}{2}(3)^2 \\
 &= 4.5
 \end{aligned}$$
+
+## Marginal benefit equals marginal cost
+
+In equilibrium, $$q_d = q_s$$. Let's write both quantities as simply $$q$$. The consumer's first order condition tells us that
+
+$$p = v^\prime(q)$$
+
+and the firm's first order condition tells us that
+
+$$p = c^\prime(q)$$
+
+Combing them, we get:
+
+$$ v^\prime(q) = p = c^\prime(q)$$
+
+This shows us that in the equilibrium of the commodity market, the consumer's marginal benefit equals the firm's marginal cost. That is a standard result in introductory econ classes and is at the heart of why the competitive market equilibrium maximizes total surplus.
+
+
+
 
 ## Big Picture Review
 
