@@ -88,17 +88,17 @@ Let's now work out a general solution for a specific class of models, in which w
 
 ### Setup
 
-A representative, price-taking consumer decides how many units, $$q$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q$$ units at price $$p$$ is:
+A representative, price-taking consumer decides how many units, $$q_d$$, of a commodity to purchase at unit price $$p$$. The utility they receive for purchasing $$q_d$$ units at price $$p$$ is:
 
-$$ u(q) = \alpha \ln q - pq $$
+$$ u(q_d) = \alpha \ln q_d - pq_d $$
 
-A representative, price-taking worker decides how many units, $$L$$, of labor to supply at unit wage $$w$$. The worker's utility function over working $$L$$ labor-units at wage $$w$$ is:
+A representative, price-taking worker decides how many units, $$L_s$$, of labor to supply at unit wage $$w$$. The worker's utility function over working $$L_s$$ labor-units at wage $$w$$ is:
 
-$$ u(L) = wL - \frac{1}{2} \delta L^2 $$
+$$ u(L_s) = wL_s - \frac{1}{2} \delta L_s^2 $$
 
-A representative, price-taking firm uses labor to produce and sell a commodity at unit price $$p$$. The firm hires labor at a constant wage rate $$w$$. If the firm employs $$L$$ units of labor, it can produce $$f(L)$$ units of commodity output, where:
+A representative, price-taking firm uses labor to produce and sell a commodity at unit price $$p$$. The firm hires labor at a constant wage rate $$w$$. If the firm employs $$L_d$$ units of labor, it can produce $$f(L_d)$$ units of commodity output, where:
 
-$$ f(L) = AL^{1/2} $$
+$$ f(L_d) = AL_d^{1/2} $$
 
 In this setup:
 
@@ -114,35 +114,35 @@ We will derive expressions for the equilibrium wage and commodity price in terms
 
 The consumer's first order condition is:
 
-$$\frac{\alpha}{q} - p = 0$$
+$$\frac{\alpha}{q_d} - p = 0$$
 
 which gives us the inverse commodity demand curve:
 
-$$p = \frac{\alpha}{q} ~ ~ ~ ~ \text{(Eq.1)} $$
+$$p = \frac{\alpha}{q_d} ~ ~ ~ ~ \text{(Eq.1)} $$
 
 #### Worker's problem
 
 The worker's first order condition is:
 
-$$w - \delta L = 0 $$
+$$w - \delta L_s = 0 $$
 
 which gives us the inverse labor supply function:
 
-$$w = \delta L ~ ~ ~ ~ \text{(Eq.2)} $$
+$$w = \delta L_s ~ ~ ~ ~ \text{(Eq.2)} $$
 
 #### Firm's problem
 
 The firm's optimization problem is:
 
-$$ \max_{L} ~ pAL^{1/2} - wL $$
+$$ \max_{L_d} ~ pAL_d^{1/2} - wL_d $$
 
 which leads to the first order condition:
 
-$$ \frac{1}{2} pA L^{-1/2} - w = 0$$
+$$ \frac{1}{2} pA L_d^{-1/2} - w = 0$$
 
 and the inverse labor demand function:
 
-$$ w = \frac{1}{2} pA L^{-1/2} ~ ~ ~ ~ \text{(Eq.3)} $$
+$$ w = \frac{1}{2} pA L_d^{-1/2} ~ ~ ~ ~ \text{(Eq.3)} $$
 
 #### Solution
 
