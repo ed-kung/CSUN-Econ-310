@@ -2824,6 +2824,92 @@ $$ f(x,y) = {CobbDouglas(A,'x',a,'y',b)} $$
         self.setup_list = setup_list
         self.question_list = question_list
 
+class CobbDouglasPointsProblem(GenericProblem):
+    # u(x,y) = x^a y^b 
+    def __init__(self, params=None, rng=rng, name='cobb_douglas_points_problem'):
+        default_params = {'a':1/2, 'b':1/2}
+        GenericProblem.__init__(self, params=params, default_params=default_params, rng=rng, name=name)
+        params = self.params
+        a, b = params['a'], params['b']
+        cobb_douglas = CobbDouglas(A=1, a=a, b=b)
+        setup_axis = Axis(noticklabels=True)
+        levels = get_cb_levels(cobb_douglas, setup_axis)
+        margin = 1 # keep markers oen grid point inside the graph edges
+        xlo, xhi = margin*setup_axis.xunit, setup_axis.xmax - margin*setup_axis.xunit
+        ylo, yhi = margin*setup_axis.yunit, setup_axis.ymax - margin*setup_axis.yunit
+        def visible_x_range(u):
+            c = u**(1/b)
+            return max(xlo, (c/yhi)**(b/a)), min(xhi, (c/ylo)**(b/a))
+        mids = [(levels[k] + levels[k+1])/2 for k in range(len(levels)-1)]
+        candidates = [u for u in mids if visible_x_range(u)[0] < visible_x_range(u)[1]]
+        chosen = rng.choice(candidates, size=4, replace=False)
+        points = []
+        best_u = -99
+        worst_u = 100000
+        best_point = 'A'
+        worst_point = 'A'
+        for u, label in zip(chosen, ['A', 'B', 'C', 'D']):
+            x_min, x_max = visible_x_range(u)
+            x = rng.uniform(x_min, x_max)
+            y = u**(1/b) * x**(-a/b)
+            points.append(Point(x,y,text=label,position='ne'))
+            if u > best_u:
+                best_u = u
+                best_point = label
+            if u < worst_u:
+                worst_u = u
+                worst_point = label
+        setup_axis.add(CobbDouglasContours(cobb_douglas, levels), points[0], points[1], points[2], points[3])
+        self.setup_axis = setup_axis
+        self.sol = {'best_point': best_point, 'worst_point': worst_point}
+        setup_list = []
+        setup = fr"""
+A consumer has a utility function over two goods, \(x\) and \(y\), represented by the indifference curves shown below.
+\begin{{center}}
+\includegraphics[width=3in]{{{name}_setup.png}}
+\end{{center}}
+"""
+        online_setup = fr"""
+A consumer has a utility function over two goods, \(x\) and \(y\), represented by the indifference curves shown below.
+<p>
+<img src="/CSUN-Econ-310/assets/images/graphs/{name}_setup.png">
+</p>
+"""
+        setup_list.append({
+            "setup": setup,
+            "online_setup": online_setup
+        })
+        question_list = []
+        question = fr"Which point gives the highest utility?"
+        online_question = question
+        answer = best_point
+        online_answer = answer
+        answers = ['A', 'B', 'C', 'D']
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,answers.index(answer),horz=True,shuffle=False,sort=False,numerical=False,rng=rng)
+        })
+        question = fr"Which point gives the lowest utility?"
+        online_question = question
+        answer = worst_point
+        online_answer = answer
+        answers = ['A', 'B', 'C', 'D']
+        question_list.append({
+            "question": question,
+            "online_question": online_question,
+            "answer": answer,
+            "online_answer": online_answer,
+            "MCQ": MCQ(question,answers,answers.index(answer),horz=True,shuffle=False,sort=False,numerical=False,rng=rng)
+        })
+        self.setup_list = setup_list
+        self.question_list = question_list
+    def check_solution(self):
+        return True
+    
+
 class CobbDouglasConsumerProblem(GenericProblem):
     # u(x,y) = x^a y^b s.t. px x + py y = I
     def __init__(self, params=None, rng=rng, name='cobb_douglas_consumer_problem'):
@@ -5007,6 +5093,7 @@ PROBLEM_TYPES = {
     'ProductivityShockProblem': ProductivityShockProblem,
     'LinearContourProblem': LinearContourProblem,
     'CBDerivativeProblem': CBDerivativeProblem,
+    'CobbDouglasPointsProblem': CobbDouglasPointsProblem,
     'CobbDouglasConsumerProblem': CobbDouglasConsumerProblem,
     'PerfectSubstitutesProblem': PerfectSubstitutesProblem,
     'PerfectComplementsProblem': PerfectComplementsProblem,
